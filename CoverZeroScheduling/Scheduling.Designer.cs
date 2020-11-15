@@ -405,8 +405,8 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.MediumBlue;
-            this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Location = new System.Drawing.Point(6, 13);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1212, 119);
@@ -416,20 +416,20 @@
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.MediumBlue;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 72F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.label3.Location = new System.Drawing.Point(6, 0);
+            this.label3.Font = new System.Drawing.Font("Planet Benson 2", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.SystemColors.Control;
+            this.label3.Location = new System.Drawing.Point(23, 10);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(913, 108);
+            this.label3.Size = new System.Drawing.Size(813, 98);
             this.label3.TabIndex = 0;
             this.label3.Text = "Cover Zero Training";
             // 
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(1029, 22);
+            this.pictureBox1.Location = new System.Drawing.Point(881, 21);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(84, 71);
+            this.pictureBox1.Size = new System.Drawing.Size(73, 66);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
