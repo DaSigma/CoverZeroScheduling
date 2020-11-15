@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="U04cRODataSet" targetNamespace="http://tempuri.org/U04cRODataSet.xsd" xmlns:mstns="http://tempuri.org/U04cRODataSet.xsd" xmlns="http://tempuri.org/U04cRODataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="U04cROConnectionString2" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="U04cROConnectionString2 (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.DelvonFontenot969PA.Properties.Settings.GlobalReference.Default.U04cROConnectionString2" Provider="MySql.Data.MySqlClient" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="appointmentTableAdapter" GeneratorDataComponentClassName="appointmentTableAdapter" Name="appointment" UserDataComponentName="appointmentTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="U04cROConnectionString2 (Settings)" DbObjectName="U04cRO.appointment" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="false">
+                    <CommandText>SELECT `appointmentId`, `customerId`, `userId`, `title`, `description`, `location`, `contact`, `type`, `url`, `start`, `end`, `createDate`, `createdBy`, `lastUpdate`, `lastUpdateBy` FROM `appointment`</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings />
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="U04cRODataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="U04cRODataSet" msprop:Generator_UserDSName="U04cRODataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="appointment" msprop:Generator_TableClassName="appointmentDataTable" msprop:Generator_TableVarName="tableappointment" msprop:Generator_TablePropName="appointment" msprop:Generator_RowDeletingName="appointmentRowDeleting" msprop:Generator_RowChangingName="appointmentRowChanging" msprop:Generator_RowEvHandlerName="appointmentRowChangeEventHandler" msprop:Generator_RowDeletedName="appointmentRowDeleted" msprop:Generator_UserTableName="appointment" msprop:Generator_RowChangedName="appointmentRowChanged" msprop:Generator_RowEvArgName="appointmentRowChangeEvent" msprop:Generator_RowClassName="appointmentRow">
+          <xs:complexType>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

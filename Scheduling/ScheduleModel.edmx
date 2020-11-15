@@ -1,0 +1,486 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ScheduleModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="address">
+          <Key>
+            <PropertyRef Name="addressId" />
+          </Key>
+          <Property Name="addressId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="address" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="address2" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="cityId" Type="int" Nullable="false" />
+          <Property Name="postalCode" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="phone" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="createDate" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="createdBy" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="lastUpdate" Type="timestamp" Precision="0" Nullable="false" />
+          <Property Name="lastUpdateBy" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="appointment">
+          <Key>
+            <PropertyRef Name="appointmentId" />
+          </Key>
+          <Property Name="appointmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="customerId" Type="int" Nullable="false" />
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="title" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="description" Type="text" Nullable="false" />
+          <Property Name="location" Type="text" Nullable="false" />
+          <Property Name="contact" Type="text" Nullable="false" />
+          <Property Name="type" Type="text" Nullable="false" />
+          <Property Name="url" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="start" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="end" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="createDate" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="createdBy" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="lastUpdate" Type="timestamp" Precision="0" Nullable="false" />
+          <Property Name="lastUpdateBy" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="city">
+          <Key>
+            <PropertyRef Name="cityId" />
+          </Key>
+          <Property Name="cityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="city" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="countryId" Type="int" Nullable="false" />
+          <Property Name="createDate" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="createdBy" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="lastUpdate" Type="timestamp" Precision="0" Nullable="false" />
+          <Property Name="lastUpdateBy" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="country">
+          <Key>
+            <PropertyRef Name="countryId" />
+          </Key>
+          <Property Name="countryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="country" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="createDate" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="createdBy" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="lastUpdate" Type="timestamp" Precision="0" Nullable="false" />
+          <Property Name="lastUpdateBy" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="customer">
+          <Key>
+            <PropertyRef Name="customerId" />
+          </Key>
+          <Property Name="customerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="customerName" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="addressId" Type="int" Nullable="false" />
+          <Property Name="active" Type="bool" Nullable="false" />
+          <Property Name="createDate" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="createdBy" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="lastUpdate" Type="timestamp" Precision="0" Nullable="false" />
+          <Property Name="lastUpdateBy" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="active" Type="tinyint" Nullable="false" />
+          <Property Name="createDate" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="createdBy" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="lastUpdate" Type="timestamp" Precision="0" Nullable="false" />
+          <Property Name="lastUpdateBy" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <Association Name="address_ibfk_1">
+          <End Role="city" Type="Self.city" Multiplicity="1" />
+          <End Role="address" Type="Self.address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="city">
+              <PropertyRef Name="cityId" />
+            </Principal>
+            <Dependent Role="address">
+              <PropertyRef Name="cityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="appointment_ibfk_1">
+          <End Role="customer" Type="Self.customer" Multiplicity="1" />
+          <End Role="appointment" Type="Self.appointment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="customerId" />
+            </Principal>
+            <Dependent Role="appointment">
+              <PropertyRef Name="customerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="appointment_ibfk_2">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="appointment" Type="Self.appointment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="appointment">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="city_ibfk_1">
+          <End Role="country" Type="Self.country" Multiplicity="1" />
+          <End Role="city" Type="Self.city" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="country">
+              <PropertyRef Name="countryId" />
+            </Principal>
+            <Dependent Role="city">
+              <PropertyRef Name="countryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="customer_ibfk_1">
+          <End Role="address" Type="Self.address" Multiplicity="1" />
+          <End Role="customer" Type="Self.customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="address">
+              <PropertyRef Name="addressId" />
+            </Principal>
+            <Dependent Role="customer">
+              <PropertyRef Name="addressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ScheduleModelStoreContainer">
+          <EntitySet Name="address" EntityType="Self.address" Schema="U04cRO" store:Type="Tables" />
+          <EntitySet Name="appointment" EntityType="Self.appointment" Schema="U04cRO" store:Type="Tables" />
+          <EntitySet Name="city" EntityType="Self.city" Schema="U04cRO" store:Type="Tables" />
+          <EntitySet Name="country" EntityType="Self.country" Schema="U04cRO" store:Type="Tables" />
+          <EntitySet Name="customer" EntityType="Self.customer" Schema="U04cRO" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="U04cRO" store:Type="Tables" />
+          <AssociationSet Name="address_ibfk_1" Association="Self.address_ibfk_1">
+            <End Role="city" EntitySet="city" />
+            <End Role="address" EntitySet="address" />
+          </AssociationSet>
+          <AssociationSet Name="appointment_ibfk_1" Association="Self.appointment_ibfk_1">
+            <End Role="customer" EntitySet="customer" />
+            <End Role="appointment" EntitySet="appointment" />
+          </AssociationSet>
+          <AssociationSet Name="appointment_ibfk_2" Association="Self.appointment_ibfk_2">
+            <End Role="user" EntitySet="user" />
+            <End Role="appointment" EntitySet="appointment" />
+          </AssociationSet>
+          <AssociationSet Name="city_ibfk_1" Association="Self.city_ibfk_1">
+            <End Role="country" EntitySet="country" />
+            <End Role="city" EntitySet="city" />
+          </AssociationSet>
+          <AssociationSet Name="customer_ibfk_1" Association="Self.customer_ibfk_1">
+            <End Role="address" EntitySet="address" />
+            <End Role="customer" EntitySet="customer" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ScheduleModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="address">
+          <Key>
+            <PropertyRef Name="addressId" />
+          </Key>
+          <Property Name="addressId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="cityId" Type="Int32" Nullable="false" />
+          <Property Name="postalCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="phone" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="createDate" Type="DateTime" Nullable="false" />
+          <Property Name="createdBy" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="lastUpdate" Type="DateTime" Nullable="false" />
+          <Property Name="lastUpdateBy" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="city" Relationship="Self.address_ibfk_1" FromRole="address" ToRole="city" />
+          <NavigationProperty Name="customers" Relationship="Self.customer_ibfk_1" FromRole="address" ToRole="customer" />
+        </EntityType>
+        <EntityType Name="appointment">
+          <Key>
+            <PropertyRef Name="appointmentId" />
+          </Key>
+          <Property Name="appointmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="customerId" Type="Int32" Nullable="false" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="title" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="location" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="contact" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="type" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="url" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="start" Type="DateTime" Nullable="false" />
+          <Property Name="end" Type="DateTime" Nullable="false" />
+          <Property Name="createDate" Type="DateTime" Nullable="false" />
+          <Property Name="createdBy" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="lastUpdate" Type="DateTime" Nullable="false" />
+          <Property Name="lastUpdateBy" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="customer" Relationship="Self.appointment_ibfk_1" FromRole="appointment" ToRole="customer" />
+          <NavigationProperty Name="user" Relationship="Self.appointment_ibfk_2" FromRole="appointment" ToRole="user" />
+        </EntityType>
+        <EntityType Name="city">
+          <Key>
+            <PropertyRef Name="cityId" />
+          </Key>
+          <Property Name="cityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="city1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="countryId" Type="Int32" Nullable="false" />
+          <Property Name="createDate" Type="DateTime" Nullable="false" />
+          <Property Name="createdBy" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="lastUpdate" Type="DateTime" Nullable="false" />
+          <Property Name="lastUpdateBy" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="addresses" Relationship="Self.address_ibfk_1" FromRole="city" ToRole="address" />
+          <NavigationProperty Name="country" Relationship="Self.city_ibfk_1" FromRole="city" ToRole="country" />
+        </EntityType>
+        <EntityType Name="country">
+          <Key>
+            <PropertyRef Name="countryId" />
+          </Key>
+          <Property Name="countryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="country1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="createDate" Type="DateTime" Nullable="false" />
+          <Property Name="createdBy" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="lastUpdate" Type="DateTime" Nullable="false" />
+          <Property Name="lastUpdateBy" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="cities" Relationship="Self.city_ibfk_1" FromRole="country" ToRole="city" />
+        </EntityType>
+        <EntityType Name="customer">
+          <Key>
+            <PropertyRef Name="customerId" />
+          </Key>
+          <Property Name="customerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="customerName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="addressId" Type="Int32" Nullable="false" />
+          <Property Name="active" Type="Boolean" Nullable="false" />
+          <Property Name="createDate" Type="DateTime" Nullable="false" />
+          <Property Name="createdBy" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="lastUpdate" Type="DateTime" Nullable="false" />
+          <Property Name="lastUpdateBy" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="address" Relationship="Self.customer_ibfk_1" FromRole="customer" ToRole="address" />
+          <NavigationProperty Name="appointments" Relationship="Self.appointment_ibfk_1" FromRole="customer" ToRole="appointment" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="active" Type="SByte" Nullable="false" />
+          <Property Name="createDate" Type="DateTime" Nullable="false" />
+          <Property Name="createdBy" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="lastUpdate" Type="DateTime" Nullable="false" />
+          <Property Name="lastUpdateBy" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="appointments" Relationship="Self.appointment_ibfk_2" FromRole="user" ToRole="appointment" />
+        </EntityType>
+        <Association Name="address_ibfk_1">
+          <End Role="city" Type="Self.city" Multiplicity="1" />
+          <End Role="address" Type="Self.address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="city">
+              <PropertyRef Name="cityId" />
+            </Principal>
+            <Dependent Role="address">
+              <PropertyRef Name="cityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="customer_ibfk_1">
+          <End Role="address" Type="Self.address" Multiplicity="1" />
+          <End Role="customer" Type="Self.customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="address">
+              <PropertyRef Name="addressId" />
+            </Principal>
+            <Dependent Role="customer">
+              <PropertyRef Name="addressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="appointment_ibfk_1">
+          <End Role="customer" Type="Self.customer" Multiplicity="1" />
+          <End Role="appointment" Type="Self.appointment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="customerId" />
+            </Principal>
+            <Dependent Role="appointment">
+              <PropertyRef Name="customerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="appointment_ibfk_2">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="appointment" Type="Self.appointment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="appointment">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="city_ibfk_1">
+          <End Role="country" Type="Self.country" Multiplicity="1" />
+          <End Role="city" Type="Self.city" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="country">
+              <PropertyRef Name="countryId" />
+            </Principal>
+            <Dependent Role="city">
+              <PropertyRef Name="countryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ScheduleEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="addresses" EntityType="Self.address" />
+          <EntitySet Name="appointments" EntityType="Self.appointment" />
+          <EntitySet Name="cities" EntityType="Self.city" />
+          <EntitySet Name="countries" EntityType="Self.country" />
+          <EntitySet Name="customers" EntityType="Self.customer" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <AssociationSet Name="address_ibfk_1" Association="Self.address_ibfk_1">
+            <End Role="city" EntitySet="cities" />
+            <End Role="address" EntitySet="addresses" />
+          </AssociationSet>
+          <AssociationSet Name="customer_ibfk_1" Association="Self.customer_ibfk_1">
+            <End Role="address" EntitySet="addresses" />
+            <End Role="customer" EntitySet="customers" />
+          </AssociationSet>
+          <AssociationSet Name="appointment_ibfk_1" Association="Self.appointment_ibfk_1">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="appointment" EntitySet="appointments" />
+          </AssociationSet>
+          <AssociationSet Name="appointment_ibfk_2" Association="Self.appointment_ibfk_2">
+            <End Role="user" EntitySet="users" />
+            <End Role="appointment" EntitySet="appointments" />
+          </AssociationSet>
+          <AssociationSet Name="city_ibfk_1" Association="Self.city_ibfk_1">
+            <End Role="country" EntitySet="countries" />
+            <End Role="city" EntitySet="cities" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ScheduleModelStoreContainer" CdmEntityContainer="ScheduleEntities">
+          <EntitySetMapping Name="addresses">
+            <EntityTypeMapping TypeName="ScheduleModel.address">
+              <MappingFragment StoreEntitySet="address">
+                <ScalarProperty Name="addressId" ColumnName="addressId" />
+                <ScalarProperty Name="address1" ColumnName="address" />
+                <ScalarProperty Name="address2" ColumnName="address2" />
+                <ScalarProperty Name="cityId" ColumnName="cityId" />
+                <ScalarProperty Name="postalCode" ColumnName="postalCode" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="createdBy" ColumnName="createdBy" />
+                <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
+                <ScalarProperty Name="lastUpdateBy" ColumnName="lastUpdateBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="appointments">
+            <EntityTypeMapping TypeName="ScheduleModel.appointment">
+              <MappingFragment StoreEntitySet="appointment">
+                <ScalarProperty Name="appointmentId" ColumnName="appointmentId" />
+                <ScalarProperty Name="customerId" ColumnName="customerId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="contact" ColumnName="contact" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="start" ColumnName="start" />
+                <ScalarProperty Name="end" ColumnName="end" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="createdBy" ColumnName="createdBy" />
+                <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
+                <ScalarProperty Name="lastUpdateBy" ColumnName="lastUpdateBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cities">
+            <EntityTypeMapping TypeName="ScheduleModel.city">
+              <MappingFragment StoreEntitySet="city">
+                <ScalarProperty Name="cityId" ColumnName="cityId" />
+                <ScalarProperty Name="city1" ColumnName="city" />
+                <ScalarProperty Name="countryId" ColumnName="countryId" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="createdBy" ColumnName="createdBy" />
+                <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
+                <ScalarProperty Name="lastUpdateBy" ColumnName="lastUpdateBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="countries">
+            <EntityTypeMapping TypeName="ScheduleModel.country">
+              <MappingFragment StoreEntitySet="country">
+                <ScalarProperty Name="countryId" ColumnName="countryId" />
+                <ScalarProperty Name="country1" ColumnName="country" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="createdBy" ColumnName="createdBy" />
+                <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
+                <ScalarProperty Name="lastUpdateBy" ColumnName="lastUpdateBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="customers">
+            <EntityTypeMapping TypeName="ScheduleModel.customer">
+              <MappingFragment StoreEntitySet="customer">
+                <ScalarProperty Name="customerId" ColumnName="customerId" />
+                <ScalarProperty Name="customerName" ColumnName="customerName" />
+                <ScalarProperty Name="addressId" ColumnName="addressId" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="createdBy" ColumnName="createdBy" />
+                <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
+                <ScalarProperty Name="lastUpdateBy" ColumnName="lastUpdateBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="ScheduleModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="createdBy" ColumnName="createdBy" />
+                <ScalarProperty Name="lastUpdate" ColumnName="lastUpdate" />
+                <ScalarProperty Name="lastUpdateBy" ColumnName="lastUpdateBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
