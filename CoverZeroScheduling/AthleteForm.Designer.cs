@@ -1,6 +1,6 @@
 ﻿namespace CoverZeroScheduling
 {
-    partial class CustomerForm
+    partial class AthleteForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,20 +29,20 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomerForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AthleteForm));
             this.gbCustomer = new System.Windows.Forms.GroupBox();
             this.btnClose = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.gbCustomerInfo = new System.Windows.Forms.GroupBox();
             this.btnNewAddress = new System.Windows.Forms.Button();
             this.btnEditAddress = new System.Windows.Forms.Button();
-            this.tbCustCountry = new System.Windows.Forms.TextBox();
-            this.tbCustCity = new System.Windows.Forms.TextBox();
+            this.tbCountry = new System.Windows.Forms.TextBox();
+            this.tbCity = new System.Windows.Forms.TextBox();
             this.lblCustID = new System.Windows.Forms.Label();
-            this.cbCustZip = new System.Windows.Forms.ComboBox();
+            this.cbZip = new System.Windows.Forms.ComboBox();
             this.lblLastUpdated = new System.Windows.Forms.Label();
             this.lblLastupdate = new System.Windows.Forms.Label();
-            this.tbCustPhone = new System.Windows.Forms.TextBox();
+            this.tbPhone = new System.Windows.Forms.TextBox();
             this.lb6 = new System.Windows.Forms.Label();
             this.lbl5 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -50,8 +50,8 @@
             this.lbl1 = new System.Windows.Forms.Label();
             this.lbl2 = new System.Windows.Forms.Label();
             this.lbl3 = new System.Windows.Forms.Label();
-            this.tbCustName = new System.Windows.Forms.TextBox();
-            this.tbCustAdd = new System.Windows.Forms.TextBox();
+            this.tbName = new System.Windows.Forms.TextBox();
+            this.tbAdd = new System.Windows.Forms.TextBox();
             this.btnSaveCustomer = new System.Windows.Forms.Button();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.gbCustomer.SuspendLayout();
@@ -72,7 +72,7 @@
             this.gbCustomer.Size = new System.Drawing.Size(543, 292);
             this.gbCustomer.TabIndex = 12;
             this.gbCustomer.TabStop = false;
-            this.gbCustomer.Text = "Customer";
+            this.gbCustomer.Text = "Athlete";
             // 
             // btnClose
             // 
@@ -98,13 +98,13 @@
             // 
             this.gbCustomerInfo.Controls.Add(this.btnNewAddress);
             this.gbCustomerInfo.Controls.Add(this.btnEditAddress);
-            this.gbCustomerInfo.Controls.Add(this.tbCustCountry);
-            this.gbCustomerInfo.Controls.Add(this.tbCustCity);
+            this.gbCustomerInfo.Controls.Add(this.tbCountry);
+            this.gbCustomerInfo.Controls.Add(this.tbCity);
             this.gbCustomerInfo.Controls.Add(this.lblCustID);
-            this.gbCustomerInfo.Controls.Add(this.cbCustZip);
+            this.gbCustomerInfo.Controls.Add(this.cbZip);
             this.gbCustomerInfo.Controls.Add(this.lblLastUpdated);
             this.gbCustomerInfo.Controls.Add(this.lblLastupdate);
-            this.gbCustomerInfo.Controls.Add(this.tbCustPhone);
+            this.gbCustomerInfo.Controls.Add(this.tbPhone);
             this.gbCustomerInfo.Controls.Add(this.lb6);
             this.gbCustomerInfo.Controls.Add(this.lbl5);
             this.gbCustomerInfo.Controls.Add(this.label1);
@@ -112,8 +112,8 @@
             this.gbCustomerInfo.Controls.Add(this.lbl1);
             this.gbCustomerInfo.Controls.Add(this.lbl2);
             this.gbCustomerInfo.Controls.Add(this.lbl3);
-            this.gbCustomerInfo.Controls.Add(this.tbCustName);
-            this.gbCustomerInfo.Controls.Add(this.tbCustAdd);
+            this.gbCustomerInfo.Controls.Add(this.tbName);
+            this.gbCustomerInfo.Controls.Add(this.tbAdd);
             this.gbCustomerInfo.Location = new System.Drawing.Point(6, 19);
             this.gbCustomerInfo.Name = "gbCustomerInfo";
             this.gbCustomerInfo.Size = new System.Drawing.Size(271, 267);
@@ -140,21 +140,21 @@
             this.btnEditAddress.UseVisualStyleBackColor = true;
             this.btnEditAddress.Click += new System.EventHandler(this.btnEditAddress_Click);
             // 
-            // tbCustCountry
+            // tbCountry
             // 
-            this.tbCustCountry.Enabled = false;
-            this.tbCustCountry.Location = new System.Drawing.Point(82, 174);
-            this.tbCustCountry.Name = "tbCustCountry";
-            this.tbCustCountry.Size = new System.Drawing.Size(126, 20);
-            this.tbCustCountry.TabIndex = 37;
+            this.tbCountry.Enabled = false;
+            this.tbCountry.Location = new System.Drawing.Point(82, 174);
+            this.tbCountry.Name = "tbCountry";
+            this.tbCountry.Size = new System.Drawing.Size(126, 20);
+            this.tbCountry.TabIndex = 37;
             // 
-            // tbCustCity
+            // tbCity
             // 
-            this.tbCustCity.Enabled = false;
-            this.tbCustCity.Location = new System.Drawing.Point(81, 121);
-            this.tbCustCity.Name = "tbCustCity";
-            this.tbCustCity.Size = new System.Drawing.Size(126, 20);
-            this.tbCustCity.TabIndex = 36;
+            this.tbCity.Enabled = false;
+            this.tbCity.Location = new System.Drawing.Point(81, 121);
+            this.tbCity.Name = "tbCity";
+            this.tbCity.Size = new System.Drawing.Size(126, 20);
+            this.tbCity.TabIndex = 36;
             // 
             // lblCustID
             // 
@@ -167,18 +167,18 @@
             this.lblCustID.TabIndex = 35;
             this.lblCustID.Text = "Auto Generated";
             // 
-            // cbCustZip
+            // cbZip
             // 
-            this.cbCustZip.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbCustZip.Enabled = false;
-            this.cbCustZip.FormattingEnabled = true;
-            this.cbCustZip.ItemHeight = 13;
-            this.cbCustZip.Location = new System.Drawing.Point(81, 147);
-            this.cbCustZip.Name = "cbCustZip";
-            this.cbCustZip.Size = new System.Drawing.Size(127, 21);
-            this.cbCustZip.TabIndex = 33;
-            this.cbCustZip.SelectedIndexChanged += new System.EventHandler(this.cbCustZip_SelectedIndexChanged);
-            this.cbCustZip.TextChanged += new System.EventHandler(this.cbCustZip_TextChanged);
+            this.cbZip.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbZip.Enabled = false;
+            this.cbZip.FormattingEnabled = true;
+            this.cbZip.ItemHeight = 13;
+            this.cbZip.Location = new System.Drawing.Point(81, 147);
+            this.cbZip.Name = "cbZip";
+            this.cbZip.Size = new System.Drawing.Size(127, 21);
+            this.cbZip.TabIndex = 33;
+            this.cbZip.SelectedIndexChanged += new System.EventHandler(this.cbAthleteZip_SelectedIndexChanged);
+            this.cbZip.TextChanged += new System.EventHandler(this.cbCustZip_TextChanged);
             // 
             // lblLastUpdated
             // 
@@ -199,15 +199,15 @@
             this.lblLastupdate.TabIndex = 30;
             this.lblLastupdate.Text = "Last Updated:";
             // 
-            // tbCustPhone
+            // tbPhone
             // 
-            this.tbCustPhone.Enabled = false;
-            this.tbCustPhone.Location = new System.Drawing.Point(80, 70);
-            this.tbCustPhone.Name = "tbCustPhone";
-            this.tbCustPhone.Size = new System.Drawing.Size(127, 20);
-            this.tbCustPhone.TabIndex = 2;
-            this.tbCustPhone.TextChanged += new System.EventHandler(this.tbCustPhone_TextChanged);
-            this.tbCustPhone.Leave += new System.EventHandler(this.tbCustPhone_Leave);
+            this.tbPhone.Enabled = false;
+            this.tbPhone.Location = new System.Drawing.Point(80, 70);
+            this.tbPhone.Name = "tbPhone";
+            this.tbPhone.Size = new System.Drawing.Size(127, 20);
+            this.tbPhone.TabIndex = 2;
+            this.tbPhone.TextChanged += new System.EventHandler(this.tbAthletePhone_TextChanged);
+            this.tbPhone.Leave += new System.EventHandler(this.tbAthletePhone_Leave);
             // 
             // lb6
             // 
@@ -250,9 +250,9 @@
             this.lbl1.AutoSize = true;
             this.lbl1.Location = new System.Drawing.Point(6, 22);
             this.lbl1.Name = "lbl1";
-            this.lbl1.Size = new System.Drawing.Size(65, 13);
+            this.lbl1.Size = new System.Drawing.Size(54, 13);
             this.lbl1.TabIndex = 21;
-            this.lbl1.Text = "Customer ID";
+            this.lbl1.Text = "Athlete ID";
             // 
             // lbl2
             // 
@@ -272,25 +272,25 @@
             this.lbl3.TabIndex = 5;
             this.lbl3.Text = "Address";
             // 
-            // tbCustName
+            // tbName
             // 
-            this.tbCustName.BackColor = System.Drawing.SystemColors.Window;
-            this.tbCustName.Location = new System.Drawing.Point(80, 45);
-            this.tbCustName.Name = "tbCustName";
-            this.tbCustName.Size = new System.Drawing.Size(128, 20);
-            this.tbCustName.TabIndex = 1;
-            this.tbCustName.TextChanged += new System.EventHandler(this.tbCustName_TextChanged);
-            this.tbCustName.Leave += new System.EventHandler(this.tbCustName_Leave);
+            this.tbName.BackColor = System.Drawing.SystemColors.Window;
+            this.tbName.Location = new System.Drawing.Point(80, 45);
+            this.tbName.Name = "tbName";
+            this.tbName.Size = new System.Drawing.Size(128, 20);
+            this.tbName.TabIndex = 1;
+            this.tbName.TextChanged += new System.EventHandler(this.tbAthleteName_TextChanged);
+            this.tbName.Leave += new System.EventHandler(this.tbAthleteName_Leave);
             // 
-            // tbCustAdd
+            // tbAdd
             // 
-            this.tbCustAdd.Enabled = false;
-            this.tbCustAdd.Location = new System.Drawing.Point(80, 95);
-            this.tbCustAdd.Name = "tbCustAdd";
-            this.tbCustAdd.Size = new System.Drawing.Size(128, 20);
-            this.tbCustAdd.TabIndex = 3;
-            this.tbCustAdd.TextChanged += new System.EventHandler(this.tbCustAdd_TextChanged);
-            this.tbCustAdd.Leave += new System.EventHandler(this.tbCustAdd_Leave);
+            this.tbAdd.Enabled = false;
+            this.tbAdd.Location = new System.Drawing.Point(80, 95);
+            this.tbAdd.Name = "tbAdd";
+            this.tbAdd.Size = new System.Drawing.Size(128, 20);
+            this.tbAdd.TabIndex = 3;
+            this.tbAdd.TextChanged += new System.EventHandler(this.tbAthleteAddress_TextChanged);
+            this.tbAdd.Leave += new System.EventHandler(this.tbAthleteAddress_Leave);
             // 
             // btnSaveCustomer
             // 
@@ -300,13 +300,13 @@
             this.btnSaveCustomer.TabIndex = 5;
             this.btnSaveCustomer.Text = "Save";
             this.btnSaveCustomer.UseVisualStyleBackColor = true;
-            this.btnSaveCustomer.Click += new System.EventHandler(this.btnSaveCustomer_Click);
+            this.btnSaveCustomer.Click += new System.EventHandler(this.btnSaveAthlete_Click);
             // 
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
             // 
-            // CustomerForm
+            // AthleteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -315,8 +315,8 @@
             this.Controls.Add(this.gbCustomer);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "CustomerForm";
-            this.Text = "Customer";
+            this.Name = "AthleteForm";
+            this.Text = "Athlete";
             this.gbCustomer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.gbCustomerInfo.ResumeLayout(false);
@@ -339,15 +339,15 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button btnClose;
         internal System.Windows.Forms.GroupBox gbCustomer;
-        internal System.Windows.Forms.TextBox tbCustName;
-        internal System.Windows.Forms.TextBox tbCustPhone;
-        internal System.Windows.Forms.TextBox tbCustAdd;
+        internal System.Windows.Forms.TextBox tbName;
+        internal System.Windows.Forms.TextBox tbPhone;
+        internal System.Windows.Forms.TextBox tbAdd;
         internal System.Windows.Forms.Label lblLastUpdated;
         internal System.Windows.Forms.Label lblCustID;
-        internal System.Windows.Forms.ComboBox cbCustZip;
+        internal System.Windows.Forms.ComboBox cbZip;
         internal System.Windows.Forms.Label lblLastupdate;
-        internal System.Windows.Forms.TextBox tbCustCountry;
-        internal System.Windows.Forms.TextBox tbCustCity;
+        internal System.Windows.Forms.TextBox tbCountry;
+        internal System.Windows.Forms.TextBox tbCity;
         private System.Windows.Forms.ErrorProvider errorProvider1;
         internal System.Windows.Forms.Button btnEditAddress;
         internal System.Windows.Forms.Button btnNewAddress;

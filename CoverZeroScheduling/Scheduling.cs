@@ -29,9 +29,9 @@ namespace CoverZeroScheduling
         public int DaysInMonth { get; set; }
 
         int indexOfSelectedAppt = -1;
-        int indexOfSelectedCustomer = -1;
-        int currentUserID;
-        string currentUser;
+        int indexOfSelectedAthlete = -1;
+        int currentCoachID;
+        string currentCoach;
 
         public Scheduling()
         {
@@ -44,11 +44,11 @@ namespace CoverZeroScheduling
         private void Scheduling_Load(object sender, EventArgs e)
         {            
             rbWeek.Checked = true;
-            string sp = "sp_getApptsbyUsrID";
+            string sp = "sp_getApptsbyCoachID";
             LoadAppointmentData(sp);
             LoadCustomerData();
-            currentUserID = LogIn.GetUserID();
-            currentUser = LogIn.GetUserName();
+            currentCoachID = LogIn.GetCoachID();
+            currentCoach = LogIn.GetCoachName();
             dTPFrom.Value = DateTime.Now;
         }
 
@@ -123,7 +123,7 @@ namespace CoverZeroScheduling
                 cmd = new MySqlCommand(sp, con);
                 da = new MySqlDataAdapter(cmd);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@usrID", LogIn.GetUserID());
+                cmd.Parameters.AddWithValue("@CoachID", LogIn.GetCoachID());
                 cmd.Parameters.AddWithValue("@startDate", StartDate);
                 cmd.Parameters.AddWithValue("@endDate", ToDate);
                 //da.Fill(ds);
@@ -139,11 +139,11 @@ namespace CoverZeroScheduling
 
         }
 
-        // Get upcomeing meeting if withing 15 minutes from now
+        // Get upcomeing appointments if withing 15 minutes from now
         private void GetUpcomingMeeting()
         {
             string startDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
-            string toDate = Convert.ToDateTime(startDate).AddMinutes(15).ToString("yyyy-MM-dd HH:mm");
+            string toDate = Convert.ToDateTime(startDate).AddDays(7).ToString("yyyy-MM-dd HH:mm");
 
             string sp = "sp_getApptsByDate";
             GetData(sp, startDate, toDate);
@@ -229,11 +229,11 @@ namespace CoverZeroScheduling
 
         }
 
-        // Load All of the current Consultants Appointments
+        // Load All of the current Coaches Appointments
         private void btnLoadAll_Click(object sender, EventArgs e)
         {
             lblApptDates.Text = "All of your Appointments are Displayed";
-            string sp = "sp_getApptsbyUsrID";
+            string sp = "sp_getApptsbyCoachID";
             LoadAppointmentData(sp);
         }
 
@@ -249,7 +249,7 @@ namespace CoverZeroScheduling
                     da = new MySqlDataAdapter(cmd);
 
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@usrID", LogIn.GetUserID());
+                    cmd.Parameters.AddWithValue("@CoachID", LogIn.GetCoachID());
                     cmd.ExecuteNonQuery();
                     dt = new DataTable();
                     da.Fill(dt);
@@ -262,16 +262,16 @@ namespace CoverZeroScheduling
 
                     dgvAppt.Columns["End"].DefaultCellStyle.Format = "MMMM dd, yyyy hh:mm tt"; //Format End date
                     dgvAppt.Columns["End"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells; // Autosize End Column
-                    dgvAppt.Columns["Customer"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells; // Autosize Customer column
+                    dgvAppt.Columns["Athlete"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells; // Autosize Athlete column
                     da.Update(dt);
 
                     string startDate = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now, TimeZoneInfo.Local).ToString("yyyy-MM-dd HH:mm");
-                    string toDate = Convert.ToDateTime(startDate).AddMinutes(15).ToString("yyyy-MM-dd HH:mm");
+                    string toDate = Convert.ToDateTime(startDate).AddDays(7).ToString("yyyy-MM-dd HH:mm");
 
                     MySqlCommand cmd2 = new MySqlCommand("sp_getApptsByDate");
                     cmd2.CommandType = CommandType.StoredProcedure;
                     cmd2.Connection = con;
-                    cmd2.Parameters.AddWithValue("@usrID", LogIn.GetUserID());
+                    cmd2.Parameters.AddWithValue("@CoachID", LogIn.GetCoachID());
                     cmd2.Parameters.AddWithValue("@startDate", startDate);
                     cmd2.Parameters.AddWithValue("@endDate", toDate);
                     MySqlDataReader dr = cmd2.ExecuteReader();
@@ -308,26 +308,26 @@ namespace CoverZeroScheduling
                     {
                         con.Open();
 
-                        // Fill appointment customer name combobox
-                        MySqlCommand cmd2 = new MySqlCommand("sp_customerName");
+                        // Fill appointment athlete name combobox
+                        MySqlCommand cmd2 = new MySqlCommand("sp_athleteName");
                         cmd2.Connection = con;
                         dr = cmd2.ExecuteReader();
 
                         while (dr.Read())
                         {
-                            viewAppointment.cbCustName.Items.Add(dr["customerName"].ToString());
+                            viewAppointment.cbCustName.Items.Add(dr["athleteName"].ToString());
                         }
                         dr.Close();
 
                         // Fill appointment consultant combobox
-                        MySqlCommand cmd3 = new MySqlCommand("sp_getDistinctUsr");
+                        MySqlCommand cmd3 = new MySqlCommand("sp_getDistinctCoach");
                         cmd3.Connection = con;
                         dr = cmd3.ExecuteReader();
 
                         while (dr.Read())
                         {
-                            viewAppointment.cbUsr.Items.Add(dr["userName"].ToString());
-                            viewAppointment.cbUsr.Text = currentUser.ToString();
+                            viewAppointment.cbUsr.Items.Add(dr["coachName"].ToString());
+                            viewAppointment.cbUsr.Text = currentCoach.ToString();
                         }
                         dr.Close();
 
@@ -353,7 +353,7 @@ namespace CoverZeroScheduling
                         if (dr.Read())
                         {
                             viewAppointment.lblApptID.Text = dr["appointmentID"].ToString();
-                            viewAppointment.cbCustName.Text = dr["customerName"].ToString();
+                            viewAppointment.cbCustName.Text = dr["athleteName"].ToString();
                             viewAppointment.cbType.Text = dr["type"].ToString();
                             viewAppointment.dTPStart.Text = GetCorrectedDate(Convert.ToDateTime((dr["start"]))).ToString("MMMM dd, yyyy");
                             DateTime appStartTime = GetCorrectedDate(Convert.ToDateTime((dr["start"])));
@@ -413,25 +413,25 @@ namespace CoverZeroScheduling
                 dr.Close();
 
                 // Fill appointment consultant combobox
-                MySqlCommand cmd3 = new MySqlCommand("sp_getDistinctUsr");
+                MySqlCommand cmd3 = new MySqlCommand("sp_getDistinctCoach");
                 cmd3.Connection = con;
                 dr = cmd3.ExecuteReader();
 
                 while (dr.Read())
                 {
-                    newAppointment.cbUsr.Text = dr["userName"].ToString();
-                    newAppointment.cbUsr.Items.Add(dr["userName"].ToString());
+                    newAppointment.cbUsr.Text = dr["coachName"].ToString();
+                    newAppointment.cbUsr.Items.Add(dr["coachName"].ToString());
                 }
                 dr.Close();
 
-                // Fill appointment Custoomer name combobox
-                MySqlCommand cmd2 = new MySqlCommand("sp_customerName");
+                // Fill appointment Athlete name combobox
+                MySqlCommand cmd2 = new MySqlCommand("sp_athleteName");
                 cmd2.Connection = con;
                 dr = cmd2.ExecuteReader();
 
                 while (dr.Read())
                 {
-                    newAppointment.cbCustName.Items.Add(dr["customerName"].ToString());
+                    newAppointment.cbCustName.Items.Add(dr["athleteName"].ToString());
                 }
                
                 newAppointment.gbAppointment.Text = "New Appointment";
@@ -462,10 +462,10 @@ namespace CoverZeroScheduling
                 if (indexOfSelectedAppt >= 0)
                 {
                     int currentApptID = (int)dgvAppt.Rows[indexOfSelectedAppt].Cells[5].Value;
-                    string currentCustomer = dgvAppt.Rows[indexOfSelectedAppt].Cells[1].Value.ToString();
+                    string currentAthlete = dgvAppt.Rows[indexOfSelectedAppt].Cells[1].Value.ToString();
                     string currentStartDate = dgvAppt.Rows[indexOfSelectedAppt].Cells[2].Value.ToString();
                     DialogResult result = MessageBox.Show($"Are you sure you " +
-                    $"want to delete Appointment ID# {currentApptID} on {currentStartDate} with Customer-{currentCustomer}?", "Delete",
+                    $"want to delete Appointment ID# {currentApptID} on {currentStartDate} with Athlete-{currentAthlete}?", "Delete",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     // Delete appointment. 
@@ -479,10 +479,10 @@ namespace CoverZeroScheduling
                         cmd.Parameters.AddWithValue("@apptID", currentApptID);
                         cmd.ExecuteNonQuery();
                         con.Close();
-                        string sp = "sp_getApptsbyUsrID";
+                        string sp = "sp_getApptsbyCoachID";
                         LoadAppointmentData(sp);
                         MessageBox.Show($"Appointment ID#{currentApptID} on {currentStartDate} " +
-                            $"with Customer-{currentCustomer} has been Removed!", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            $"with Athlete-{currentAthlete} has been Removed!", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                     else
                     {
@@ -506,26 +506,26 @@ namespace CoverZeroScheduling
 
         }
 
-        // Select index of customer
+        // Select index of athlete
         private void dgvCustomer_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
-                indexOfSelectedCustomer = e.RowIndex;
+                indexOfSelectedAthlete= e.RowIndex;
             }
         }
 
-        // View/Edit customer record
+        // View/Edit athlete record
         private void btnCustViewEdit_Click(object sender, EventArgs e)
         {
             try
             {
-                if (indexOfSelectedCustomer >= 0)
+                if (indexOfSelectedAthlete >= 0)
                 {
-                    int currentCustomerID = (int)dgvCustomer.Rows[indexOfSelectedCustomer].Cells[0].Value;
+                    int currentAthleteID = (int)dgvCustomer.Rows[indexOfSelectedAthlete].Cells[0].Value;
                     this.Hide();
-                    CustomerForm viewCustomer = new CustomerForm();
-                    if (currentCustomerID > 0)
+                    AthleteForm viewAthlete = new AthleteForm();
+                    if (currentAthleteID > 0)
                     {
                         con.Open();
 
@@ -535,38 +535,38 @@ namespace CoverZeroScheduling
 
                         while (dr.Read())
                         {
-                            viewCustomer.cbCustZip.Items.Add(dr["postalCode"].ToString());
+                            viewAthlete.cbZip.Items.Add(dr["postalCode"].ToString());
                         }
                         dr.Close();
 
                         cmd.Connection = con;
-                        cmd.CommandText = "sp_viewEditCustomerByID";
+                        cmd.CommandText = "sp_viewEditAthleteByID";
 
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Clear();
-                        cmd.Parameters.AddWithValue("@custID", currentCustomerID);
+                        cmd.Parameters.AddWithValue("@AthlID", currentAthleteID);
                         dr = cmd.ExecuteReader();
 
                         if (dr.Read())
                         {
-                            viewCustomer.lblCustID.Text = dr["customerId"].ToString();
-                            viewCustomer.tbCustName.Text = dr["customerName"].ToString();
-                            viewCustomer.tbCustPhone.Text = dr["phone"].ToString();
-                            viewCustomer.tbCustAdd.Text = dr["address"].ToString();
-                            viewCustomer.tbCustCity.Text = dr["city"].ToString();
-                            viewCustomer.tbCustCountry.Text = dr["country"].ToString();
-                            viewCustomer.cbCustZip.Text = dr["postalCode"].ToString();
-                            CustomerForm.AddressID = Convert.ToInt32(dr["addressId"]);
-                            viewCustomer.lblLastUpdated.Text = Scheduling.GetCorrectedDate(Convert.ToDateTime(dr["lastUpdate"])).ToString();
+                            viewAthlete.lblCustID.Text = dr["athleteId"].ToString();
+                            viewAthlete.tbName.Text = dr["athleteName"].ToString();
+                            viewAthlete.tbPhone.Text = dr["phone"].ToString();
+                            viewAthlete.tbAdd.Text = dr["address"].ToString();
+                            viewAthlete.tbCity.Text = dr["city"].ToString();
+                            viewAthlete.tbCountry.Text = dr["country"].ToString();
+                            viewAthlete.cbZip.Text = dr["postalCode"].ToString();
+                            AthleteForm.AddressID = Convert.ToInt32(dr["addressId"]);
+                            viewAthlete.lblLastUpdated.Text = Scheduling.GetCorrectedDate(Convert.ToDateTime(dr["lastUpdate"])).ToString();
                         }
                         con.Close();
                     }
-                    viewCustomer.gbCustomer.Text = "Edit Customer";
-                    viewCustomer.ShowDialog();
+                    viewAthlete.gbCustomer.Text = "Edit Athlete";
+                    viewAthlete.ShowDialog();
                 }
                 else
                 {
-                    MessageBox.Show("Please select and Appointment to Edit the Customer!");
+                    MessageBox.Show("Please select and Appointment to Edit the Athlete!");
                 }
             }
 
@@ -583,14 +583,14 @@ namespace CoverZeroScheduling
             }
         }
 
-        // Create new customer record
+        // Create new athlete record
         private void btnCustNew_Click(object sender, EventArgs e)
         {
             try
             {
                 //Fill Combo boxes with data from database
                 this.Hide();
-                CustomerForm newCustomer = new CustomerForm();
+                AthleteForm newAthlete = new AthleteForm();
 
                 con.Open();
                 cmd.Connection = con;
@@ -601,23 +601,23 @@ namespace CoverZeroScheduling
 
                 while (dr.Read())
                 {
-                    newCustomer.cbCustZip.Items.Add(dr["Zip"].ToString());
+                    newAthlete.cbZip.Items.Add(dr["Zip"].ToString());
                 }
 
                 con.Close();
 
                 //Change labels on new customer form
-                newCustomer.gbCustomer.Text = "New Customer";
-                newCustomer.lblCustID.Text = "0".ToString();
-                newCustomer.lblLastupdate.Visible = false;
-                newCustomer.lblLastUpdated.Visible = false;
-                CustomerForm.AddressID = 0;
-                newCustomer.tbCustAdd.Enabled = true;
-                newCustomer.tbCustPhone.Enabled = true;
-                newCustomer.cbCustZip.Enabled = true;
-                newCustomer.btnEditAddress.Visible = false;
-                newCustomer.btnNewAddress.Visible = false;
-                newCustomer.ShowDialog();
+                newAthlete.gbCustomer.Text = "New Athlete";
+                newAthlete.lblCustID.Text = "0".ToString();
+                newAthlete.lblLastupdate.Visible = false;
+                newAthlete.lblLastUpdated.Visible = false;
+                AthleteForm.AddressID = 0;
+                newAthlete.tbAdd.Enabled = true;
+                newAthlete.tbPhone.Enabled = true;
+                newAthlete.cbZip.Enabled = true;
+                newAthlete.btnEditAddress.Visible = false;
+                newAthlete.btnNewAddress.Visible = false;
+                newAthlete.ShowDialog();
             }
             catch (Exception ex)
             {
@@ -636,24 +636,24 @@ namespace CoverZeroScheduling
         // Delete customer by customerID
         private void btnCustDelete_Click(object sender, EventArgs e)
         {
-            if (indexOfSelectedCustomer >= 0)
+            if (indexOfSelectedAthlete >= 0)
             {
                 // Select Customer
-                int currentCustomerID = (int)dgvCustomer.Rows[indexOfSelectedCustomer].Cells[0].Value;
-                int address_ID = (int)dgvCustomer.Rows[indexOfSelectedCustomer].Cells["AddressID"].Value;
-                string currentCustomer = dgvCustomer.Rows[indexOfSelectedCustomer].Cells[1].Value.ToString();
+                int currentAthleteID = (int)dgvCustomer.Rows[indexOfSelectedAthlete].Cells[0].Value;
+                int address_ID = (int)dgvCustomer.Rows[indexOfSelectedAthlete].Cells["AddressID"].Value;
+                string currentAthlete = dgvCustomer.Rows[indexOfSelectedAthlete].Cells[1].Value.ToString();
 
                     con.Open();
                     cmd.Connection = con;
-                    cmd.CommandText = "sp_distinctApptCustomerID";
+                    cmd.CommandText = "sp_distinctApptAthleteID";
                     MySqlDataReader dr = cmd.ExecuteReader();
 
                     while (dr.Read())
                     {
 
-                        if (currentCustomerID.Equals(Convert.ToInt32((dr["customerId"]))))
+                        if (currentAthleteID.Equals(Convert.ToInt32((dr["athleteId"]))))
                         {
-                            MessageBox.Show($"Deletion of customer {currentCustomer} is not allowed. {currentCustomer} is " +
+                            MessageBox.Show($"Deletion of athlete {currentAthlete} is not allowed. {currentAthlete} is " +
                                 $"associated with Appointments!", "Not Allowed!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             goto done;
                         }
@@ -661,19 +661,19 @@ namespace CoverZeroScheduling
                     }
 
                     dr.Close();
-                DialogResult result = MessageBox.Show($"Customer: {currentCustomer} is not associated with any appointment(s). " +
-                    $"Are you sure you want to delete Customer ID# {currentCustomerID}: {currentCustomer}?", "Delete",
+                DialogResult result = MessageBox.Show($"Athlete: {currentAthlete} is not associated with any appointment(s). " +
+                    $"Are you sure you want to delete Athlete ID# {currentAthleteID}: {currentAthlete}?", "Delete",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-                // Delete Customer
+                // Delete Athlete
                 if (result == DialogResult.Yes)
                 {
 
-                    MySqlCommand cmd2 = new MySqlCommand("sp_custDeletebyID");
+                    MySqlCommand cmd2 = new MySqlCommand("sp_AthleteDeletebyID");
                     cmd2.Connection = con;
                     cmd2.CommandType = CommandType.StoredProcedure;
                     cmd2.Parameters.Clear();
-                    cmd2.Parameters.AddWithValue("@custID", currentCustomerID);
+                    cmd2.Parameters.AddWithValue("@AthleteID", currentAthleteID);
                     cmd2.ExecuteNonQuery();
 
 
@@ -683,13 +683,13 @@ namespace CoverZeroScheduling
                     cmd2.Parameters.AddWithValue("@Address_ID", address_ID);
                     cmd2.ExecuteNonQuery();
 
-                    MessageBox.Show($"Customer ID#{currentCustomerID} name {currentCustomer} " +
+                    MessageBox.Show($"Athlete ID#{currentAthleteID} name {currentAthlete} " +
                         $"has been Removed!", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }                
                 else
                 {
                 
-                    MessageBox.Show("No Customers Deleted!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("No Athletes Deleted!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 done:;
                 con.Close();
@@ -707,8 +707,8 @@ namespace CoverZeroScheduling
         {
             using (con)
             {
-                indexOfSelectedCustomer = -1;
-                using (MySqlCommand cmd = new MySqlCommand("sp_viewAllCustomers", con))
+                indexOfSelectedAthlete = -1;
+                using (MySqlCommand cmd = new MySqlCommand("sp_viewAllAthletes", con))
                 {
                     con.Open();
                     da = new MySqlDataAdapter(cmd);
@@ -737,11 +737,11 @@ namespace CoverZeroScheduling
                 case "Appointment Types by Month":
                     MonthlyAppointments();
                     break;
-                case "Consultant Schedule":
-                    ConsultantSchedule();
+                case "Coach's Schedule":
+                    CoachSchedule();
                     break;
-                case "All Consultants Schedule":
-                    AllConsultantAppointments();
+                case "All Coach's Schedule":
+                    AllCoachAppointments();
                     break;
                 default:
                     break;
@@ -797,28 +797,28 @@ namespace CoverZeroScheduling
 
         }
 
-        // Print consultant appointments by consultant to a report
-        private void ConsultantSchedule()
+        // Print coach's appointments by coach to a report
+        private void CoachSchedule()
         {
-            string usrName = cbConsultant.Text;
+            string coachName = cbConsultant.Text;
 
             try
             {
                 con.Open();
 
-                MySqlCommand cmd = new MySqlCommand("sp_getConsultantSchedule", con);
+                MySqlCommand cmd = new MySqlCommand("sp_getCoachSchedule", con);
                 cmd.Connection = con;
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@usrName", usrName);
+                cmd.Parameters.AddWithValue("@CoachName", coachName);
 
                 MySqlDataReader dr = cmd.ExecuteReader();
                 var pg = new StringBuilder();
-                pg.Append($"\t\t\t All appointments for Consultant {usrName} \n\n");
-                pg.Append(String.Format("{0,-15}\t{1,-15}\t{2,-25}\t\t{3,-25}\n", "Consultant", "Type", "Start", "End"));
+                pg.Append($"\t\t\t All appointments for Coach {coachName} \n\n");
+                pg.Append(String.Format("{0,-15}\t{1,-15}\t{2,-25}\t\t{3,-25}\n", "Coach", "Type", "Start", "End"));
                 pg.Append($"{string.Concat(Enumerable.Repeat("*", 100))} \n");
                 while (dr.Read())
                 {
-                    pg.AppendFormat(String.Format("{0,-15}\t{1,-15}\t{2,-25}\t{3,-25} \n", dr["userName"], dr["type"],
+                    pg.AppendFormat(String.Format("{0,-15}\t{1,-15}\t{2,-25}\t{3,-25} \n", dr["coachName"], dr["type"],
                         GetCorrectedDate(Convert.ToDateTime(dr["start"])), GetCorrectedDate(Convert.ToDateTime(dr["end"]))));
                 }
                 con.Close();
@@ -839,8 +839,8 @@ namespace CoverZeroScheduling
 
         }
 
-        // Print All consultant appointments to a report
-        private void AllConsultantAppointments()
+        // Print All coachs appointments to a report
+        private void AllCoachAppointments()
         {
             try
             {
@@ -854,12 +854,12 @@ namespace CoverZeroScheduling
 
                 // Initilize stringbuilder
                 var pg = new StringBuilder();
-                pg.Append($"\t\t\t All appointments for all Consultants \n\n");// Report Title
-                pg.Append(String.Format("{0,-15}\t{1,-15}\t{2,-25}\t\t{3,-25}\n", "Consultant", "Type", "Start", "End"));// Report Header
+                pg.Append($"\t\t\t All appointments for all Coaches \n\n");// Report Title
+                pg.Append(String.Format("{0,-15}\t{1,-15}\t{2,-25}\t\t{3,-25}\n", "Coach", "Type", "Start", "End"));// Report Header
                 pg.Append($"{string.Concat(Enumerable.Repeat("*", 100))} \n");
                 while (dr.Read())
                 {
-                    pg.AppendFormat(String.Format("{0,-15}\t{1,-15}\t{2,-25}\t{3,-25} \n", dr["userName"], dr["type"], 
+                    pg.AppendFormat(String.Format("{0,-15}\t{1,-15}\t{2,-25}\t{3,-25} \n", dr["coachName"], dr["type"], 
                         GetCorrectedDate(Convert.ToDateTime(dr["start"])), GetCorrectedDate(Convert.ToDateTime(dr["end"]))));
                 }
                 con.Close();
@@ -889,15 +889,15 @@ namespace CoverZeroScheduling
                 label2.Visible = true;
                 label2.Text = "Please select Month: ";
             }
-            else if(cbReports.Text == "Consultant Schedule")
+            else if(cbReports.Text == "Coach's Schedule")
             {
                 dtpMonth.Visible = false;
                 cbConsultant.Visible = true;
                 label2.Visible = true;
-                GetConsultants();
-                label2.Text = "Select Consultant: ";
+                GetCoaches();
+                label2.Text = "Select Coach: ";
             }
-            else if(cbReports.Text == "All Consultants Schedule")
+            else if(cbReports.Text == "All Coach's Schedule")
             {
                 dtpMonth.Visible = false;
                 cbConsultant.Visible = false;
@@ -906,21 +906,21 @@ namespace CoverZeroScheduling
 
         }
 
-        // Get Consultant names from database
-        private void GetConsultants()
+        // Get Coach names from database
+        private void GetCoaches()
         {
             using (con)
             {
                 con.Open();
 
 
-                MySqlCommand cmd = new MySqlCommand("sp_getDistinctUsr");
+                MySqlCommand cmd = new MySqlCommand("sp_getDistinctCoach");
                 cmd.Connection = con;
                 dr = cmd.ExecuteReader();
 
                 while (dr.Read())
                 {
-                    cbConsultant.Items.Add(dr["userName"].ToString());
+                    cbConsultant.Items.Add(dr["coachName"].ToString());
                 }
 
             }

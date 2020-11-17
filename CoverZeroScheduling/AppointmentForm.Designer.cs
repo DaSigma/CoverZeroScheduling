@@ -134,12 +134,12 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(49, 104);
+            this.label5.Location = new System.Drawing.Point(68, 104);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(57, 13);
+            this.label5.Size = new System.Drawing.Size(38, 13);
             this.label5.TabIndex = 42;
-            this.label5.Text = "Consultant";
+            this.label5.Text = "Coach";
             // 
             // cbUsr
             // 
@@ -192,7 +192,7 @@
             this.dTPStartTime.ShowUpDown = true;
             this.dTPStartTime.Size = new System.Drawing.Size(73, 20);
             this.dTPStartTime.TabIndex = 4;
-            this.dTPStartTime.Value = new System.DateTime(2020, 3, 25, 19, 24, 0, 0);
+            this.dTPStartTime.Value = new System.DateTime(2020, 11, 16, 9, 0, 0, 0);
             // 
             // dTPEndTime
             // 
@@ -204,7 +204,7 @@
             this.dTPEndTime.ShowUpDown = true;
             this.dTPEndTime.Size = new System.Drawing.Size(70, 20);
             this.dTPEndTime.TabIndex = 6;
-            this.dTPEndTime.Value = new System.DateTime(2020, 3, 31, 22, 21, 0, 0);
+            this.dTPEndTime.Value = new System.DateTime(2020, 11, 16, 10, 21, 0, 0);
             // 
             // lblUpdated
             // 
@@ -223,7 +223,7 @@
             this.dTPStart.Name = "dTPStart";
             this.dTPStart.Size = new System.Drawing.Size(150, 20);
             this.dTPStart.TabIndex = 3;
-            this.dTPStart.Value = new System.DateTime(2020, 3, 25, 12, 0, 0, 0);
+            this.dTPStart.Value = new System.DateTime(2020, 12, 25, 0, 0, 0, 0);
             this.dTPStart.ValueChanged += new System.EventHandler(this.dTPStart_ValueChanged);
             // 
             // cbCustName
@@ -295,11 +295,11 @@
             // lbl2
             // 
             this.lbl2.AutoSize = true;
-            this.lbl2.Location = new System.Drawing.Point(24, 49);
+            this.lbl2.Location = new System.Drawing.Point(35, 49);
             this.lbl2.Name = "lbl2";
-            this.lbl2.Size = new System.Drawing.Size(82, 13);
+            this.lbl2.Size = new System.Drawing.Size(71, 13);
             this.lbl2.TabIndex = 4;
-            this.lbl2.Text = "Customer Name";
+            this.lbl2.Text = "Athlete Name";
             // 
             // dtpEnd
             // 

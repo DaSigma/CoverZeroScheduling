@@ -15,11 +15,11 @@ namespace CoverZeroScheduling
         MySqlConnection con = new MySqlConnection();
         MySqlCommand cmd = new MySqlCommand();
         MySqlDataReader dr;
-        static string currentUser;
-        private static int currentUserID;
+        static string currentCoach;
+        private static int currentCoachID;
 
-        internal static int CurrentUserID { get { return currentUserID; } }
-        internal static string CurrentUser { get { return currentUser; } }
+        internal static int CurrentCoachID { get { return currentCoachID; } }
+        internal static string CurrentCoach { get { return currentCoach; } }
         public LogIn()
         {
             InitializeComponent();
@@ -63,16 +63,16 @@ namespace CoverZeroScheduling
                     // Connect to db and check username and password entered
                     con.Open();
                     cmd.Connection = con;
-                    cmd.CommandText = "Select * FROM user Where userName = '" + txtUsername.Text.Trim() + "'";
+                    cmd.CommandText = "Select * FROM coach Where coachName = '" + txtUsername.Text.Trim() + "'";
                     MySqlDataReader dr = cmd.ExecuteReader();
 
                     if (dr.Read())
                     {
-                        if (txtUsername.Text.ToUpper().Equals(dr["userName"].ToString().ToUpper()) && txtPassword.Text.Equals(dr["password"]))
+                        if (txtUsername.Text.ToUpper().Equals(dr["coachName"].ToString().ToUpper()) && txtPassword.Text.Equals(dr["password"]))
                         {
                             MessageBox.Show($"{Properties.Resources.logInSuccess}", "Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            currentUserID = Convert.ToInt32(dr["userID"]);
-                            currentUser = dr["userName"].ToString();
+                            currentCoachID = Convert.ToInt32(dr["coachID"]);
+                            currentCoach = dr["coachName"].ToString();
 
                             // Open Scheduling screen
                             Scheduling scheduling = new Scheduling();
@@ -82,7 +82,7 @@ namespace CoverZeroScheduling
                             // Log successful login
                             using (StreamWriter w = File.AppendText("log.txt"))
                             {
-                                LogEntry($"{currentUser.ToString()} Logged in successfully", w);
+                                LogEntry($"{currentCoach.ToString()} Logged in successfully", w);
                             }
                         }
                         else// Throw exception
@@ -145,16 +145,16 @@ namespace CoverZeroScheduling
         }
 
         // Set Current user ID
-        internal static int GetUserID()
+        internal static int GetCoachID()
         {
-            int userID = currentUserID;
-            return userID;
+            int coachID = currentCoachID;
+            return coachID;
         }
 
         // Set Current user Name
-        internal static string GetUserName()
+        internal static string GetCoachName()
         {
-            string userName = currentUser;
+            string userName = currentCoach;
             return userName;
         }
 
@@ -180,7 +180,7 @@ namespace CoverZeroScheduling
         {
             log.Write("\r\nLog Entry : ");
             log.WriteLine($"");
-            log.WriteLine($"  : User {entry} on {DateTime.Now.ToLongTimeString()} {DateTime.Now.ToLongDateString()}.");
+            log.WriteLine($"  : Coach {entry} on {DateTime.Now.ToLongTimeString()} {DateTime.Now.ToLongDateString()}.");
             log.WriteLine("*************************************************");
         }
 

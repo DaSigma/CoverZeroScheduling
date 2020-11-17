@@ -11,16 +11,16 @@ using System.Windows.Forms;
 
 namespace CoverZeroScheduling
 {
-    public partial class CustomerForm : Form
+    public partial class AthleteForm : Form
     {
         MySqlConnection con = new MySqlConnection(@"server=3.227.166.251;user id=U04cRO;password=53688204070;persistsecurityinfo=True;database=U04cRO");
-        int custID;
+        int athleteID;
         int addressID;
         public static int AddressID { get; set; }
         int cityID;
 
         
-        public CustomerForm()
+        public AthleteForm()
         {
             InitializeComponent();
 
@@ -33,10 +33,10 @@ namespace CoverZeroScheduling
            };// Lambda expression to create Close button click event
         }
 
-        // Save Customer and address
-        private void btnSaveCustomer_Click(object sender, EventArgs e)
+        // Save Athlete and address
+        private void btnSaveAthlete_Click(object sender, EventArgs e)
         {
-            custID = Convert.ToInt32(lblCustID.Text);
+            athleteID = Convert.ToInt32(lblCustID.Text);
 
             try
             {
@@ -49,7 +49,7 @@ namespace CoverZeroScheduling
 
                     // Get City ID with zip
                     cmd_GetCityID.CommandType = CommandType.StoredProcedure;
-                    cmd_GetCityID.Parameters.AddWithValue("@zip", cbCustZip.Text);
+                    cmd_GetCityID.Parameters.AddWithValue("@zip", cbZip.Text);
                     MySqlDataReader dr = cmd_GetCityID.ExecuteReader();
 
                     if (dr.Read())
@@ -62,18 +62,18 @@ namespace CoverZeroScheduling
                     MySqlCommand cmd_addUpdateAddress = new MySqlCommand("sp_addUpdateAddress", con);
                     cmd_addUpdateAddress.CommandType = CommandType.StoredProcedure;
                     cmd_addUpdateAddress.Parameters.AddWithValue("@address_ID", addressID);
-                    cmd_addUpdateAddress.Parameters.AddWithValue("@address1", tbCustAdd.Text);
+                    cmd_addUpdateAddress.Parameters.AddWithValue("@address1", tbAdd.Text);
                     cmd_addUpdateAddress.Parameters.AddWithValue("@city_ID", cityID);
-                    cmd_addUpdateAddress.Parameters.AddWithValue("@zip", cbCustZip.Text);
-                    cmd_addUpdateAddress.Parameters.AddWithValue("@phoneNumber", tbCustPhone.Text);
+                    cmd_addUpdateAddress.Parameters.AddWithValue("@zip", cbZip.Text);
+                    cmd_addUpdateAddress.Parameters.AddWithValue("@phoneNumber", tbPhone.Text);
                     cmd_addUpdateAddress.ExecuteNonQuery();
 
                     // Get addressID with cityID and zip
                     cmd_GetAddressID.CommandType = CommandType.StoredProcedure;
                     cmd_GetAddressID.Parameters.AddWithValue("@city_ID", cityID);
-                    cmd_GetAddressID.Parameters.AddWithValue("@zip", cbCustZip.Text);
-                    cmd_GetAddressID.Parameters.AddWithValue("@custAddress", tbCustAdd.Text);
-                    cmd_GetAddressID.Parameters.AddWithValue("@custPhone", tbCustPhone.Text);
+                    cmd_GetAddressID.Parameters.AddWithValue("@zip", cbZip.Text);
+                    cmd_GetAddressID.Parameters.AddWithValue("@AthleteAddress", tbAdd.Text);
+                    cmd_GetAddressID.Parameters.AddWithValue("@AthletePhone", tbPhone.Text);
                     dr = cmd_GetAddressID.ExecuteReader();
 
                     if (dr.Read())
@@ -83,16 +83,16 @@ namespace CoverZeroScheduling
                     }
                     dr.Close();
 
-                    // Insert or update customr Info
-                    MySqlCommand cmd_addUpdateCustomer = new MySqlCommand("sp_addUpdateCustomer", con);
-                    cmd_addUpdateCustomer.Parameters.Clear();
-                    cmd_addUpdateCustomer.CommandType = CommandType.StoredProcedure;
-                    cmd_addUpdateCustomer.Parameters.AddWithValue("@custID", custID);
-                    cmd_addUpdateCustomer.Parameters.AddWithValue("@custName", tbCustName.Text);
-                    cmd_addUpdateCustomer.Parameters.AddWithValue("@addressID", addressID);
-                    cmd_addUpdateCustomer.ExecuteNonQuery();
+                    // Insert or update athlete Info
+                    MySqlCommand cmd_addUpdateAthlete = new MySqlCommand("sp_addUpdateAthlete", con);
+                    cmd_addUpdateAthlete.Parameters.Clear();
+                    cmd_addUpdateAthlete.CommandType = CommandType.StoredProcedure;
+                    cmd_addUpdateAthlete.Parameters.AddWithValue("@AthlID", athleteID);
+                    cmd_addUpdateAthlete.Parameters.AddWithValue("@AthlName", tbName.Text);
+                    cmd_addUpdateAthlete.Parameters.AddWithValue("@addressID", addressID);
+                    cmd_addUpdateAthlete.ExecuteNonQuery();
 
-                    MessageBox.Show("Customer Added/Updated");// Feedback
+                    MessageBox.Show("Athlete Added/Updated");// Feedback
                 }
                 con.Close();
             }
@@ -113,8 +113,8 @@ namespace CoverZeroScheduling
         // Conditions to allow save button to be enabled
         private bool AllowSave()
         {
-            if (((string.IsNullOrEmpty(tbCustName.Text)) || (string.IsNullOrEmpty(tbCustPhone.Text)) || (string.IsNullOrEmpty(tbCustAdd.Text)) ||
-                (string.IsNullOrEmpty(cbCustZip.Text))))
+            if (((string.IsNullOrEmpty(tbName.Text)) || (string.IsNullOrEmpty(tbPhone.Text)) || (string.IsNullOrEmpty(tbAdd.Text)) ||
+                (string.IsNullOrEmpty(cbZip.Text))))
             {
                 return false;
             }
@@ -129,114 +129,114 @@ namespace CoverZeroScheduling
                 con.Open();
                 MySqlCommand cmd = new MySqlCommand("sp_getAddressInfo", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@zip", cbCustZip.Text);
+                cmd.Parameters.AddWithValue("@zip", cbZip.Text);
                 MySqlDataReader dr = cmd.ExecuteReader();
 
                 if (dr.Read())
                 {
-                    tbCustCity.Text = (dr["City"].ToString());
-                    tbCustCountry.Text = (dr["Country"].ToString());
+                    tbCity.Text = (dr["City"].ToString());
+                    tbCountry.Text = (dr["Country"].ToString());
                 }
             }
             con.Close();
         }
 
-        // Validation check for empty Customer name textbox
-        private void tbCustName_Leave(object sender, EventArgs e)
+        // Validation check for empty Athlete name textbox
+        private void tbAthleteName_Leave(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(tbCustName.Text))
+            if (string.IsNullOrEmpty(tbName.Text))
             {
-                errorProvider1.SetError(tbCustName, "Please provide customer name.");
+                errorProvider1.SetError(tbName, "Please provide athlete's name.");
             }
             else
             {
-                errorProvider1.SetError(tbCustName, null);
+                errorProvider1.SetError(tbName, null);
             }
         }
 
-        // Validation check for empty Customer phone textbox
-        private void tbCustPhone_Leave(object sender, EventArgs e)
+        // Validation check for empty Athlete phone textbox
+        private void tbAthletePhone_Leave(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(tbCustPhone.Text))
+            if (string.IsNullOrEmpty(tbPhone.Text))
             {
-                errorProvider1.SetError(tbCustPhone, "Please provide customer Phone Number.");
+                errorProvider1.SetError(tbPhone, "Please provide athlete's Phone Number.");
             }
             else
             {
-                errorProvider1.SetError(tbCustPhone, null);
+                errorProvider1.SetError(tbPhone, null);
             }
         
         }
 
-        // Validation check for empty Customer address textbox
-        private void tbCustAdd_Leave(object sender, EventArgs e)
+        // Validation check for empty Athlete address textbox
+        private void tbAthleteAddress_Leave(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(tbCustAdd.Text))
+            if (string.IsNullOrEmpty(tbAdd.Text))
             {
 
-                errorProvider1.SetError(tbCustAdd, "Please provide customer Address.");
+                errorProvider1.SetError(tbAdd, "Please provide athlete's Address.");
             }
             else
             {
-                errorProvider1.SetError(tbCustAdd, null);
+                errorProvider1.SetError(tbAdd, null);
             }
             
         }
 
         // Check if save button is enabled
-        private void tbCustName_TextChanged(object sender, EventArgs e)
+        private void tbAthleteName_TextChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(tbCustName.Text))
+            if (string.IsNullOrEmpty(tbName.Text))
             {
-                errorProvider1.SetError(tbCustName, "Please provide customer name.");
+                errorProvider1.SetError(tbName, "Please provide athlete's name.");
             }
             else
             {
-                errorProvider1.SetError(tbCustName, null);
+                errorProvider1.SetError(tbName, null);
             }
             btnSaveCustomer.Enabled = AllowSave();
         }
 
         // Check if save button is enabled
-        private void tbCustPhone_TextChanged(object sender, EventArgs e)
+        private void tbAthletePhone_TextChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(tbCustPhone.Text))
+            if (string.IsNullOrEmpty(tbPhone.Text))
             {
-                errorProvider1.SetError(tbCustPhone, "Please provide customer Phone Number.");
+                errorProvider1.SetError(tbPhone, "Please provide athlete's Phone Number.");
             }
             else
             {
-                errorProvider1.SetError(tbCustPhone, null);
+                errorProvider1.SetError(tbPhone, null);
             }
             btnSaveCustomer.Enabled = AllowSave();
         }
 
         // Check if save button is enabled
-        private void tbCustAdd_TextChanged(object sender, EventArgs e)
+        private void tbAthleteAddress_TextChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(tbCustAdd.Text))
+            if (string.IsNullOrEmpty(tbAdd.Text))
             {
 
-                errorProvider1.SetError(tbCustAdd, "Please provide customer Address.");
+                errorProvider1.SetError(tbAdd, "Please provide athlete's Address.");
             }
             else
             {
-                errorProvider1.SetError(tbCustAdd, null);
+                errorProvider1.SetError(tbAdd, null);
             }
             btnSaveCustomer.Enabled = AllowSave();
         }
 
         // Check if save button is enabled
-        private void cbCustZip_SelectedIndexChanged(object sender, EventArgs e)
+        private void cbAthleteZip_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(cbCustZip.Text))
+            if (string.IsNullOrEmpty(cbZip.Text))
             {
 
-                errorProvider1.SetError(cbCustZip, "Please provide customer Zip.");
+                errorProvider1.SetError(cbZip, "Please provide athlete's Zip.");
             }
             else
             {
-                errorProvider1.SetError(cbCustZip, null);
+                errorProvider1.SetError(cbZip, null);
             }
             btnSaveCustomer.Enabled = AllowSave();
         }
@@ -244,24 +244,24 @@ namespace CoverZeroScheduling
         // Edit address information - enable textboxes
         private void btnEditAddress_Click(object sender, EventArgs e)
         {
-            tbCustAdd.Enabled = true;
-            tbCustPhone.Enabled = true;
-            cbCustZip.Enabled = true;
+            tbAdd.Enabled = true;
+            tbPhone.Enabled = true;
+            cbZip.Enabled = true;
             addressID = AddressID;
         }
 
         // Add new address btn - clear text
         private void btnAddAddress_Click(object sender, EventArgs e)
         {
-            tbCustPhone.Text = "";
-            tbCustAdd.Text = "";
-            tbCustCity.Text = "";
-            cbCustZip.SelectedIndex = -1;
-            tbCustCountry.Text = "";
+            tbPhone.Text = "";
+            tbAdd.Text = "";
+            tbCity.Text = "";
+            cbZip.SelectedIndex = -1;
+            tbCountry.Text = "";
 
-            tbCustAdd.Enabled = true;
-            tbCustPhone.Enabled = true;
-            cbCustZip.Enabled = true;
+            tbAdd.Enabled = true;
+            tbPhone.Enabled = true;
+            cbZip.Enabled = true;
             addressID = 0;
         }
 

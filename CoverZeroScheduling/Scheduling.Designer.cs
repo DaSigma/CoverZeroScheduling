@@ -133,8 +133,8 @@
             this.cbReports.FormattingEnabled = true;
             this.cbReports.Items.AddRange(new object[] {
             "Appointment Types by Month",
-            "Consultant Schedule",
-            "All Consultants Schedule"});
+            "Coach\'s Schedule",
+            "All Coach\'s Schedule"});
             this.cbReports.Location = new System.Drawing.Point(19, 33);
             this.cbReports.Name = "cbReports";
             this.cbReports.Size = new System.Drawing.Size(229, 21);
@@ -338,7 +338,7 @@
             this.gbScheduleCustomer.Size = new System.Drawing.Size(601, 239);
             this.gbScheduleCustomer.TabIndex = 11;
             this.gbScheduleCustomer.TabStop = false;
-            this.gbScheduleCustomer.Text = "Customer";
+            this.gbScheduleCustomer.Text = "Athletes";
             // 
             // dgvCustomer
             // 
