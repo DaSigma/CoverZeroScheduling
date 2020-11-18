@@ -134,7 +134,9 @@
             this.cbReports.Items.AddRange(new object[] {
             "Appointment Types by Month",
             "Coach\'s Schedule",
-            "All Coach\'s Schedule"});
+            "All Coach\'s Schedule",
+            "Corners",
+            "Safties"});
             this.cbReports.Location = new System.Drawing.Point(19, 33);
             this.cbReports.Name = "cbReports";
             this.cbReports.Size = new System.Drawing.Size(229, 21);

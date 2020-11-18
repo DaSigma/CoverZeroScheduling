@@ -30,8 +30,8 @@ namespace CoverZeroScheduling
             
             InitializeComponent();
             dtpEnd.Value = dTPStart.Value;
-            dTPStartTime.Format = DateTimePickerFormat.Time;
-            dTPEndTime.Format = DateTimePickerFormat.Time;
+            dTPStartTime.Value = dTPStart.Value;
+            dTPEndTime.Value = dTPStart.Value;
             this.btnDone.Click += (object sender, EventArgs e) =>
             {
                 this.Hide();
@@ -64,9 +64,6 @@ namespace CoverZeroScheduling
                         string sp = "sp_insertAppt";
                         using (MySqlCommand cmd2 = new MySqlCommand(sp, con))
                         {
-                            TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id);
-                            //var offset = new DateTimeOffset()
-
                             apptStartTime = TimeZoneInfo.ConvertTimeToUtc(dTPStartTime.Value, TimeZoneInfo.Local);
                             apptEndTime = TimeZoneInfo.ConvertTimeToUtc(dTPEndTime.Value, TimeZoneInfo.Local);
                             string apptStart = dTPStart.Value.ToString("yyyy-MM-dd") + apptStartTime.ToString(" HH:mm");
@@ -113,10 +110,11 @@ namespace CoverZeroScheduling
                                         string mtgDay = Scheduling.GetCorrectedDate(Convert.ToDateTime(dr["Start"])).ToString("MMMM dd, yyyy");
                                         char.ToUpper(cbUsr.Text[0]);
                                         MessageBox.Show($"Coach {cbUsr.Text} already has a meeting from {mtgStart} to {mtgEnd} on {mtgDay}!");
-                                        goto done;
+                                        goto done;                                
                                     }
                                 }
                             }
+                            
                             dr.Close();
 
                             //Get AthleteID by name
@@ -146,14 +144,15 @@ namespace CoverZeroScheduling
                                     cmd2.ExecuteNonQuery();
                                     MessageBox.Show("Appointment Saved!");
                                 }
+                                Scheduling schedulingScreen = new Scheduling();
+                                schedulingScreen.Show();
+                                this.Hide();
                             }
                             done:;
                             con.Close();
 
                         }
-                        Scheduling schedulingScreen = new Scheduling();
-                        schedulingScreen.Show();
-                        this.Hide();
+
                     }
                 }
             }
@@ -190,6 +189,8 @@ namespace CoverZeroScheduling
         private void dTPStart_ValueChanged(object sender, EventArgs e)
         {
             dtpEnd.Value = dTPStart.Value;
+            dTPStartTime.Value =dTPStart.Value;
+            dTPEndTime.Value = dTPStart.Value;
         }
 
         // Check if save button is enabled
@@ -275,10 +276,15 @@ namespace CoverZeroScheduling
         // Change Appointment ID label text
         private void ChangeAID()
         {
-            if (lblApptID.Text == "Auto Generated")
+            if (lblApptID.Text == "0")
             {
                 lblApptID.Text = "0";
             }
+        }
+
+        private void dTPStartTime_ValueChanged(object sender, EventArgs e)
+        {
+            dTPEndTime.Value = dTPStartTime.Value.AddHours(1);
         }
 
     }

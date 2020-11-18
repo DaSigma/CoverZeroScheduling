@@ -18,11 +18,13 @@ namespace CoverZeroScheduling
         int addressID;
         public static int AddressID { get; set; }
         int cityID;
+        bool isCorner;
 
         
         public AthleteForm()
         {
             InitializeComponent();
+            LoadcbPosition();
 
             this.btnClose.Click += (object sender, EventArgs e) =>
             {
@@ -89,12 +91,17 @@ namespace CoverZeroScheduling
                     cmd_addUpdateAthlete.CommandType = CommandType.StoredProcedure;
                     cmd_addUpdateAthlete.Parameters.AddWithValue("@AthlID", athleteID);
                     cmd_addUpdateAthlete.Parameters.AddWithValue("@AthlName", tbName.Text);
-                    cmd_addUpdateAthlete.Parameters.AddWithValue("@addressID", addressID);
+                    cmd_addUpdateAthlete.Parameters.AddWithValue("@AthlPosition", cbPosition.Text);
+                    cmd_addUpdateAthlete.Parameters.AddWithValue("@AthlDiscipline", cbDiscipline.Text);
+                    cmd_addUpdateAthlete.Parameters.AddWithValue("@addID", addressID);
                     cmd_addUpdateAthlete.ExecuteNonQuery();
 
                     MessageBox.Show("Athlete Added/Updated");// Feedback
                 }
                 con.Close();
+                this.Hide();
+                Scheduling schedulingScreen = new Scheduling();
+                schedulingScreen.Show();
             }
             catch (Exception ex)
             {
@@ -105,9 +112,7 @@ namespace CoverZeroScheduling
                 if (con.State == ConnectionState.Open)
                     con.Close();
             }
-            this.Hide();
-            Scheduling schedulingScreen = new Scheduling();
-            schedulingScreen.Show();
+
         }
 
         // Conditions to allow save button to be enabled
@@ -265,5 +270,45 @@ namespace CoverZeroScheduling
             addressID = 0;
         }
 
+        private void SelectDiscipline()
+        {
+            if(cbPosition.Text == "Corner")
+            {
+                isCorner = true;
+            }
+            else
+            {
+                isCorner = false;
+            }
+            
+        }
+
+        private void LoadcbPosition()
+        {
+            cbPosition.Items.Add("Corner");
+            cbPosition.Items.Add("Safety");
+        }
+        private void LoadcbDiscipline()
+        {
+            if (isCorner)
+            {
+                cbDiscipline.Items.Clear();
+                cbDiscipline.Items.Add("Left");
+                cbDiscipline.Items.Add("Right");
+
+            }
+            else
+            {
+                cbDiscipline.Items.Clear();
+                cbDiscipline.Items.Add("Strong");
+                cbDiscipline.Items.Add("Free");
+            }
+        }
+
+        private void cbPosition_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectDiscipline();
+            LoadcbDiscipline();
+        }
     }
 }

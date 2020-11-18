@@ -143,7 +143,7 @@ namespace CoverZeroScheduling
         private void GetUpcomingMeeting()
         {
             string startDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
-            string toDate = Convert.ToDateTime(startDate).AddDays(7).ToString("yyyy-MM-dd HH:mm");
+            string toDate = Convert.ToDateTime(startDate).AddHours(1).ToString("yyyy-MM-dd HH:mm");
 
             string sp = "sp_getApptsByDate";
             GetData(sp, startDate, toDate);
@@ -266,7 +266,7 @@ namespace CoverZeroScheduling
                     da.Update(dt);
 
                     string startDate = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now, TimeZoneInfo.Local).ToString("yyyy-MM-dd HH:mm");
-                    string toDate = Convert.ToDateTime(startDate).AddDays(7).ToString("yyyy-MM-dd HH:mm");
+                    string toDate = Convert.ToDateTime(startDate).AddHours(1).ToString("yyyy-MM-dd HH:mm");
 
                     MySqlCommand cmd2 = new MySqlCommand("sp_getApptsByDate");
                     cmd2.CommandType = CommandType.StoredProcedure;
@@ -435,9 +435,11 @@ namespace CoverZeroScheduling
                 }
                
                 newAppointment.gbAppointment.Text = "New Appointment";
-                newAppointment.lblApptID.Text = "Auto Generated";
+                newAppointment.lblApptID.Text = "0";
                 newAppointment.lblUpdated.Visible = false;
                 newAppointment.lblLastUpdate.Visible = false;
+                //newAppointment.dTPStartTime.Value = DateTime.Today;
+                //newAppointment.dTPEndTime.Value = DateTime.Today;
                 newAppointment.ShowDialog();
                 con.Close();
             }
@@ -536,6 +538,7 @@ namespace CoverZeroScheduling
                         while (dr.Read())
                         {
                             viewAthlete.cbZip.Items.Add(dr["postalCode"].ToString());
+                            
                         }
                         dr.Close();
 
@@ -551,6 +554,12 @@ namespace CoverZeroScheduling
                         {
                             viewAthlete.lblCustID.Text = dr["athleteId"].ToString();
                             viewAthlete.tbName.Text = dr["athleteName"].ToString();
+                            
+                            //viewAthlete.cbPosition.Items.Add(dr["athletePosition"].ToString());
+                            viewAthlete.cbPosition.Text = dr["athletePosition"].ToString();
+                            //viewAthlete.cbDiscipline.Items.Add(dr["athleteDiscipline"].ToString());
+                            viewAthlete.cbDiscipline.Text = dr["athleteDiscipline"].ToString();
+                            //viewAthlete.cbDiscipline.Text = dr["athleteDiscipline"].ToString();
                             viewAthlete.tbPhone.Text = dr["phone"].ToString();
                             viewAthlete.tbAdd.Text = dr["address"].ToString();
                             viewAthlete.tbCity.Text = dr["city"].ToString();
@@ -673,7 +682,7 @@ namespace CoverZeroScheduling
                     cmd2.Connection = con;
                     cmd2.CommandType = CommandType.StoredProcedure;
                     cmd2.Parameters.Clear();
-                    cmd2.Parameters.AddWithValue("@AthleteID", currentAthleteID);
+                    cmd2.Parameters.AddWithValue("@Athlete_ID", currentAthleteID);
                     cmd2.ExecuteNonQuery();
 
 
@@ -732,6 +741,7 @@ namespace CoverZeroScheduling
         private void btnGenerate_Click(object sender, EventArgs e)
         {
             string result = cbReports.Text;
+            string sp;
             switch (result)
             {
                 case "Appointment Types by Month":
@@ -742,6 +752,14 @@ namespace CoverZeroScheduling
                     break;
                 case "All Coach's Schedule":
                     AllCoachAppointments();
+                    break;
+                case "Safties":
+                    sp = "sp_safeties";
+                    DBReports(sp);
+                    break;
+                case "Corners":
+                    sp = "sp_corners";
+                    DBReports(sp);
                     break;
                 default:
                     break;
@@ -867,6 +885,46 @@ namespace CoverZeroScheduling
                 rtbReport.Text = pg.ToString(); // Print report to Rich text box
             }
             catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);// print error message
+            }
+            finally
+            {
+                if (dr != null)
+                    dr.Close();
+                if (con.State == ConnectionState.Open)
+                    con.Close();
+            }
+        }
+
+        // Print All DBs by position to a report
+        private void DBReports(string sp)
+        {
+            try
+            {
+                con.Open();
+
+                MySqlCommand cmd = new MySqlCommand(sp, con);
+                cmd.Connection = con;
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                MySqlDataReader dr = cmd.ExecuteReader();
+
+                // Initilize stringbuilder
+                var pg = new StringBuilder();
+                pg.Append($"\t\t\t Defensive Backs by Position \n\n");// Report Title
+                pg.Append(String.Format("{0,-15}\t{1,-15}\t{2,-25}\t\n", "DB", "Discipline", "Position"));// Report Header
+                pg.Append($"{string.Concat(Enumerable.Repeat("*", 100))} \n");
+                while (dr.Read())
+                {
+                    pg.AppendFormat(String.Format("{0,-15}\t{1,-15}\t{2,-25} \n", dr["athleteName"], dr["athleteDiscipline"],
+                        dr["athletePosition"]));
+                }
+                con.Close();
+
+                rtbReport.Text = pg.ToString(); // Print report to Rich text box
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);// print error message
             }

@@ -59,7 +59,7 @@ namespace CoverZeroScheduling
                     try
                     {
                         con.Open();
-                        MySqlCommand cmd = new MySqlCommand("sp_add_user", con);
+                        MySqlCommand cmd = new MySqlCommand("sp_add_coach", con);
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@un", txtUsername.Text.Trim());
                         cmd.Parameters.AddWithValue("@pw", txtPassword.Text.Trim());
@@ -71,7 +71,7 @@ namespace CoverZeroScheduling
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"User Already Exists \n {ex}");
+                        MessageBox.Show($"Coach Already Exists \n {ex}");
                     }
 
                 }

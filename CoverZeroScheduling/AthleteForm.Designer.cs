@@ -54,6 +54,10 @@
             this.tbAdd = new System.Windows.Forms.TextBox();
             this.btnSaveCustomer = new System.Windows.Forms.Button();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cbPosition = new System.Windows.Forms.ComboBox();
+            this.cbDiscipline = new System.Windows.Forms.ComboBox();
             this.gbCustomer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.gbCustomerInfo.SuspendLayout();
@@ -69,14 +73,14 @@
             this.gbCustomer.Controls.Add(this.btnSaveCustomer);
             this.gbCustomer.Location = new System.Drawing.Point(12, 23);
             this.gbCustomer.Name = "gbCustomer";
-            this.gbCustomer.Size = new System.Drawing.Size(543, 292);
+            this.gbCustomer.Size = new System.Drawing.Size(543, 356);
             this.gbCustomer.TabIndex = 12;
             this.gbCustomer.TabStop = false;
             this.gbCustomer.Text = "Athlete";
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(464, 263);
+            this.btnClose.Location = new System.Drawing.Point(464, 303);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 6;
@@ -96,6 +100,10 @@
             // 
             // gbCustomerInfo
             // 
+            this.gbCustomerInfo.Controls.Add(this.cbDiscipline);
+            this.gbCustomerInfo.Controls.Add(this.cbPosition);
+            this.gbCustomerInfo.Controls.Add(this.label3);
+            this.gbCustomerInfo.Controls.Add(this.label2);
             this.gbCustomerInfo.Controls.Add(this.btnNewAddress);
             this.gbCustomerInfo.Controls.Add(this.btnEditAddress);
             this.gbCustomerInfo.Controls.Add(this.tbCountry);
@@ -116,13 +124,13 @@
             this.gbCustomerInfo.Controls.Add(this.tbAdd);
             this.gbCustomerInfo.Location = new System.Drawing.Point(6, 19);
             this.gbCustomerInfo.Name = "gbCustomerInfo";
-            this.gbCustomerInfo.Size = new System.Drawing.Size(271, 267);
+            this.gbCustomerInfo.Size = new System.Drawing.Size(271, 331);
             this.gbCustomerInfo.TabIndex = 29;
             this.gbCustomerInfo.TabStop = false;
             // 
             // btnNewAddress
             // 
-            this.btnNewAddress.Location = new System.Drawing.Point(186, 238);
+            this.btnNewAddress.Location = new System.Drawing.Point(181, 283);
             this.btnNewAddress.Name = "btnNewAddress";
             this.btnNewAddress.Size = new System.Drawing.Size(79, 23);
             this.btnNewAddress.TabIndex = 39;
@@ -132,7 +140,7 @@
             // 
             // btnEditAddress
             // 
-            this.btnEditAddress.Location = new System.Drawing.Point(95, 238);
+            this.btnEditAddress.Location = new System.Drawing.Point(90, 283);
             this.btnEditAddress.Name = "btnEditAddress";
             this.btnEditAddress.Size = new System.Drawing.Size(85, 23);
             this.btnEditAddress.TabIndex = 38;
@@ -143,7 +151,7 @@
             // tbCountry
             // 
             this.tbCountry.Enabled = false;
-            this.tbCountry.Location = new System.Drawing.Point(82, 174);
+            this.tbCountry.Location = new System.Drawing.Point(82, 229);
             this.tbCountry.Name = "tbCountry";
             this.tbCountry.Size = new System.Drawing.Size(126, 20);
             this.tbCountry.TabIndex = 37;
@@ -151,7 +159,7 @@
             // tbCity
             // 
             this.tbCity.Enabled = false;
-            this.tbCity.Location = new System.Drawing.Point(81, 121);
+            this.tbCity.Location = new System.Drawing.Point(81, 176);
             this.tbCity.Name = "tbCity";
             this.tbCity.Size = new System.Drawing.Size(126, 20);
             this.tbCity.TabIndex = 36;
@@ -173,7 +181,7 @@
             this.cbZip.Enabled = false;
             this.cbZip.FormattingEnabled = true;
             this.cbZip.ItemHeight = 13;
-            this.cbZip.Location = new System.Drawing.Point(81, 147);
+            this.cbZip.Location = new System.Drawing.Point(80, 202);
             this.cbZip.Name = "cbZip";
             this.cbZip.Size = new System.Drawing.Size(127, 21);
             this.cbZip.TabIndex = 33;
@@ -184,7 +192,7 @@
             // 
             this.lblLastUpdated.AutoSize = true;
             this.lblLastUpdated.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLastUpdated.Location = new System.Drawing.Point(86, 210);
+            this.lblLastUpdated.Location = new System.Drawing.Point(86, 261);
             this.lblLastUpdated.Name = "lblLastUpdated";
             this.lblLastUpdated.Size = new System.Drawing.Size(31, 13);
             this.lblLastUpdated.TabIndex = 31;
@@ -193,7 +201,7 @@
             // lblLastupdate
             // 
             this.lblLastupdate.AutoSize = true;
-            this.lblLastupdate.Location = new System.Drawing.Point(6, 210);
+            this.lblLastupdate.Location = new System.Drawing.Point(6, 261);
             this.lblLastupdate.Name = "lblLastupdate";
             this.lblLastupdate.Size = new System.Drawing.Size(74, 13);
             this.lblLastupdate.TabIndex = 30;
@@ -202,9 +210,9 @@
             // tbPhone
             // 
             this.tbPhone.Enabled = false;
-            this.tbPhone.Location = new System.Drawing.Point(80, 70);
+            this.tbPhone.Location = new System.Drawing.Point(81, 124);
             this.tbPhone.Name = "tbPhone";
-            this.tbPhone.Size = new System.Drawing.Size(127, 20);
+            this.tbPhone.Size = new System.Drawing.Size(126, 20);
             this.tbPhone.TabIndex = 2;
             this.tbPhone.TextChanged += new System.EventHandler(this.tbAthletePhone_TextChanged);
             this.tbPhone.Leave += new System.EventHandler(this.tbAthletePhone_Leave);
@@ -212,7 +220,7 @@
             // lb6
             // 
             this.lb6.AutoSize = true;
-            this.lb6.Location = new System.Drawing.Point(22, 155);
+            this.lb6.Location = new System.Drawing.Point(22, 206);
             this.lb6.Name = "lb6";
             this.lb6.Size = new System.Drawing.Size(50, 13);
             this.lb6.TabIndex = 7;
@@ -221,7 +229,7 @@
             // lbl5
             // 
             this.lbl5.AutoSize = true;
-            this.lbl5.Location = new System.Drawing.Point(48, 129);
+            this.lbl5.Location = new System.Drawing.Point(48, 180);
             this.lbl5.Name = "lbl5";
             this.lbl5.Size = new System.Drawing.Size(24, 13);
             this.lbl5.TabIndex = 6;
@@ -230,7 +238,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(29, 181);
+            this.label1.Location = new System.Drawing.Point(29, 232);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(43, 13);
             this.label1.TabIndex = 23;
@@ -239,7 +247,7 @@
             // lbl7
             // 
             this.lbl7.AutoSize = true;
-            this.lbl7.Location = new System.Drawing.Point(23, 75);
+            this.lbl7.Location = new System.Drawing.Point(24, 127);
             this.lbl7.Name = "lbl7";
             this.lbl7.Size = new System.Drawing.Size(48, 13);
             this.lbl7.TabIndex = 8;
@@ -257,7 +265,7 @@
             // lbl2
             // 
             this.lbl2.AutoSize = true;
-            this.lbl2.Location = new System.Drawing.Point(36, 52);
+            this.lbl2.Location = new System.Drawing.Point(36, 48);
             this.lbl2.Name = "lbl2";
             this.lbl2.Size = new System.Drawing.Size(35, 13);
             this.lbl2.TabIndex = 4;
@@ -266,7 +274,7 @@
             // lbl3
             // 
             this.lbl3.AutoSize = true;
-            this.lbl3.Location = new System.Drawing.Point(26, 103);
+            this.lbl3.Location = new System.Drawing.Point(26, 154);
             this.lbl3.Name = "lbl3";
             this.lbl3.Size = new System.Drawing.Size(45, 13);
             this.lbl3.TabIndex = 5;
@@ -275,9 +283,9 @@
             // tbName
             // 
             this.tbName.BackColor = System.Drawing.SystemColors.Window;
-            this.tbName.Location = new System.Drawing.Point(80, 45);
+            this.tbName.Location = new System.Drawing.Point(82, 45);
             this.tbName.Name = "tbName";
-            this.tbName.Size = new System.Drawing.Size(128, 20);
+            this.tbName.Size = new System.Drawing.Size(125, 20);
             this.tbName.TabIndex = 1;
             this.tbName.TextChanged += new System.EventHandler(this.tbAthleteName_TextChanged);
             this.tbName.Leave += new System.EventHandler(this.tbAthleteName_Leave);
@@ -285,16 +293,16 @@
             // tbAdd
             // 
             this.tbAdd.Enabled = false;
-            this.tbAdd.Location = new System.Drawing.Point(80, 95);
+            this.tbAdd.Location = new System.Drawing.Point(81, 150);
             this.tbAdd.Name = "tbAdd";
-            this.tbAdd.Size = new System.Drawing.Size(128, 20);
+            this.tbAdd.Size = new System.Drawing.Size(126, 20);
             this.tbAdd.TabIndex = 3;
             this.tbAdd.TextChanged += new System.EventHandler(this.tbAthleteAddress_TextChanged);
             this.tbAdd.Leave += new System.EventHandler(this.tbAthleteAddress_Leave);
             // 
             // btnSaveCustomer
             // 
-            this.btnSaveCustomer.Location = new System.Drawing.Point(378, 263);
+            this.btnSaveCustomer.Location = new System.Drawing.Point(378, 303);
             this.btnSaveCustomer.Name = "btnSaveCustomer";
             this.btnSaveCustomer.Size = new System.Drawing.Size(75, 23);
             this.btnSaveCustomer.TabIndex = 5;
@@ -306,12 +314,51 @@
             // 
             this.errorProvider1.ContainerControl = this;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(27, 74);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(44, 13);
+            this.label2.TabIndex = 42;
+            this.label2.Text = "Position";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(20, 100);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(52, 13);
+            this.label3.TabIndex = 43;
+            this.label3.Text = "Discipline";
+            // 
+            // cbPosition
+            // 
+            this.cbPosition.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPosition.FormattingEnabled = true;
+            this.cbPosition.ItemHeight = 13;
+            this.cbPosition.Location = new System.Drawing.Point(82, 71);
+            this.cbPosition.Name = "cbPosition";
+            this.cbPosition.Size = new System.Drawing.Size(127, 21);
+            this.cbPosition.TabIndex = 44;
+            this.cbPosition.SelectedIndexChanged += new System.EventHandler(this.cbPosition_SelectedIndexChanged);
+            // 
+            // cbDiscipline
+            // 
+            this.cbDiscipline.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDiscipline.FormattingEnabled = true;
+            this.cbDiscipline.ItemHeight = 13;
+            this.cbDiscipline.Location = new System.Drawing.Point(82, 97);
+            this.cbDiscipline.Name = "cbDiscipline";
+            this.cbDiscipline.Size = new System.Drawing.Size(127, 21);
+            this.cbDiscipline.TabIndex = 45;
+            // 
             // AthleteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.ClientSize = new System.Drawing.Size(567, 344);
+            this.ClientSize = new System.Drawing.Size(567, 391);
             this.Controls.Add(this.gbCustomer);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -351,5 +398,9 @@
         private System.Windows.Forms.ErrorProvider errorProvider1;
         internal System.Windows.Forms.Button btnEditAddress;
         internal System.Windows.Forms.Button btnNewAddress;
+        internal System.Windows.Forms.ComboBox cbDiscipline;
+        internal System.Windows.Forms.ComboBox cbPosition;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
     }
 }
