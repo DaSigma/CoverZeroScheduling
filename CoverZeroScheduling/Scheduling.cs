@@ -913,11 +913,11 @@ namespace CoverZeroScheduling
                 // Initilize stringbuilder
                 var pg = new StringBuilder();
                 pg.Append($"\t\t\t Defensive Backs by Position \n\n");// Report Title
-                pg.Append(String.Format("{0,-15}\t{1,-15}\t{2,-25}\t\n", "DB", "Discipline", "Position"));// Report Header
+                pg.Append(String.Format("{0,-35}\t{1,-25}\t{2,-25}\t\n", "       DB       ", "Discipline", "Position"));// Report Header
                 pg.Append($"{string.Concat(Enumerable.Repeat("*", 100))} \n");
                 while (dr.Read())
                 {
-                    pg.AppendFormat(String.Format("{0,-15}\t{1,-15}\t{2,-25} \n", dr["athleteName"], dr["athleteDiscipline"],
+                    pg.AppendFormat(String.Format("{0,-25}\t{1,-25}\t{2,-25} \n", dr["athleteName"], dr["athleteDiscipline"],
                         dr["athletePosition"]));
                 }
                 con.Close();
