@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using System.Windows.Forms;
+using System.Configuration;
 
 namespace CoverZeroScheduling
 {
@@ -18,7 +19,7 @@ namespace CoverZeroScheduling
             InitializeComponent();
         }
 
-        string conString = @"server=3.227.166.251;user id=U04cRO;password=53688204070;persistsecurityinfo=True;database=U04cRO";
+        string connection = ConfigurationManager.ConnectionStrings["mycon"].ConnectionString;
 
         private void txtUsername_Enter(object sender, EventArgs e)
         {
@@ -52,30 +53,18 @@ namespace CoverZeroScheduling
         }
         private void btnSignup_Click(object sender, EventArgs e)
         {
-            if ((txtUsername.Text != "" && txtUsername.Text != "Username") && txtPassword.Text != "")
+            if ((txtUsername.Text != "" && txtUsername.Text != "Username") &&
+                (txtPassword.Text != "" && txtPassword.Text != "********"))
             {
-                using (MySqlConnection con = new MySqlConnection(conString))
-                {
-                    try
-                    {
-                        con.Open();
-                        MySqlCommand cmd = new MySqlCommand("sp_add_coach", con);
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@un", txtUsername.Text.Trim());
-                        cmd.Parameters.AddWithValue("@pw", txtPassword.Text.Trim());
-                        cmd.ExecuteNonQuery();
-                        MessageBox.Show("Registrations Complete");
-                        LogIn logIn = new LogIn();
-                        this.Hide();
-                        logIn.Show();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Coach Already Exists \n {ex}");
-                    }
 
-                }
+                Coach.AddCoach(txtUsername.Text, txtPassword.Text);
+                LogIn logIn = new LogIn();
+                this.Hide();
+                logIn.Show();
+
             }
+
+
             else
             {
                 MessageBox.Show("Please fill in manditory fields");

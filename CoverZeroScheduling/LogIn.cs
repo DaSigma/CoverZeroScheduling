@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using System.Configuration;
 
 namespace CoverZeroScheduling
 {
@@ -17,16 +18,18 @@ namespace CoverZeroScheduling
         MySqlDataReader dr;
         static string currentCoach;
         private static int currentCoachID;
+        string connection = ConfigurationManager.ConnectionStrings["mycon"].ConnectionString;
 
         internal static int CurrentCoachID { get { return currentCoachID; } }
         internal static string CurrentCoach { get { return currentCoach; } }
+
         public LogIn()
         {
             InitializeComponent();
             CultureInfo ci = CultureInfo.CurrentUICulture;
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo($"{CultureInfo.CurrentCulture.ToString()}");
 
-            con.ConnectionString = @"server=3.227.166.251;user id=U04cRO;password=53688204070;persistsecurityinfo=True;database=U04cRO";
+            con.ConnectionString = connection;
             setCulture();
             txtPassword.Text = "********";
         }

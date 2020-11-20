@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
@@ -16,11 +17,13 @@ namespace CoverZeroScheduling
     public partial class Scheduling : Form
     {
         public static int currentApptID;
-        MySqlConnection con = new MySqlConnection(@"server=3.227.166.251;user id=U04cRO;password=53688204070;persistsecurityinfo=True;database=U04cRO");
+        MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ConnectionString);
         MySqlCommand cmd = new MySqlCommand();
         MySqlDataAdapter da;
         DataTable dt;
         MySqlDataReader dr;
+        string sp_AthleteByID;
+        string athleteDiscipline;
         public string StartDate { get; set; }
         public string ToDate { get; set; }
         
@@ -515,6 +518,8 @@ namespace CoverZeroScheduling
             {
                 indexOfSelectedAthlete= e.RowIndex;
             }
+            IsCorner();
+            SetAthlete();
         }
 
         // View/Edit athlete record
@@ -543,7 +548,7 @@ namespace CoverZeroScheduling
                         dr.Close();
 
                         cmd.Connection = con;
-                        cmd.CommandText = "sp_viewEditAthleteByID";
+                        cmd.CommandText = sp_AthleteByID;
 
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Clear();
@@ -558,7 +563,7 @@ namespace CoverZeroScheduling
                             //viewAthlete.cbPosition.Items.Add(dr["athletePosition"].ToString());
                             viewAthlete.cbPosition.Text = dr["athletePosition"].ToString();
                             //viewAthlete.cbDiscipline.Items.Add(dr["athleteDiscipline"].ToString());
-                            viewAthlete.cbDiscipline.Text = dr["athleteDiscipline"].ToString();
+                            viewAthlete.cbDiscipline.Text = dr[athleteDiscipline].ToString();
                             //viewAthlete.cbDiscipline.Text = dr["athleteDiscipline"].ToString();
                             viewAthlete.tbPhone.Text = dr["phone"].ToString();
                             viewAthlete.tbAdd.Text = dr["address"].ToString();
@@ -952,7 +957,7 @@ namespace CoverZeroScheduling
                 dtpMonth.Visible = false;
                 cbConsultant.Visible = true;
                 label2.Visible = true;
-                GetCoaches();
+                GetCoachNames();
                 label2.Text = "Select Coach: ";
             }
             else if(cbReports.Text == "All Coach's Schedule")
@@ -965,7 +970,7 @@ namespace CoverZeroScheduling
         }
 
         // Get Coach names from database
-        private void GetCoaches()
+        private void GetCoachNames()
         {
             using (con)
             {
@@ -983,6 +988,33 @@ namespace CoverZeroScheduling
 
             }
             con.Close();
+        }
+
+        private bool IsCorner()
+        {
+            if((string)dgvCustomer.Rows[indexOfSelectedAthlete].Cells[1].Value == "Corner")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        private void SetAthlete()
+        {
+            if (IsCorner())
+            {
+                sp_AthleteByID = "sp_viewEditCornerByID";
+                athleteDiscipline = "cornerDiscipline";
+            }
+            else
+            {
+                sp_AthleteByID = "sp_viewEditSafetyByID";
+                athleteDiscipline = "safetyDiscipline";
+            }
         }
 
         // Exit program

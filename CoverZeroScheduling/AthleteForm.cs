@@ -8,12 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CoverZeroScheduling.Models;
+using System.Configuration;
 
 namespace CoverZeroScheduling
 {
     public partial class AthleteForm : Form
     {
-        MySqlConnection con = new MySqlConnection(@"server=3.227.166.251;user id=U04cRO;password=53688204070;persistsecurityinfo=True;database=U04cRO");
+        MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ConnectionString);
         int athleteID;
         int addressID;
         public static int AddressID { get; set; }
@@ -42,63 +44,24 @@ namespace CoverZeroScheduling
 
             try
             {
-                using (con)
+                cityID = City.GetCityID(cbZip.Text);
+                addressID = Address.GetAddressID(cityID, cbZip.Text, tbAdd.Text, tbPhone.Text);
+                Address.Insert_UpdateAddress(addressID, tbAdd.Text, cityID, cbZip.Text, tbPhone.Text);
+
+                addressID = Address.GetAddressID(cityID, cbZip.Text, tbAdd.Text, tbPhone.Text);
+
+                SelectDiscipline();
+                if (isCorner)
                 {
-                    con.Open();
-
-                    MySqlCommand cmd_GetCityID = new MySqlCommand("sp_getCityID", con);
-                    MySqlCommand cmd_GetAddressID = new MySqlCommand("sp_getAddressID", con);
-
-                    // Get City ID with zip
-                    cmd_GetCityID.CommandType = CommandType.StoredProcedure;
-                    cmd_GetCityID.Parameters.AddWithValue("@zip", cbZip.Text);
-                    MySqlDataReader dr = cmd_GetCityID.ExecuteReader();
-
-                    if (dr.Read())
-                    {
-                        cityID = Convert.ToInt32(dr["cityId"]);
-                    }
-                    dr.Close();
-
-                    // Insert or update address Info
-                    MySqlCommand cmd_addUpdateAddress = new MySqlCommand("sp_addUpdateAddress", con);
-                    cmd_addUpdateAddress.CommandType = CommandType.StoredProcedure;
-                    cmd_addUpdateAddress.Parameters.AddWithValue("@address_ID", addressID);
-                    cmd_addUpdateAddress.Parameters.AddWithValue("@address1", tbAdd.Text);
-                    cmd_addUpdateAddress.Parameters.AddWithValue("@city_ID", cityID);
-                    cmd_addUpdateAddress.Parameters.AddWithValue("@zip", cbZip.Text);
-                    cmd_addUpdateAddress.Parameters.AddWithValue("@phoneNumber", tbPhone.Text);
-                    cmd_addUpdateAddress.ExecuteNonQuery();
-
-                    // Get addressID with cityID and zip
-                    cmd_GetAddressID.CommandType = CommandType.StoredProcedure;
-                    cmd_GetAddressID.Parameters.AddWithValue("@city_ID", cityID);
-                    cmd_GetAddressID.Parameters.AddWithValue("@zip", cbZip.Text);
-                    cmd_GetAddressID.Parameters.AddWithValue("@AthleteAddress", tbAdd.Text);
-                    cmd_GetAddressID.Parameters.AddWithValue("@AthletePhone", tbPhone.Text);
-                    dr = cmd_GetAddressID.ExecuteReader();
-
-                    if (dr.Read())
-                    {
-                        addressID = Convert.ToInt32(dr["addressId"]);
-
-                    }
-                    dr.Close();
-
-                    // Insert or update athlete Info
-                    MySqlCommand cmd_addUpdateAthlete = new MySqlCommand("sp_addUpdateAthlete", con);
-                    cmd_addUpdateAthlete.Parameters.Clear();
-                    cmd_addUpdateAthlete.CommandType = CommandType.StoredProcedure;
-                    cmd_addUpdateAthlete.Parameters.AddWithValue("@AthlID", athleteID);
-                    cmd_addUpdateAthlete.Parameters.AddWithValue("@AthlName", tbName.Text);
-                    cmd_addUpdateAthlete.Parameters.AddWithValue("@AthlPosition", cbPosition.Text);
-                    cmd_addUpdateAthlete.Parameters.AddWithValue("@AthlDiscipline", cbDiscipline.Text);
-                    cmd_addUpdateAthlete.Parameters.AddWithValue("@addID", addressID);
-                    cmd_addUpdateAthlete.ExecuteNonQuery();
-
-                    MessageBox.Show("Athlete Added/Updated");// Feedback
+                    Corner.Insert_UpdateCorner(athleteID, tbName.Text, cbPosition.Text, cbDiscipline.Text, addressID);
                 }
-                con.Close();
+                else
+                {
+                    Safety.Insert_UpdateSafety(athleteID, tbName.Text, cbPosition.Text, cbDiscipline.Text, addressID);
+                }
+
+                MessageBox.Show("Athlete Added/Updated");// Feedback
+
                 this.Hide();
                 Scheduling schedulingScreen = new Scheduling();
                 schedulingScreen.Show();
