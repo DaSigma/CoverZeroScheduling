@@ -1023,5 +1023,65 @@ namespace CoverZeroScheduling
             this.Close();
             Application.Exit();
         }
+
+        private void btnSearchAppt_Click(object sender, EventArgs e)
+        {
+            //// Search for Part by Name.
+            //dataGridViewParts.ClearSelection();
+            //dataGridViewProducts.ClearSelection();
+            //dataGridViewParts.DefaultCellStyle.SelectionBackColor = Color.Yellow;
+            //bool found = false;
+
+            //// If searchbox is not blank, select parts.
+            //if (searchBoxParts.Text != "")
+            //{
+            //    // Loop through parts.
+            //    for (int i = 0; i < Inventory.AllParts.Count; i++)
+            //    {
+            //        if (Inventory.AllParts[i].PartName.ToUpper().Contains(searchBoxParts.Text.ToUpper()))
+            //        {
+            //            // Select parts.
+            //            dataGridViewParts.Rows[i].Selected = true;
+            //            found = true;
+            //        }
+            //    }
+            //}
+
+            //// If no parts found.
+            //if (!found)
+            //{
+            //    MessageBox.Show("No Parts Found!");
+            //}
+        }
+
+        private void btnSearchAthl_Click(object sender, EventArgs e)
+        {
+            //// Search for Part by Name.
+            //dataGridViewParts.ClearSelection();
+            //dataGridViewProducts.ClearSelection();
+            //dataGridViewParts.DefaultCellStyle.SelectionBackColor = Color.Yellow;
+            //bool found = false;
+
+            //// If searchbox is not blank, select parts.
+            //if (searchBoxParts.Text != "")
+            //{
+            //    // Loop through parts.
+            //    for (int i = 0; i < Inventory.AllParts.Count; i++)
+            //    {
+            //        if (Inventory.AllParts[i].PartName.ToUpper().Contains(searchBoxParts.Text.ToUpper()))
+            //        {
+            //            // Select parts.
+            //            dataGridViewParts.Rows[i].Selected = true;
+            //            found = true;
+            //        }
+            //    }
+            //}
+
+            //// If no parts found.
+            //if (!found)
+            //{
+            //    MessageBox.Show("No Parts Found!");
+            //}
+        }
     }
 }

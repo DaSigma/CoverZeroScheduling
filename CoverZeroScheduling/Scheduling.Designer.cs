@@ -38,6 +38,8 @@
             this.cbReports = new System.Windows.Forms.ComboBox();
             this.rtbReport = new System.Windows.Forms.RichTextBox();
             this.gbAppointments = new System.Windows.Forms.GroupBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.btnSearchAppt = new System.Windows.Forms.Button();
             this.lblUpcoming = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.btnLoadAll = new System.Windows.Forms.Button();
@@ -53,6 +55,8 @@
             this.rbMonth = new System.Windows.Forms.RadioButton();
             this.btnAptDelete = new System.Windows.Forms.Button();
             this.gbScheduleCustomer = new System.Windows.Forms.GroupBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.btnSearchAthl = new System.Windows.Forms.Button();
             this.dgvCustomer = new System.Windows.Forms.DataGridView();
             this.btnCustViewEdit = new System.Windows.Forms.Button();
             this.btnCustNew = new System.Windows.Forms.Button();
@@ -84,7 +88,7 @@
             this.gbReports.Controls.Add(this.rtbReport);
             this.gbReports.Location = new System.Drawing.Point(613, 138);
             this.gbReports.Name = "gbReports";
-            this.gbReports.Size = new System.Drawing.Size(616, 621);
+            this.gbReports.Size = new System.Drawing.Size(616, 699);
             this.gbReports.TabIndex = 0;
             this.gbReports.TabStop = false;
             this.gbReports.Text = "Reports";
@@ -147,13 +151,15 @@
             // 
             this.rtbReport.Location = new System.Drawing.Point(22, 94);
             this.rtbReport.Name = "rtbReport";
-            this.rtbReport.Size = new System.Drawing.Size(577, 497);
+            this.rtbReport.Size = new System.Drawing.Size(577, 597);
             this.rtbReport.TabIndex = 0;
             this.rtbReport.Text = "";
             // 
             // gbAppointments
             // 
             this.gbAppointments.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.gbAppointments.Controls.Add(this.textBox1);
+            this.gbAppointments.Controls.Add(this.btnSearchAppt);
             this.gbAppointments.Controls.Add(this.lblUpcoming);
             this.gbAppointments.Controls.Add(this.pictureBox2);
             this.gbAppointments.Controls.Add(this.btnLoadAll);
@@ -170,17 +176,34 @@
             this.gbAppointments.Controls.Add(this.btnAptDelete);
             this.gbAppointments.Location = new System.Drawing.Point(6, 138);
             this.gbAppointments.Name = "gbAppointments";
-            this.gbAppointments.Size = new System.Drawing.Size(601, 346);
+            this.gbAppointments.Size = new System.Drawing.Size(601, 376);
             this.gbAppointments.TabIndex = 1;
             this.gbAppointments.TabStop = false;
             this.gbAppointments.Text = "Appointments";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(394, 96);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(125, 20);
+            this.textBox1.TabIndex = 18;
+            // 
+            // btnSearchAppt
+            // 
+            this.btnSearchAppt.Location = new System.Drawing.Point(525, 94);
+            this.btnSearchAppt.Name = "btnSearchAppt";
+            this.btnSearchAppt.Size = new System.Drawing.Size(75, 23);
+            this.btnSearchAppt.TabIndex = 17;
+            this.btnSearchAppt.Text = "Search";
+            this.btnSearchAppt.UseVisualStyleBackColor = true;
+            this.btnSearchAppt.Click += new System.EventHandler(this.btnSearchAppt_Click);
             // 
             // lblUpcoming
             // 
             this.lblUpcoming.AutoSize = true;
             this.lblUpcoming.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblUpcoming.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.lblUpcoming.Location = new System.Drawing.Point(6, 312);
+            this.lblUpcoming.Location = new System.Drawing.Point(6, 344);
             this.lblUpcoming.Name = "lblUpcoming";
             this.lblUpcoming.Size = new System.Drawing.Size(184, 20);
             this.lblUpcoming.TabIndex = 16;
@@ -208,7 +231,7 @@
             // 
             // btnApptViewEdit
             // 
-            this.btnApptViewEdit.Location = new System.Drawing.Point(368, 309);
+            this.btnApptViewEdit.Location = new System.Drawing.Point(368, 341);
             this.btnApptViewEdit.Name = "btnApptViewEdit";
             this.btnApptViewEdit.Size = new System.Drawing.Size(75, 23);
             this.btnApptViewEdit.TabIndex = 13;
@@ -230,7 +253,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(6, 72);
+            this.label1.Location = new System.Drawing.Point(6, 94);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(141, 13);
             this.label1.TabIndex = 11;
@@ -239,16 +262,16 @@
             // lblApptDates
             // 
             this.lblApptDates.AutoSize = true;
-            this.lblApptDates.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblApptDates.Location = new System.Drawing.Point(145, 72);
+            this.lblApptDates.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblApptDates.Location = new System.Drawing.Point(145, 94);
             this.lblApptDates.Name = "lblApptDates";
-            this.lblApptDates.Size = new System.Drawing.Size(279, 19);
+            this.lblApptDates.Size = new System.Drawing.Size(221, 15);
             this.lblApptDates.TabIndex = 10;
             this.lblApptDates.Text = "All of your Appointments are Displayed";
             // 
             // btnAptNew
             // 
-            this.btnAptNew.Location = new System.Drawing.Point(449, 309);
+            this.btnAptNew.Location = new System.Drawing.Point(449, 341);
             this.btnAptNew.Name = "btnAptNew";
             this.btnAptNew.Size = new System.Drawing.Size(75, 23);
             this.btnAptNew.TabIndex = 7;
@@ -275,7 +298,7 @@
             this.dgvAppt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvAppt.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAppt.GridColor = System.Drawing.Color.LightSteelBlue;
-            this.dgvAppt.Location = new System.Drawing.Point(0, 94);
+            this.dgvAppt.Location = new System.Drawing.Point(0, 126);
             this.dgvAppt.Name = "dgvAppt";
             this.dgvAppt.ReadOnly = true;
             this.dgvAppt.RowHeadersVisible = false;
@@ -320,7 +343,7 @@
             // 
             // btnAptDelete
             // 
-            this.btnAptDelete.Location = new System.Drawing.Point(530, 307);
+            this.btnAptDelete.Location = new System.Drawing.Point(530, 339);
             this.btnAptDelete.Name = "btnAptDelete";
             this.btnAptDelete.Size = new System.Drawing.Size(70, 25);
             this.btnAptDelete.TabIndex = 2;
@@ -331,16 +354,35 @@
             // gbScheduleCustomer
             // 
             this.gbScheduleCustomer.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.gbScheduleCustomer.Controls.Add(this.textBox2);
+            this.gbScheduleCustomer.Controls.Add(this.btnSearchAthl);
             this.gbScheduleCustomer.Controls.Add(this.dgvCustomer);
             this.gbScheduleCustomer.Controls.Add(this.btnCustViewEdit);
             this.gbScheduleCustomer.Controls.Add(this.btnCustNew);
             this.gbScheduleCustomer.Controls.Add(this.btnCustDelete);
-            this.gbScheduleCustomer.Location = new System.Drawing.Point(6, 490);
+            this.gbScheduleCustomer.Location = new System.Drawing.Point(6, 520);
             this.gbScheduleCustomer.Name = "gbScheduleCustomer";
-            this.gbScheduleCustomer.Size = new System.Drawing.Size(601, 239);
+            this.gbScheduleCustomer.Size = new System.Drawing.Size(601, 282);
             this.gbScheduleCustomer.TabIndex = 11;
             this.gbScheduleCustomer.TabStop = false;
             this.gbScheduleCustomer.Text = "Athletes";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(395, 19);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(125, 20);
+            this.textBox2.TabIndex = 45;
+            // 
+            // btnSearchAthl
+            // 
+            this.btnSearchAthl.Location = new System.Drawing.Point(526, 19);
+            this.btnSearchAthl.Name = "btnSearchAthl";
+            this.btnSearchAthl.Size = new System.Drawing.Size(75, 23);
+            this.btnSearchAthl.TabIndex = 44;
+            this.btnSearchAthl.Text = "Search";
+            this.btnSearchAthl.UseVisualStyleBackColor = true;
+            this.btnSearchAthl.Click += new System.EventHandler(this.btnSearchAthl_Click);
             // 
             // dgvCustomer
             // 
@@ -352,17 +394,17 @@
             this.dgvCustomer.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvCustomer.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCustomer.GridColor = System.Drawing.Color.LightSteelBlue;
-            this.dgvCustomer.Location = new System.Drawing.Point(9, 32);
+            this.dgvCustomer.Location = new System.Drawing.Point(10, 48);
             this.dgvCustomer.Name = "dgvCustomer";
             this.dgvCustomer.ReadOnly = true;
             this.dgvCustomer.RowHeadersVisible = false;
-            this.dgvCustomer.Size = new System.Drawing.Size(592, 169);
+            this.dgvCustomer.Size = new System.Drawing.Size(592, 191);
             this.dgvCustomer.TabIndex = 43;
             this.dgvCustomer.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCustomer_CellClick);
             // 
             // btnCustViewEdit
             // 
-            this.btnCustViewEdit.Location = new System.Drawing.Point(363, 210);
+            this.btnCustViewEdit.Location = new System.Drawing.Point(364, 248);
             this.btnCustViewEdit.Name = "btnCustViewEdit";
             this.btnCustViewEdit.Size = new System.Drawing.Size(75, 23);
             this.btnCustViewEdit.TabIndex = 13;
@@ -372,7 +414,7 @@
             // 
             // btnCustNew
             // 
-            this.btnCustNew.Location = new System.Drawing.Point(444, 210);
+            this.btnCustNew.Location = new System.Drawing.Point(445, 248);
             this.btnCustNew.Name = "btnCustNew";
             this.btnCustNew.Size = new System.Drawing.Size(75, 23);
             this.btnCustNew.TabIndex = 12;
@@ -382,7 +424,7 @@
             // 
             // btnCustDelete
             // 
-            this.btnCustDelete.Location = new System.Drawing.Point(525, 207);
+            this.btnCustDelete.Location = new System.Drawing.Point(526, 245);
             this.btnCustDelete.Name = "btnCustDelete";
             this.btnCustDelete.Size = new System.Drawing.Size(70, 25);
             this.btnCustDelete.TabIndex = 11;
@@ -392,7 +434,7 @@
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(531, 735);
+            this.btnExit.Location = new System.Drawing.Point(531, 813);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(70, 24);
             this.btnExit.TabIndex = 12;
@@ -441,7 +483,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.ClientSize = new System.Drawing.Size(1230, 768);
+            this.ClientSize = new System.Drawing.Size(1230, 841);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.gbScheduleCustomer);
@@ -459,6 +501,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAppt)).EndInit();
             this.gbScheduleCustomer.ResumeLayout(false);
+            this.gbScheduleCustomer.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCustomer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.panel1.ResumeLayout(false);
@@ -502,5 +545,9 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button btnSearchAppt;
+        private System.Windows.Forms.Button btnSearchAthl;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox2;
     }
 }
