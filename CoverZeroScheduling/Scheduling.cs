@@ -40,7 +40,7 @@ namespace CoverZeroScheduling
         {
             InitializeComponent();
             FormatDataGridView(dgvAppt);
-            FormatDataGridView(dgvCustomer);  
+            FormatDataGridView(dgvAthlete);  
         }
 
         // On scheduling form load
@@ -53,6 +53,7 @@ namespace CoverZeroScheduling
             currentCoachID = LogIn.GetCoachID();
             currentCoach = LogIn.GetCoachName();
             dTPFrom.Value = DateTime.Now;
+
         }
 
         // Format Appointment DGV dates
@@ -260,6 +261,7 @@ namespace CoverZeroScheduling
                     bSource.DataSource = dt;
                     dgvAppt.DataSource = bSource;
 
+                    dgvAppt.Columns["Type"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dgvAppt.Columns["Start"].DefaultCellStyle.Format = "MMMM dd, yyyy hh:mm tt"; //Format Start date
                     dgvAppt.Columns["Start"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells; // Autosize Start Column
 
@@ -393,6 +395,11 @@ namespace CoverZeroScheduling
 
         }
 
+        private void dgvAppt_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            btnApptView_Click(sender, e);
+        }
+
         // Create new appointment
         private void btnAptNew_Click(object sender, EventArgs e)
         {
@@ -523,13 +530,13 @@ namespace CoverZeroScheduling
         }
 
         // View/Edit athlete record
-        private void btnCustViewEdit_Click(object sender, EventArgs e)
+        private void btnAthleteViewEdit_Click(object sender, EventArgs e)
         {
             try
             {
                 if (indexOfSelectedAthlete >= 0)
                 {
-                    int currentAthleteID = (int)dgvCustomer.Rows[indexOfSelectedAthlete].Cells[0].Value;
+                    int currentAthleteID = (int)dgvAthlete.Rows[indexOfSelectedAthlete].Cells[0].Value;
                     this.Hide();
                     AthleteForm viewAthlete = new AthleteForm();
                     if (currentAthleteID > 0)
@@ -597,6 +604,12 @@ namespace CoverZeroScheduling
             }
         }
 
+        private void dgvAthlete_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            btnAthleteViewEdit_Click(sender, e);
+        }
+
+
         // Create new athlete record
         private void btnCustNew_Click(object sender, EventArgs e)
         {
@@ -653,9 +666,9 @@ namespace CoverZeroScheduling
             if (indexOfSelectedAthlete >= 0)
             {
                 // Select Customer
-                int currentAthleteID = (int)dgvCustomer.Rows[indexOfSelectedAthlete].Cells[0].Value;
-                int address_ID = (int)dgvCustomer.Rows[indexOfSelectedAthlete].Cells["AddressID"].Value;
-                string currentAthlete = dgvCustomer.Rows[indexOfSelectedAthlete].Cells[1].Value.ToString();
+                int currentAthleteID = (int)dgvAthlete.Rows[indexOfSelectedAthlete].Cells[0].Value;
+                int address_ID = (int)dgvAthlete.Rows[indexOfSelectedAthlete].Cells["AddressID"].Value;
+                string currentAthlete = dgvAthlete.Rows[indexOfSelectedAthlete].Cells[1].Value.ToString();
 
                     con.Open();
                     cmd.Connection = con;
@@ -731,15 +744,15 @@ namespace CoverZeroScheduling
                     da.Fill(dt);
                     BindingSource bSource = new BindingSource();
                     bSource.DataSource = dt;
-                    dgvCustomer.DataSource = bSource;
-                    dgvCustomer.Columns["Name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-                    dgvCustomer.Columns["Address"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-                    dgvCustomer.Columns["AddressID"].Visible = false;
+                    dgvAthlete.DataSource = bSource;
+                    dgvAthlete.Columns["Name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                    dgvAthlete.Columns["Address"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                    dgvAthlete.Columns["AddressID"].Visible = false;
                     da.Update(dt);
                 }
             }
             con.Close();
-            dgvCustomer.ClearSelection();
+            dgvAthlete.ClearSelection();
         }
 
         // Handle Generate report button
@@ -758,7 +771,7 @@ namespace CoverZeroScheduling
                 case "All Coach's Schedule":
                     AllCoachAppointments();
                     break;
-                case "Safties":
+                case "Safeties":
                     sp = "sp_safeties";
                     DBReports(sp);
                     break;
@@ -922,7 +935,7 @@ namespace CoverZeroScheduling
                 pg.Append($"{string.Concat(Enumerable.Repeat("*", 100))} \n");
                 while (dr.Read())
                 {
-                    pg.AppendFormat(String.Format("{0,-25}\t{1,-25}\t{2,-25} \n", dr["athleteName"], dr["athleteDiscipline"],
+                    pg.AppendFormat(String.Format("{0,-25}\t{1,-25}\t{2,-25} \n", dr["athleteName"], dr[athleteDiscipline],
                         dr["athletePosition"]));
                 }
                 con.Close();
@@ -966,6 +979,8 @@ namespace CoverZeroScheduling
                 cbConsultant.Visible = false;
                 label2.Visible = false;
             }
+            IsCorner();
+            SetAthlete();
 
         }
 
@@ -992,9 +1007,18 @@ namespace CoverZeroScheduling
 
         private bool IsCorner()
         {
-            if((string)dgvCustomer.Rows[indexOfSelectedAthlete].Cells[1].Value == "Corner")
+            if(indexOfSelectedAthlete != -1)
+            {
+                if((string)dgvAthlete.Rows[indexOfSelectedAthlete].Cells[1].Value == "Corner")
+                {
+                    return true;
+                }
+                
+            }
+            if(cbReports.Text == "Corners")
             {
                 return true;
+
             }
             else
             {
@@ -1024,64 +1048,58 @@ namespace CoverZeroScheduling
             Application.Exit();
         }
 
-        private void btnSearchAppt_Click(object sender, EventArgs e)
+        private void searchBoxAthl_TextChanged(object sender, EventArgs e)
         {
-            //// Search for Part by Name.
-            //dataGridViewParts.ClearSelection();
-            //dataGridViewProducts.ClearSelection();
-            //dataGridViewParts.DefaultCellStyle.SelectionBackColor = Color.Yellow;
-            //bool found = false;
+            // Search for Part by Name.
+            dgvAthlete.ClearSelection();
+            dgvAthlete.ClearSelection();
+            dgvAthlete.DefaultCellStyle.SelectionBackColor = Color.SpringGreen;
+            bool found = false;
 
-            //// If searchbox is not blank, select parts.
-            //if (searchBoxParts.Text != "")
-            //{
-            //    // Loop through parts.
-            //    for (int i = 0; i < Inventory.AllParts.Count; i++)
-            //    {
-            //        if (Inventory.AllParts[i].PartName.ToUpper().Contains(searchBoxParts.Text.ToUpper()))
-            //        {
-            //            // Select parts.
-            //            dataGridViewParts.Rows[i].Selected = true;
-            //            found = true;
-            //        }
-            //    }
-            //}
+            // If searchbox is not blank, select parts.
+            if (searchBoxAthl.Text != "")
+            {
+                // Loop through parts.
+                for (int i = 0; i < dgvAthlete.Rows.Count; i++)
+                {
+                    if (dgvAthlete.Rows[i].Cells[1].Value.ToString().ToUpper().Contains(searchBoxAthl.Text.ToUpper())
+                        || dgvAthlete.Rows[i].Cells[2].Value.ToString().ToUpper().Contains(searchBoxAthl.Text.ToUpper())
+                        || dgvAthlete.Rows[i].Cells[5].Value.ToString().ToUpper().Contains(searchBoxAthl.Text.ToUpper()))
+                    {
+                        // Select parts.
+                        dgvAthlete.Rows[i].Selected = true;
+                        found = true;
+                    }
+                }
+            }
 
-            //// If no parts found.
-            //if (!found)
-            //{
-            //    MessageBox.Show("No Parts Found!");
-            //}
         }
 
-        private void btnSearchAthl_Click(object sender, EventArgs e)
+        private void searchBoxAppt_TextChanged(object sender, EventArgs e)
         {
-            //// Search for Part by Name.
-            //dataGridViewParts.ClearSelection();
-            //dataGridViewProducts.ClearSelection();
-            //dataGridViewParts.DefaultCellStyle.SelectionBackColor = Color.Yellow;
-            //bool found = false;
+            // Search for Part by Name.
+            dgvAppt.ClearSelection();
+            dgvAppt.ClearSelection();
+            dgvAppt.DefaultCellStyle.SelectionBackColor = Color.SpringGreen;
+            bool found = false;
 
-            //// If searchbox is not blank, select parts.
-            //if (searchBoxParts.Text != "")
-            //{
-            //    // Loop through parts.
-            //    for (int i = 0; i < Inventory.AllParts.Count; i++)
-            //    {
-            //        if (Inventory.AllParts[i].PartName.ToUpper().Contains(searchBoxParts.Text.ToUpper()))
-            //        {
-            //            // Select parts.
-            //            dataGridViewParts.Rows[i].Selected = true;
-            //            found = true;
-            //        }
-            //    }
-            //}
-
-            //// If no parts found.
-            //if (!found)
-            //{
-            //    MessageBox.Show("No Parts Found!");
-            //}
+            // If searchbox is not blank, select parts.
+            if (searchBoxAppt.Text != "")
+            {
+                // Loop through parts.
+                for (int i = 0; i < dgvAppt.Rows.Count; i++)
+                {
+                    if (dgvAppt.Rows[i].Cells[0].Value.ToString().ToUpper().Contains(searchBoxAppt.Text.ToUpper())
+                        || dgvAppt.Rows[i].Cells[1].Value.ToString().ToUpper().Contains(searchBoxAppt.Text.ToUpper()))
+                    {
+                        // Select parts.
+                        dgvAppt.Rows[i].Selected = true;
+                        found = true;
+                    }
+                }
+            }
         }
+
+
     }
 }

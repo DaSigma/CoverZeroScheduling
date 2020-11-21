@@ -34,6 +34,10 @@
             this.btnClose = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.gbCustomerInfo = new System.Windows.Forms.GroupBox();
+            this.cbDiscipline = new System.Windows.Forms.ComboBox();
+            this.cbPosition = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.btnNewAddress = new System.Windows.Forms.Button();
             this.btnEditAddress = new System.Windows.Forms.Button();
             this.tbCountry = new System.Windows.Forms.TextBox();
@@ -54,10 +58,6 @@
             this.tbAdd = new System.Windows.Forms.TextBox();
             this.btnSaveCustomer = new System.Windows.Forms.Button();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.cbPosition = new System.Windows.Forms.ComboBox();
-            this.cbDiscipline = new System.Windows.Forms.ComboBox();
             this.gbCustomer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.gbCustomerInfo.SuspendLayout();
@@ -127,6 +127,45 @@
             this.gbCustomerInfo.Size = new System.Drawing.Size(271, 331);
             this.gbCustomerInfo.TabIndex = 29;
             this.gbCustomerInfo.TabStop = false;
+            // 
+            // cbDiscipline
+            // 
+            this.cbDiscipline.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDiscipline.FormattingEnabled = true;
+            this.cbDiscipline.ItemHeight = 13;
+            this.cbDiscipline.Location = new System.Drawing.Point(82, 97);
+            this.cbDiscipline.Name = "cbDiscipline";
+            this.cbDiscipline.Size = new System.Drawing.Size(127, 21);
+            this.cbDiscipline.TabIndex = 45;
+            // 
+            // cbPosition
+            // 
+            this.cbPosition.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPosition.FormattingEnabled = true;
+            this.cbPosition.ItemHeight = 13;
+            this.cbPosition.Location = new System.Drawing.Point(82, 71);
+            this.cbPosition.Name = "cbPosition";
+            this.cbPosition.Size = new System.Drawing.Size(127, 21);
+            this.cbPosition.TabIndex = 44;
+            this.cbPosition.SelectedIndexChanged += new System.EventHandler(this.cbPosition_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(20, 100);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(52, 13);
+            this.label3.TabIndex = 43;
+            this.label3.Text = "Discipline";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(27, 74);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(44, 13);
+            this.label2.TabIndex = 42;
+            this.label2.Text = "Position";
             // 
             // btnNewAddress
             // 
@@ -215,7 +254,7 @@
             this.tbPhone.Size = new System.Drawing.Size(126, 20);
             this.tbPhone.TabIndex = 2;
             this.tbPhone.TextChanged += new System.EventHandler(this.tbAthletePhone_TextChanged);
-            this.tbPhone.Leave += new System.EventHandler(this.tbAthletePhone_Leave);
+            this.tbPhone.Leave += new System.EventHandler(this.tbPhone_Leave);
             // 
             // lb6
             // 
@@ -313,45 +352,6 @@
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(27, 74);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(44, 13);
-            this.label2.TabIndex = 42;
-            this.label2.Text = "Position";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(20, 100);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(52, 13);
-            this.label3.TabIndex = 43;
-            this.label3.Text = "Discipline";
-            // 
-            // cbPosition
-            // 
-            this.cbPosition.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbPosition.FormattingEnabled = true;
-            this.cbPosition.ItemHeight = 13;
-            this.cbPosition.Location = new System.Drawing.Point(82, 71);
-            this.cbPosition.Name = "cbPosition";
-            this.cbPosition.Size = new System.Drawing.Size(127, 21);
-            this.cbPosition.TabIndex = 44;
-            this.cbPosition.SelectedIndexChanged += new System.EventHandler(this.cbPosition_SelectedIndexChanged);
-            // 
-            // cbDiscipline
-            // 
-            this.cbDiscipline.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbDiscipline.FormattingEnabled = true;
-            this.cbDiscipline.ItemHeight = 13;
-            this.cbDiscipline.Location = new System.Drawing.Point(82, 97);
-            this.cbDiscipline.Name = "cbDiscipline";
-            this.cbDiscipline.Size = new System.Drawing.Size(127, 21);
-            this.cbDiscipline.TabIndex = 45;
             // 
             // AthleteForm
             // 

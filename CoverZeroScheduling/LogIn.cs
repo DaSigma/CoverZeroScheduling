@@ -236,5 +236,6 @@ namespace CoverZeroScheduling
             btnLogIn.Enabled = AllowLogin();
             txtPassword.Text = ("");
         }
+
     }
 }

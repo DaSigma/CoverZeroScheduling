@@ -30,6 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Scheduling));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.gbReports = new System.Windows.Forms.GroupBox();
             this.cbConsultant = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -38,7 +41,7 @@
             this.cbReports = new System.Windows.Forms.ComboBox();
             this.rtbReport = new System.Windows.Forms.RichTextBox();
             this.gbAppointments = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.searchBoxAppt = new System.Windows.Forms.TextBox();
             this.btnSearchAppt = new System.Windows.Forms.Button();
             this.lblUpcoming = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -55,9 +58,9 @@
             this.rbMonth = new System.Windows.Forms.RadioButton();
             this.btnAptDelete = new System.Windows.Forms.Button();
             this.gbScheduleCustomer = new System.Windows.Forms.GroupBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.searchBoxAthl = new System.Windows.Forms.TextBox();
             this.btnSearchAthl = new System.Windows.Forms.Button();
-            this.dgvCustomer = new System.Windows.Forms.DataGridView();
+            this.dgvAthlete = new System.Windows.Forms.DataGridView();
             this.btnCustViewEdit = new System.Windows.Forms.Button();
             this.btnCustNew = new System.Windows.Forms.Button();
             this.btnCustDelete = new System.Windows.Forms.Button();
@@ -71,7 +74,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAppt)).BeginInit();
             this.gbScheduleCustomer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCustomer)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAthlete)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -86,9 +89,9 @@
             this.gbReports.Controls.Add(this.btnGenerate);
             this.gbReports.Controls.Add(this.cbReports);
             this.gbReports.Controls.Add(this.rtbReport);
-            this.gbReports.Location = new System.Drawing.Point(613, 138);
+            this.gbReports.Location = new System.Drawing.Point(675, 138);
             this.gbReports.Name = "gbReports";
-            this.gbReports.Size = new System.Drawing.Size(616, 699);
+            this.gbReports.Size = new System.Drawing.Size(554, 699);
             this.gbReports.TabIndex = 0;
             this.gbReports.TabStop = false;
             this.gbReports.Text = "Reports";
@@ -140,7 +143,7 @@
             "Coach\'s Schedule",
             "All Coach\'s Schedule",
             "Corners",
-            "Safties"});
+            "Safeties"});
             this.cbReports.Location = new System.Drawing.Point(19, 33);
             this.cbReports.Name = "cbReports";
             this.cbReports.Size = new System.Drawing.Size(229, 21);
@@ -149,16 +152,16 @@
             // 
             // rtbReport
             // 
-            this.rtbReport.Location = new System.Drawing.Point(22, 94);
+            this.rtbReport.Location = new System.Drawing.Point(19, 96);
             this.rtbReport.Name = "rtbReport";
-            this.rtbReport.Size = new System.Drawing.Size(577, 597);
+            this.rtbReport.Size = new System.Drawing.Size(509, 597);
             this.rtbReport.TabIndex = 0;
             this.rtbReport.Text = "";
             // 
             // gbAppointments
             // 
             this.gbAppointments.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.gbAppointments.Controls.Add(this.textBox1);
+            this.gbAppointments.Controls.Add(this.searchBoxAppt);
             this.gbAppointments.Controls.Add(this.btnSearchAppt);
             this.gbAppointments.Controls.Add(this.lblUpcoming);
             this.gbAppointments.Controls.Add(this.pictureBox2);
@@ -176,17 +179,18 @@
             this.gbAppointments.Controls.Add(this.btnAptDelete);
             this.gbAppointments.Location = new System.Drawing.Point(6, 138);
             this.gbAppointments.Name = "gbAppointments";
-            this.gbAppointments.Size = new System.Drawing.Size(601, 376);
+            this.gbAppointments.Size = new System.Drawing.Size(663, 376);
             this.gbAppointments.TabIndex = 1;
             this.gbAppointments.TabStop = false;
             this.gbAppointments.Text = "Appointments";
             // 
-            // textBox1
+            // searchBoxAppt
             // 
-            this.textBox1.Location = new System.Drawing.Point(394, 96);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(125, 20);
-            this.textBox1.TabIndex = 18;
+            this.searchBoxAppt.Location = new System.Drawing.Point(394, 96);
+            this.searchBoxAppt.Name = "searchBoxAppt";
+            this.searchBoxAppt.Size = new System.Drawing.Size(125, 20);
+            this.searchBoxAppt.TabIndex = 18;
+            this.searchBoxAppt.TextChanged += new System.EventHandler(this.searchBoxAppt_TextChanged);
             // 
             // btnSearchAppt
             // 
@@ -196,7 +200,6 @@
             this.btnSearchAppt.TabIndex = 17;
             this.btnSearchAppt.Text = "Search";
             this.btnSearchAppt.UseVisualStyleBackColor = true;
-            this.btnSearchAppt.Click += new System.EventHandler(this.btnSearchAppt_Click);
             // 
             // lblUpcoming
             // 
@@ -291,20 +294,38 @@
             // dgvAppt
             // 
             this.dgvAppt.AllowUserToAddRows = false;
-            this.dgvAppt.AllowUserToDeleteRows = false;
             this.dgvAppt.AllowUserToResizeRows = false;
             this.dgvAppt.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvAppt.BackgroundColor = System.Drawing.Color.White;
-            this.dgvAppt.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvAppt.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dgvAppt.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvAppt.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvAppt.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAppt.GridColor = System.Drawing.Color.LightSteelBlue;
-            this.dgvAppt.Location = new System.Drawing.Point(0, 126);
+            this.dgvAppt.Location = new System.Drawing.Point(10, 126);
+            this.dgvAppt.MultiSelect = false;
             this.dgvAppt.Name = "dgvAppt";
             this.dgvAppt.ReadOnly = true;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvAppt.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvAppt.RowHeadersVisible = false;
-            this.dgvAppt.Size = new System.Drawing.Size(600, 207);
+            this.dgvAppt.Size = new System.Drawing.Size(647, 207);
             this.dgvAppt.TabIndex = 5;
             this.dgvAppt.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
+            this.dgvAppt.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAppt_CellDoubleClick);
             this.dgvAppt.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvAppt_CellFormatting);
             // 
             // dTPFrom
@@ -354,25 +375,26 @@
             // gbScheduleCustomer
             // 
             this.gbScheduleCustomer.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.gbScheduleCustomer.Controls.Add(this.textBox2);
+            this.gbScheduleCustomer.Controls.Add(this.searchBoxAthl);
             this.gbScheduleCustomer.Controls.Add(this.btnSearchAthl);
-            this.gbScheduleCustomer.Controls.Add(this.dgvCustomer);
+            this.gbScheduleCustomer.Controls.Add(this.dgvAthlete);
             this.gbScheduleCustomer.Controls.Add(this.btnCustViewEdit);
             this.gbScheduleCustomer.Controls.Add(this.btnCustNew);
             this.gbScheduleCustomer.Controls.Add(this.btnCustDelete);
             this.gbScheduleCustomer.Location = new System.Drawing.Point(6, 520);
             this.gbScheduleCustomer.Name = "gbScheduleCustomer";
-            this.gbScheduleCustomer.Size = new System.Drawing.Size(601, 282);
+            this.gbScheduleCustomer.Size = new System.Drawing.Size(663, 282);
             this.gbScheduleCustomer.TabIndex = 11;
             this.gbScheduleCustomer.TabStop = false;
             this.gbScheduleCustomer.Text = "Athletes";
             // 
-            // textBox2
+            // searchBoxAthl
             // 
-            this.textBox2.Location = new System.Drawing.Point(395, 19);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(125, 20);
-            this.textBox2.TabIndex = 45;
+            this.searchBoxAthl.Location = new System.Drawing.Point(395, 19);
+            this.searchBoxAthl.Name = "searchBoxAthl";
+            this.searchBoxAthl.Size = new System.Drawing.Size(125, 20);
+            this.searchBoxAthl.TabIndex = 45;
+            this.searchBoxAthl.TextChanged += new System.EventHandler(this.searchBoxAthl_TextChanged);
             // 
             // btnSearchAthl
             // 
@@ -382,25 +404,35 @@
             this.btnSearchAthl.TabIndex = 44;
             this.btnSearchAthl.Text = "Search";
             this.btnSearchAthl.UseVisualStyleBackColor = true;
-            this.btnSearchAthl.Click += new System.EventHandler(this.btnSearchAthl_Click);
             // 
-            // dgvCustomer
+            // dgvAthlete
             // 
-            this.dgvCustomer.AllowUserToAddRows = false;
-            this.dgvCustomer.AllowUserToDeleteRows = false;
-            this.dgvCustomer.AllowUserToResizeRows = false;
-            this.dgvCustomer.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvCustomer.BackgroundColor = System.Drawing.Color.White;
-            this.dgvCustomer.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dgvCustomer.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvCustomer.GridColor = System.Drawing.Color.LightSteelBlue;
-            this.dgvCustomer.Location = new System.Drawing.Point(10, 48);
-            this.dgvCustomer.Name = "dgvCustomer";
-            this.dgvCustomer.ReadOnly = true;
-            this.dgvCustomer.RowHeadersVisible = false;
-            this.dgvCustomer.Size = new System.Drawing.Size(592, 191);
-            this.dgvCustomer.TabIndex = 43;
-            this.dgvCustomer.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCustomer_CellClick);
+            this.dgvAthlete.AllowUserToAddRows = false;
+            this.dgvAthlete.AllowUserToDeleteRows = false;
+            this.dgvAthlete.AllowUserToResizeRows = false;
+            this.dgvAthlete.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvAthlete.BackgroundColor = System.Drawing.Color.White;
+            this.dgvAthlete.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dgvAthlete.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvAthlete.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.dgvAthlete.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvAthlete.GridColor = System.Drawing.Color.LightSteelBlue;
+            this.dgvAthlete.Location = new System.Drawing.Point(10, 48);
+            this.dgvAthlete.MultiSelect = false;
+            this.dgvAthlete.Name = "dgvAthlete";
+            this.dgvAthlete.ReadOnly = true;
+            this.dgvAthlete.RowHeadersVisible = false;
+            this.dgvAthlete.Size = new System.Drawing.Size(647, 191);
+            this.dgvAthlete.TabIndex = 43;
+            this.dgvAthlete.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCustomer_CellClick);
+            this.dgvAthlete.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAthlete_CellDoubleClick);
             // 
             // btnCustViewEdit
             // 
@@ -410,7 +442,7 @@
             this.btnCustViewEdit.TabIndex = 13;
             this.btnCustViewEdit.Text = "View/Edit";
             this.btnCustViewEdit.UseVisualStyleBackColor = true;
-            this.btnCustViewEdit.Click += new System.EventHandler(this.btnCustViewEdit_Click);
+            this.btnCustViewEdit.Click += new System.EventHandler(this.btnAthleteViewEdit_Click);
             // 
             // btnCustNew
             // 
@@ -502,7 +534,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvAppt)).EndInit();
             this.gbScheduleCustomer.ResumeLayout(false);
             this.gbScheduleCustomer.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCustomer)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAthlete)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -535,7 +567,7 @@
         private System.Windows.Forms.Button btnCustNew;
         private System.Windows.Forms.Button btnCustDelete;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.DataGridView dgvCustomer;
+        private System.Windows.Forms.DataGridView dgvAthlete;
         private System.Windows.Forms.Label lblUpcoming;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.ErrorProvider errorProvider1;
@@ -547,7 +579,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button btnSearchAppt;
         private System.Windows.Forms.Button btnSearchAthl;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox searchBoxAppt;
+        private System.Windows.Forms.TextBox searchBoxAthl;
     }
 }

@@ -147,7 +147,6 @@
             this.txtPassword.Text = "********";
             this.txtPassword.TextChanged += new System.EventHandler(this.txtPassword_TextChanged);
             this.txtPassword.Enter += new System.EventHandler(this.txtPasswordEnter);
-            //this.txtPassword.Leave += new System.EventHandler(this.txtPasswordLeave);
             // 
             // txtUsername
             // 
@@ -158,7 +157,6 @@
             this.txtUsername.Text = "Username";
             this.txtUsername.TextChanged += new System.EventHandler(this.txtUsername_TextChanged);
             this.txtUsername.Enter += new System.EventHandler(this.txtUserEnter);
-           // this.txtUsername.Leave += new System.EventHandler(this.txtUsername_Leave);
             // 
             // lblLogIn
             // 

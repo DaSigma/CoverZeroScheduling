@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CoverZeroScheduling.Models;
 using System.Configuration;
+using System.Text.RegularExpressions;
 
 namespace CoverZeroScheduling
 {
@@ -81,12 +82,16 @@ namespace CoverZeroScheduling
         // Conditions to allow save button to be enabled
         private bool AllowSave()
         {
-            if (((string.IsNullOrEmpty(tbName.Text)) || (string.IsNullOrEmpty(tbPhone.Text)) || (string.IsNullOrEmpty(tbAdd.Text)) ||
+            if (((string.IsNullOrEmpty(tbName.Text)) || (ValidatePhoneNumber(tbPhone.Text) == false) || (string.IsNullOrEmpty(tbAdd.Text)) ||
                 (string.IsNullOrEmpty(cbZip.Text))))
             {
                 return false;
             }
-            return true;
+            else
+            {
+                return true;
+            }
+            
         }
 
         // Update City and country Texbox based on Zip
@@ -125,7 +130,7 @@ namespace CoverZeroScheduling
         // Validation check for empty Athlete phone textbox
         private void tbAthletePhone_Leave(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(tbPhone.Text))
+            if (ValidatePhoneNumber(tbPhone.Text))
             {
                 errorProvider1.SetError(tbPhone, "Please provide athlete's Phone Number.");
             }
@@ -133,7 +138,7 @@ namespace CoverZeroScheduling
             {
                 errorProvider1.SetError(tbPhone, null);
             }
-        
+
         }
 
         // Validation check for empty Athlete address textbox
@@ -272,6 +277,44 @@ namespace CoverZeroScheduling
         {
             SelectDiscipline();
             LoadcbDiscipline();
+        }
+
+
+        private bool ValidatePhoneNumber(string phone)
+        {
+            var phoneNumber = phone.Trim()
+                 .Replace(" ", "")
+                 .Replace("-", "")
+                 .Replace("(", "")
+                 .Replace(")", "");
+            var test = Regex.Match(phoneNumber, @"^[01]?[- .]?(\([2-9]\d{2}\)|[2-9]\d{2})[- .]?\d{3}[- .]?\d{4}$").Success; 
+            return test;
+        }
+
+        private void tbPhone_Leave(object sender, EventArgs e)
+        {
+
+            if (ValidatePhoneNumber(tbPhone.Text) == false)
+            {
+                errorProvider1.SetError(tbPhone, "Please provide athlete's Phone Number.");
+
+            }
+            else
+            {
+                errorProvider1.SetError(tbPhone, null);
+                tbPhone.Text = TrimNumber(tbPhone.Text);
+            }
+            
+        }
+
+        private string TrimNumber(string phoneNumber)
+        {
+            string trimmed = phoneNumber.Replace(" ", "")
+                                        .Replace("-", "")
+                                        .Replace("(", "")
+                                        .Replace(")", "");
+            string test = String.Format("{0:(###) ###-####}", Convert.ToInt64(trimmed));
+            return test;
         }
     }
 }
