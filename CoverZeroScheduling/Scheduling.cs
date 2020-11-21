@@ -935,7 +935,7 @@ namespace CoverZeroScheduling
                 pg.Append($"{string.Concat(Enumerable.Repeat("*", 100))} \n");
                 while (dr.Read())
                 {
-                    pg.AppendFormat(String.Format("{0,-25}\t{1,-25}\t{2,-25} \n", dr["athleteName"], dr[athleteDiscipline],
+                    pg.AppendFormat(String.Format("{0,-30}\t{1,-25}\t{2,-25} \n", dr["athleteName"], dr[athleteDiscipline],
                         dr["athletePosition"]));
                 }
                 con.Close();
@@ -1067,6 +1067,7 @@ namespace CoverZeroScheduling
                         || dgvAthlete.Rows[i].Cells[5].Value.ToString().ToUpper().Contains(searchBoxAthl.Text.ToUpper()))
                     {
                         // Select parts.
+                        dgvAthlete.MultiSelect = true;
                         dgvAthlete.Rows[i].Selected = true;
                         found = true;
                     }
@@ -1093,6 +1094,7 @@ namespace CoverZeroScheduling
                         || dgvAppt.Rows[i].Cells[1].Value.ToString().ToUpper().Contains(searchBoxAppt.Text.ToUpper()))
                     {
                         // Select parts.
+                        dgvAppt.MultiSelect = true;
                         dgvAppt.Rows[i].Selected = true;
                         found = true;
                     }
