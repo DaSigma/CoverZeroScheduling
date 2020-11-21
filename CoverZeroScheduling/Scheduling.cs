@@ -758,6 +758,9 @@ namespace CoverZeroScheduling
         // Handle Generate report button
         private void btnGenerate_Click(object sender, EventArgs e)
         {
+            indexOfSelectedAthlete = -1;
+            IsCorner();
+            SetAthlete();
             string result = cbReports.Text;
             string sp;
             switch (result)
@@ -979,6 +982,13 @@ namespace CoverZeroScheduling
                 cbConsultant.Visible = false;
                 label2.Visible = false;
             }
+            else if (cbReports.Text == "Corners" || cbReports.Text == "Safeties")
+            {
+                dtpMonth.Visible = false;
+                cbConsultant.Visible = false;
+                label2.Visible = false;
+            }
+
             IsCorner();
             SetAthlete();
 
@@ -1019,6 +1029,10 @@ namespace CoverZeroScheduling
             {
                 return true;
 
+            }
+            if(cbReports.Text == "Safeties")
+            {
+                return false;
             }
             else
             {
