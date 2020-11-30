@@ -14,7 +14,7 @@ using MySql.Data.MySqlClient;
 
 namespace CoverZeroScheduling
 {
-    public partial class Scheduling : Form
+    public partial class Schedule : Form
     {
         public static int currentApptID;
         MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ConnectionString);
@@ -36,7 +36,7 @@ namespace CoverZeroScheduling
         int currentCoachID;
         string currentCoach;
 
-        public Scheduling()
+        public Schedule()
         {
             InitializeComponent();
             FormatDataGridView(dgvAppt);
@@ -526,7 +526,8 @@ namespace CoverZeroScheduling
                 indexOfSelectedAthlete= e.RowIndex;
             }
             IsCorner();
-            SetAthlete();
+            sp_AthleteByID = SetSp_AthleteID(IsCorner());
+            athleteDiscipline = SetAthleteDiscipline(IsCorner());
         }
 
         // View/Edit athlete record
@@ -555,7 +556,7 @@ namespace CoverZeroScheduling
                         dr.Close();
 
                         cmd.Connection = con;
-                        cmd.CommandText = sp_AthleteByID;
+                        cmd.CommandText = SetSp_AthleteID(IsCorner());// sp_AthleteByID;
 
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Clear();
@@ -578,7 +579,7 @@ namespace CoverZeroScheduling
                             viewAthlete.tbCountry.Text = dr["country"].ToString();
                             viewAthlete.cbZip.Text = dr["postalCode"].ToString();
                             AthleteForm.AddressID = Convert.ToInt32(dr["addressId"]);
-                            viewAthlete.lblLastUpdated.Text = Scheduling.GetCorrectedDate(Convert.ToDateTime(dr["lastUpdate"])).ToString();
+                            viewAthlete.lblLastUpdated.Text = Schedule.GetCorrectedDate(Convert.ToDateTime(dr["lastUpdate"])).ToString();
                         }
                         con.Close();
                     }
@@ -760,7 +761,8 @@ namespace CoverZeroScheduling
         {
             indexOfSelectedAthlete = -1;
             IsCorner();
-            SetAthlete();
+            sp_AthleteByID = SetSp_AthleteID(IsCorner());
+            athleteDiscipline = SetAthleteDiscipline(IsCorner());
             string result = cbReports.Text;
             string sp;
             switch (result)
@@ -990,7 +992,8 @@ namespace CoverZeroScheduling
             }
 
             IsCorner();
-            SetAthlete();
+            sp_AthleteByID = SetSp_AthleteID(IsCorner());
+            athleteDiscipline = SetAthleteDiscipline(IsCorner());
 
         }
 
@@ -1015,8 +1018,9 @@ namespace CoverZeroScheduling
             con.Close();
         }
 
-        private bool IsCorner()
+        public bool IsCorner()
         {
+
             if(indexOfSelectedAthlete != -1)
             {
                 if((string)dgvAthlete.Rows[indexOfSelectedAthlete].Cells[1].Value == "Corner")
@@ -1041,18 +1045,32 @@ namespace CoverZeroScheduling
 
         }
 
-        private void SetAthlete()
+        public static string SetSp_AthleteID(bool isCorner)
         {
-            if (IsCorner())
+            string sp_AthleteByID;
+            if (isCorner)
             {
                 sp_AthleteByID = "sp_viewEditCornerByID";
+
+            }
+            else
+            {
+                sp_AthleteByID = "sp_viewEditSafetyByID";;
+            }
+            return sp_AthleteByID;
+        }
+        public static string SetAthleteDiscipline(bool isCorner)
+        {
+            string athleteDiscipline;
+            if (isCorner)
+            {
                 athleteDiscipline = "cornerDiscipline";
             }
             else
             {
-                sp_AthleteByID = "sp_viewEditSafetyByID";
                 athleteDiscipline = "safetyDiscipline";
             }
+            return athleteDiscipline;
         }
 
         // Exit program
@@ -1062,9 +1080,52 @@ namespace CoverZeroScheduling
             Application.Exit();
         }
 
+        private void searchBoxAppt_TextChanged(object sender, EventArgs e)
+        {
+            // Search for Part by Name.
+            
+            ForeColor = Color.Black;
+            dgvAppt.ClearSelection();
+            dgvAppt.ClearSelection();
+            dgvAppt.DefaultCellStyle.SelectionBackColor = Color.SpringGreen;
+            bool found = false;
+
+            // If searchbox is not blank, select parts.
+            if (searchBoxAppt.Text != "")
+            {
+                // Loop through parts.
+                for (int i = 0; i < dgvAppt.Rows.Count; i++)
+                {
+                    if (dgvAppt.Rows[i].Cells[0].Value.ToString().ToUpper().Contains(searchBoxAppt.Text.ToUpper())
+                        || dgvAppt.Rows[i].Cells[1].Value.ToString().ToUpper().Contains(searchBoxAppt.Text.ToUpper()))
+                    {
+                        // Select parts.
+                        dgvAppt.MultiSelect = true;
+                        dgvAppt.Rows[i].Selected = true;
+                        found = true;
+                    }
+                }
+            }
+        }
+
+        private void searchBoxAppt_Enter(object sender, EventArgs e)
+        {
+            searchBoxAppt.Text = string.Empty;
+            searchBoxAppt.ForeColor = Color.Black;
+        }
+        private void searchBoxAppt_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(searchBoxAppt.Text))
+            {
+                searchBoxAppt.Text = "Search for...";
+                searchBoxAppt.ForeColor = Color.DarkGray;
+            }
+        }
+
         private void searchBoxAthl_TextChanged(object sender, EventArgs e)
         {
             // Search for Part by Name.
+            ForeColor = Color.Black;
             dgvAthlete.ClearSelection();
             dgvAthlete.ClearSelection();
             dgvAthlete.DefaultCellStyle.SelectionBackColor = Color.SpringGreen;
@@ -1090,32 +1151,19 @@ namespace CoverZeroScheduling
 
         }
 
-        private void searchBoxAppt_TextChanged(object sender, EventArgs e)
+        private void searchBoxAthl_Enter(object sender, EventArgs e)
         {
-            // Search for Part by Name.
-            dgvAppt.ClearSelection();
-            dgvAppt.ClearSelection();
-            dgvAppt.DefaultCellStyle.SelectionBackColor = Color.SpringGreen;
-            bool found = false;
-
-            // If searchbox is not blank, select parts.
-            if (searchBoxAppt.Text != "")
-            {
-                // Loop through parts.
-                for (int i = 0; i < dgvAppt.Rows.Count; i++)
-                {
-                    if (dgvAppt.Rows[i].Cells[0].Value.ToString().ToUpper().Contains(searchBoxAppt.Text.ToUpper())
-                        || dgvAppt.Rows[i].Cells[1].Value.ToString().ToUpper().Contains(searchBoxAppt.Text.ToUpper()))
-                    {
-                        // Select parts.
-                        dgvAppt.MultiSelect = true;
-                        dgvAppt.Rows[i].Selected = true;
-                        found = true;
-                    }
-                }
-            }
+            searchBoxAthl.Text = string.Empty;
+            searchBoxAthl.ForeColor = Color.Black;
         }
 
-
+        private void searchBoxAthl_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(searchBoxAthl.Text))
+            {
+                searchBoxAthl.Text = "Search for...";
+                searchBoxAthl.ForeColor = Color.DarkGray;
+            }
+        }
     }
 }

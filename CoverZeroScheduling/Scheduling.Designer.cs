@@ -1,6 +1,6 @@
 ﻿namespace CoverZeroScheduling
 {
-    partial class Scheduling
+    partial class Schedule
     {
         /// <summary>
         /// Required designer variable.
@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Scheduling));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Schedule));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.gbReports = new System.Windows.Forms.GroupBox();
             this.cbConsultant = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -41,7 +41,6 @@
             this.rtbReport = new System.Windows.Forms.RichTextBox();
             this.gbAppointments = new System.Windows.Forms.GroupBox();
             this.searchBoxAppt = new System.Windows.Forms.TextBox();
-            this.btnSearchAppt = new System.Windows.Forms.Button();
             this.lblUpcoming = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.btnLoadAll = new System.Windows.Forms.Button();
@@ -58,7 +57,6 @@
             this.btnAptDelete = new System.Windows.Forms.Button();
             this.gbScheduleCustomer = new System.Windows.Forms.GroupBox();
             this.searchBoxAthl = new System.Windows.Forms.TextBox();
-            this.btnSearchAthl = new System.Windows.Forms.Button();
             this.dgvAthlete = new System.Windows.Forms.DataGridView();
             this.btnCustViewEdit = new System.Windows.Forms.Button();
             this.btnCustNew = new System.Windows.Forms.Button();
@@ -136,6 +134,8 @@
             // 
             // cbReports
             // 
+            this.cbReports.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbReports.ForeColor = System.Drawing.Color.Black;
             this.cbReports.FormattingEnabled = true;
             this.cbReports.Items.AddRange(new object[] {
             "Appointment Types by Month",
@@ -147,6 +147,7 @@
             this.cbReports.Name = "cbReports";
             this.cbReports.Size = new System.Drawing.Size(229, 21);
             this.cbReports.TabIndex = 1;
+            this.cbReports.Text = "Select Report...";
             this.cbReports.SelectedIndexChanged += new System.EventHandler(this.cbReports_SelectedIndexChanged);
             // 
             // rtbReport
@@ -161,7 +162,6 @@
             // 
             this.gbAppointments.BackColor = System.Drawing.Color.LightSteelBlue;
             this.gbAppointments.Controls.Add(this.searchBoxAppt);
-            this.gbAppointments.Controls.Add(this.btnSearchAppt);
             this.gbAppointments.Controls.Add(this.lblUpcoming);
             this.gbAppointments.Controls.Add(this.pictureBox2);
             this.gbAppointments.Controls.Add(this.btnLoadAll);
@@ -185,20 +185,15 @@
             // 
             // searchBoxAppt
             // 
+            this.searchBoxAppt.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.searchBoxAppt.Location = new System.Drawing.Point(394, 96);
             this.searchBoxAppt.Name = "searchBoxAppt";
-            this.searchBoxAppt.Size = new System.Drawing.Size(125, 20);
+            this.searchBoxAppt.Size = new System.Drawing.Size(201, 20);
             this.searchBoxAppt.TabIndex = 18;
+            this.searchBoxAppt.Text = "Search For ...";
             this.searchBoxAppt.TextChanged += new System.EventHandler(this.searchBoxAppt_TextChanged);
-            // 
-            // btnSearchAppt
-            // 
-            this.btnSearchAppt.Location = new System.Drawing.Point(525, 94);
-            this.btnSearchAppt.Name = "btnSearchAppt";
-            this.btnSearchAppt.Size = new System.Drawing.Size(75, 23);
-            this.btnSearchAppt.TabIndex = 17;
-            this.btnSearchAppt.Text = "Search";
-            this.btnSearchAppt.UseVisualStyleBackColor = true;
+            this.searchBoxAppt.Enter += new System.EventHandler(this.searchBoxAppt_Enter);
+            this.searchBoxAppt.Leave += new System.EventHandler(this.searchBoxAppt_Leave);
             // 
             // lblUpcoming
             // 
@@ -298,28 +293,28 @@
             this.dgvAppt.BackgroundColor = System.Drawing.Color.White;
             this.dgvAppt.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgvAppt.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvAppt.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvAppt.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dgvAppt.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAppt.GridColor = System.Drawing.Color.LightSteelBlue;
             this.dgvAppt.Location = new System.Drawing.Point(10, 126);
             this.dgvAppt.MultiSelect = false;
             this.dgvAppt.Name = "dgvAppt";
             this.dgvAppt.ReadOnly = true;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvAppt.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvAppt.RowHeadersDefaultCellStyle = dataGridViewCellStyle10;
             this.dgvAppt.RowHeadersVisible = false;
             this.dgvAppt.Size = new System.Drawing.Size(647, 207);
             this.dgvAppt.TabIndex = 5;
@@ -375,7 +370,6 @@
             // 
             this.gbScheduleCustomer.BackColor = System.Drawing.Color.LightSteelBlue;
             this.gbScheduleCustomer.Controls.Add(this.searchBoxAthl);
-            this.gbScheduleCustomer.Controls.Add(this.btnSearchAthl);
             this.gbScheduleCustomer.Controls.Add(this.dgvAthlete);
             this.gbScheduleCustomer.Controls.Add(this.btnCustViewEdit);
             this.gbScheduleCustomer.Controls.Add(this.btnCustNew);
@@ -389,20 +383,15 @@
             // 
             // searchBoxAthl
             // 
+            this.searchBoxAthl.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.searchBoxAthl.Location = new System.Drawing.Point(395, 19);
             this.searchBoxAthl.Name = "searchBoxAthl";
-            this.searchBoxAthl.Size = new System.Drawing.Size(125, 20);
+            this.searchBoxAthl.Size = new System.Drawing.Size(200, 20);
             this.searchBoxAthl.TabIndex = 45;
+            this.searchBoxAthl.Text = "Search for...";
             this.searchBoxAthl.TextChanged += new System.EventHandler(this.searchBoxAthl_TextChanged);
-            // 
-            // btnSearchAthl
-            // 
-            this.btnSearchAthl.Location = new System.Drawing.Point(526, 19);
-            this.btnSearchAthl.Name = "btnSearchAthl";
-            this.btnSearchAthl.Size = new System.Drawing.Size(75, 23);
-            this.btnSearchAthl.TabIndex = 44;
-            this.btnSearchAthl.Text = "Search";
-            this.btnSearchAthl.UseVisualStyleBackColor = true;
+            this.searchBoxAthl.Enter += new System.EventHandler(this.searchBoxAthl_Enter);
+            this.searchBoxAthl.Leave += new System.EventHandler(this.searchBoxAthl_Leave);
             // 
             // dgvAthlete
             // 
@@ -501,12 +490,12 @@
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
             // 
-            // Scheduling
+            // Schedule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.ClientSize = new System.Drawing.Size(1230, 811);
+            this.ClientSize = new System.Drawing.Size(1230, 853);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.gbScheduleCustomer);
@@ -514,9 +503,9 @@
             this.Controls.Add(this.gbReports);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Scheduling";
+            this.Name = "Schedule";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Scheduling";
+            this.Text = "ScheduleSync Scheduling";
             this.Load += new System.EventHandler(this.Scheduling_Load);
             this.gbReports.ResumeLayout(false);
             this.gbReports.PerformLayout();
@@ -569,8 +558,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button btnSearchAppt;
-        private System.Windows.Forms.Button btnSearchAthl;
         private System.Windows.Forms.TextBox searchBoxAppt;
         private System.Windows.Forms.TextBox searchBoxAthl;
     }

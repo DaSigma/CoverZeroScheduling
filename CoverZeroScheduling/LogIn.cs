@@ -78,7 +78,7 @@ namespace CoverZeroScheduling
                             currentCoach = dr["coachName"].ToString();
 
                             // Open Scheduling screen
-                            Scheduling scheduling = new Scheduling();
+                            Schedule scheduling = new Schedule();
                             this.Hide();
                             scheduling.Show();
 

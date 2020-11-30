@@ -36,7 +36,7 @@ namespace CoverZeroScheduling
             this.btnDone.Click += (object sender, EventArgs e) =>
             {
                 this.Hide();
-                Scheduling schedulingScreen = new Scheduling();
+                Schedule schedulingScreen = new Schedule();
                 schedulingScreen.Show();
             }; // Lambda expression to create Done button click event
         }
@@ -101,14 +101,14 @@ namespace CoverZeroScheduling
                                 ChangeAID();
                                 int AID = Convert.ToInt32(dr["AID"]);
 
-                                if ((Scheduling.GetCorrectedDate(Convert.ToDateTime(dr["Start"])) <= start)
-                                && (start <= Scheduling.GetCorrectedDate(Convert.ToDateTime(dr["End"]))))
+                                if ((Schedule.GetCorrectedDate(Convert.ToDateTime(dr["Start"])) <= start)
+                                && (start <= Schedule.GetCorrectedDate(Convert.ToDateTime(dr["End"]))))
                                 {
                                     if (AID != Convert.ToInt32(lblApptID.Text))
                                     {
-                                        string mtgStart = Scheduling.GetCorrectedDate(Convert.ToDateTime(dr["Start"])).ToString("hh:mm tt");
-                                        string mtgEnd = Scheduling.GetCorrectedDate(Convert.ToDateTime(dr["End"])).ToString("hh:mm tt");
-                                        string mtgDay = Scheduling.GetCorrectedDate(Convert.ToDateTime(dr["Start"])).ToString("MMMM dd, yyyy");
+                                        string mtgStart = Schedule.GetCorrectedDate(Convert.ToDateTime(dr["Start"])).ToString("hh:mm tt");
+                                        string mtgEnd = Schedule.GetCorrectedDate(Convert.ToDateTime(dr["End"])).ToString("hh:mm tt");
+                                        string mtgDay = Schedule.GetCorrectedDate(Convert.ToDateTime(dr["Start"])).ToString("MMMM dd, yyyy");
                                         char.ToUpper(cbUsr.Text[0]);
                                         MessageBox.Show($"Coach {cbUsr.Text} already has a meeting from {mtgStart} to {mtgEnd} on {mtgDay}!");
                                         goto done;                                
@@ -145,7 +145,7 @@ namespace CoverZeroScheduling
                                     cmd2.ExecuteNonQuery();
                                     MessageBox.Show("Appointment Saved!");
                                 }
-                                Scheduling schedulingScreen = new Scheduling();
+                                Schedule schedulingScreen = new Schedule();
                                 schedulingScreen.Show();
                                 this.Hide();
                             }

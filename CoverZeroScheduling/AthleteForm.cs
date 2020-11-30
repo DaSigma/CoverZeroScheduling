@@ -32,7 +32,7 @@ namespace CoverZeroScheduling
             this.btnClose.Click += (object sender, EventArgs e) =>
             {
                this.Hide();
-               Scheduling schedulingScreen = new Scheduling();
+               Schedule schedulingScreen = new Schedule();
                schedulingScreen.Show();
                addressID = AddressID;
            };// Lambda expression to create Close button click event
@@ -64,7 +64,7 @@ namespace CoverZeroScheduling
                 MessageBox.Show("Athlete Added/Updated");// Feedback
 
                 this.Hide();
-                Scheduling schedulingScreen = new Scheduling();
+                Schedule schedulingScreen = new Schedule();
                 schedulingScreen.Show();
             }
             catch (Exception ex)
