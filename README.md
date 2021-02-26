@@ -125,6 +125,6 @@ J. Write code to address the following conditions with exception handling code:
 
 ![Image 1](https://github.com/DaSigma/CoverZeroScheduling/blob/master/Login.jpg)
 ![Image 1](https://github.com/DaSigma/CoverZeroScheduling/blob/master/Main.jpg)
-![Image 1](https://github.com/DaSigma/CoverZeroScheduling/blob/master/Appointmnet.jpg)
+![Image 1](https://github.com/DaSigma/CoverZeroScheduling/blob/master/Appointment.jpg)
 ![Image 1](https://github.com/DaSigma/CoverZeroScheduling/blob/master/Athlete.jpg)
 
