@@ -1,5 +1,8 @@
 # CoverZeroScheduling
 
+Screenshots below.
+Code needs refactoring
+
 INTRODUCTION
 Throughout your career in software design and development, you will be asked to create applications with
 various features and functionality based on business requirements. When a new system is developed,
