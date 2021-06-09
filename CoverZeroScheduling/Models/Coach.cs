@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Data;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace CoverZeroScheduling
 {
     public class Coach
     {
+        [Display(Name ="CoachID")]
+        public int CoachID { get; set; }
         public static void AddCoach(string userName, string password)
         {            
             MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ConnectionString);
