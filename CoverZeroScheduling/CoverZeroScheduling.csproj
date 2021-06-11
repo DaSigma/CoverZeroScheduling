@@ -50,12 +50,13 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>2</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>icons8-american-football-48.ico</ApplicationIcon>
@@ -200,10 +201,8 @@
       <DependentUpon>AppointmentForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Address.cs" />
-    <Compile Include="Models\Appointment.cs" />
     <Compile Include="Models\Athlete.cs" />
     <Compile Include="Models\City.cs" />
-    <Compile Include="Models\Coach.cs" />
     <Compile Include="LogIn.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -316,6 +315,12 @@
   <ItemGroup>
     <EmbeddedResource Include="icons8-american-football-48.ico" />
     <Content Include="Properties\DataSources\LogFile.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataLibrary\DataLibrary.csproj">
+      <Project>{9d452fb1-16ce-4cbd-ad9b-4ac230365b20}</Project>
+      <Name>DataLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace CoverZeroScheduling
+﻿namespace DataLibrary
 {
     partial class AthleteForm
     {

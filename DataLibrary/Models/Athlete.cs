@@ -11,15 +11,11 @@ namespace DataLibrary.Models
         public int AthleteID { get; set; }
         public string AthleteName { get; set; }
         public int AddressID { get; set; }
-
-
-        public Athlete(int athleteID, string athleteName, int addressID)
-        {
-            AthleteID = athleteID;
-            AthleteName = athleteName;
-            AddressID = addressID;
-        }
+        public string AthletePosition { get; set; }
+        public string CornerDiscipline { get; set; }
+        public string SafetyDiscipline { get; set; }
+        public string ImageURL { get; set; }
+        public DateTime Updated { get; set; }
 
     }
-
 }

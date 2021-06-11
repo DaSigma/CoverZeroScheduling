@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
-namespace CoverZeroScheduling
+namespace DataLibrary
 {
     public partial class AppointmentForm : Form
     {

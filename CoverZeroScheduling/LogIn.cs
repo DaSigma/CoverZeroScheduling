@@ -1,5 +1,4 @@
-﻿using MySql.Data.MySqlClient;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -8,29 +7,25 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using System.Configuration;
+using DataLibrary.BusinessLogic;
+using DataLibrary.Models;
 
-namespace CoverZeroScheduling
+namespace DataLibrary
 {
     public partial class LogIn : Form
     {
-        MySqlConnection con = new MySqlConnection();
-        MySqlCommand cmd = new MySqlCommand();
-        MySqlDataReader dr;
-        static string currentCoach;
+        public string CurrentCoachName { get; set; }
+        public int CurrentCoachID { get; set; }
+        private static string currentCoachName;
         private static int currentCoachID;
-        string connection = ConfigurationManager.ConnectionStrings["mycon"].ConnectionString;
 
-        internal static int CurrentCoachID { get { return currentCoachID; } }
-        internal static string CurrentCoach { get { return currentCoach; } }
 
         public LogIn()
         {
             InitializeComponent();
             CultureInfo ci = CultureInfo.CurrentUICulture;
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo($"{CultureInfo.CurrentCulture.ToString()}");
-
-            con.ConnectionString = connection;
-            setCulture();
+            SetCulture();
             txtPassword.Text = "********";
         }
 
@@ -42,7 +37,6 @@ namespace CoverZeroScheduling
             if (txtUsername.Text.Equals($"{Properties.Resources.txtUsername}"))
             {
                 txtUsername.Text = ("");
-
             }
         }
 
@@ -62,60 +56,43 @@ namespace CoverZeroScheduling
                 // Validate 
                 if (ValidateChildren(ValidationConstraints.Enabled))
                 {
+                    Coach CurrentCoach = CoachProcesser.Login(txtUsername.Text.ToUpper(), txtPassword.Text);
+                    if (CurrentCoach != null)
+                    {                        
+                        CurrentCoachID = CurrentCoach.CoachID;
+                        CurrentCoachName = CurrentCoach.UserName;
 
-                    // Connect to db and check username and password entered
-                    con.Open();
-                    cmd.Connection = con;
-                    cmd.CommandText = "Select * FROM coach Where coachName = '" + txtUsername.Text.Trim() + "'";
-                    MySqlDataReader dr = cmd.ExecuteReader();
+                        // Open Scheduling screen
+                        Schedule scheduling = new Schedule();
+                        scheduling.coachlbl.Text = currentCoachName;
+                        this.Hide();
+                        scheduling.Show();
 
-                    if (dr.Read())
-                    {
-                        if (txtUsername.Text.ToUpper().Equals(dr["coachName"].ToString().ToUpper()) && txtPassword.Text.Equals(dr["password"]))
+                        // Log successful login
+                        using (StreamWriter w = File.AppendText("log.txt"))
                         {
-                            MessageBox.Show($"{Properties.Resources.logInSuccess}", "Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            currentCoachID = Convert.ToInt32(dr["coachID"]);
-                            currentCoach = dr["coachName"].ToString();
-
-                            // Open Scheduling screen
-                            Schedule scheduling = new Schedule();
-                            this.Hide();
-                            scheduling.Show();
-
-                            // Log successful login
-                            using (StreamWriter w = File.AppendText("log.txt"))
-                            {
-                                LogEntry($"{currentCoach.ToString()} Logged in successfully", w);
-                            }
+                            LogEntry($"{CurrentCoachName} Logged in successfully", w);
                         }
-                        else// Throw exception
-                        {
-                            throw (new UserPasswordException(string.Format($"{Properties.Resources.loginError}")));
-                        }
-
                     }
                     else
                     {
-                        MessageBox.Show($"{Properties.Resources.loginError2}");
+                        MessageBox.Show("Invalid Login Credentials");
                     }
+
                 }
-                con.Close();
+                else// Throw exception
+                {
+                    throw (new UserPasswordException(string.Format($"{Properties.Resources.loginError}")));
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);// print error message
             }
-            finally //Close dr and connection
-            {
-                if (dr != null)
-                    dr.Close();
-                if (con.State == ConnectionState.Open)
-                    con.Close();
-            }
         }
 
         // Set labels, buttons, and text boxes based on culture
-        private void setCulture()
+        private void SetCulture()
         {
             txtUsername.Text = Properties.Resources.txtUsername;
             lblScheduling.Text = Properties.Resources.lblScheduling;
@@ -157,7 +134,7 @@ namespace CoverZeroScheduling
         // Set Current user Name
         internal static string GetCoachName()
         {
-            string userName = currentCoach;
+            string userName = currentCoachName;
             return userName;
         }
 

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CoverZeroScheduling.Properties {
+namespace DataLibrary.Properties {
     using System;
     
     

@@ -10,23 +10,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
+using DataLibrary.BusinessLogic;
+using DataLibrary.Models;
 
-namespace CoverZeroScheduling
+namespace DataLibrary
 {
     public partial class Schedule : Form
     {
         public static int currentApptID;
-        MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ConnectionString);
-        MySqlCommand cmd = new MySqlCommand();
-        MySqlDataAdapter da;
-        DataTable dt;
-        MySqlDataReader dr;
+        //MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ConnectionString);
+        //MySqlCommand cmd = new MySqlCommand();
+        //MySqlDataAdapter da;
+        //DataTable dt;
+        //MySqlDataReader dr;
         string sp_AthleteByID;
         string athleteDiscipline;
         public string StartDate { get; set; }
-        public string ToDate { get; set; }
-        
+        public string ToDate { get; set; }        
         public int CurrentMonth { get; set; }
         public int CurrentYear { get; set; }
         public int DaysInMonth { get; set; }
@@ -47,8 +47,7 @@ namespace CoverZeroScheduling
         private void Scheduling_Load(object sender, EventArgs e)
         {            
             rbWeek.Checked = true;
-            string sp = "sp_getApptsbyCoachID";
-            LoadAppointmentData(sp);
+            LoadAppointments();
             LoadCustomerData();
             currentCoachID = LogIn.GetCoachID();
             currentCoach = LogIn.GetCoachName();
@@ -119,28 +118,32 @@ namespace CoverZeroScheduling
         }
 
         // Get appointment data from database with given stored parameter starting date and end date
-        private void GetData(string sp, string StartDate, string ToDate)
+        private void UpdateTable(string StartDate, string ToDate)
         {
-            using (con)
-            {
-                con.Open();
-                cmd = new MySqlCommand(sp, con);
-                da = new MySqlDataAdapter(cmd);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@CoachID", LogIn.GetCoachID());
-                cmd.Parameters.AddWithValue("@startDate", StartDate);
-                cmd.Parameters.AddWithValue("@endDate", ToDate);
-                //da.Fill(ds);
-                cmd.ExecuteNonQuery();
-                dt = new DataTable();
-                da.Fill(dt);
-                BindingSource bSource = new BindingSource();
-                bSource.DataSource = dt;
-                dgvAppt.DataSource = bSource;
-                da.Update(dt);
-            }
-            con.Close();
+            DataTable dt =  CoachProcesser.GetCoachDataByDate(currentCoachID, StartDate, ToDate);
+            BindingSource bSource = new BindingSource();
+            bSource.DataSource = dt;
+            dgvAppt.DataSource = bSource;
 
+            //using (con)
+            //{
+            //    con.Open();
+            //    cmd = new MySqlCommand(sp, con);
+            //    da = new MySqlDataAdapter(cmd);
+            //    cmd.CommandType = CommandType.StoredProcedure;
+            //    cmd.Parameters.AddWithValue("@CoachID", LogIn.GetCoachID());
+            //    cmd.Parameters.AddWithValue("@startDate", StartDate);
+            //    cmd.Parameters.AddWithValue("@endDate", ToDate);
+            //    //da.Fill(ds);
+            //    cmd.ExecuteNonQuery();
+            //    dt = new DataTable();
+            //    da.Fill(dt);
+            //    BindingSource bSource = new BindingSource();
+            //    bSource.DataSource = dt;
+            //    dgvAppt.DataSource = bSource;
+            //    da.Update(dt);
+            //}
+            //con.Close();
         }
 
         // Get upcomeing appointments if withing 15 minutes from now
@@ -149,8 +152,7 @@ namespace CoverZeroScheduling
             string startDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
             string toDate = Convert.ToDateTime(startDate).AddHours(1).ToString("yyyy-MM-dd HH:mm");
 
-            string sp = "sp_getApptsByDate";
-            GetData(sp, startDate, toDate);
+            UpdateTable(startDate, toDate);
 
         }
 
@@ -158,9 +160,8 @@ namespace CoverZeroScheduling
         private void GetWeek()
         {
             ConvertDatesToWeek();
-            string sp = "sp_getApptsByDate";
 
-            GetData(sp, StartDate, ToDate);
+            UpdateTable(StartDate, ToDate);
             dgvAppt.ClearSelection();
         }
 
@@ -183,7 +184,7 @@ namespace CoverZeroScheduling
             string sp = "sp_getApptsByDate";
 
             //Get appointment by month based on starting date.
-            GetData(sp, StartDate, ToDate);
+            UpdateTable(StartDate, ToDate);
             dgvAppt.ClearSelection();
         }
 
@@ -238,67 +239,46 @@ namespace CoverZeroScheduling
         {
             lblApptDates.Text = "All of your Appointments are Displayed";
             string sp = "sp_getApptsbyCoachID";
-            LoadAppointmentData(sp);
+            LoadAppointments();
         }
 
         //Load Appointment DGV with appointment data
-        private void LoadAppointmentData(string sp)
+        private void LoadAppointments()
         {
+            DataTable dt = new DataTable();
+            AppointmentProcesser.GetAppointmentByCoach(currentCoachID);
+            BindingSource bSource = new BindingSource();
+            bSource.DataSource = dt;
+            dgvAppt.DataSource = bSource;
 
-            using (con)
-            {                
-                using (MySqlCommand cmd = new MySqlCommand(sp, con))
-                {
-                    con.Open();
-                    da = new MySqlDataAdapter(cmd);
+            dgvAppt.Columns["Type"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dgvAppt.Columns["Start"].DefaultCellStyle.Format = "MMMM dd, yyyy hh:mm tt"; //Format Start date
+            dgvAppt.Columns["Start"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells; // Autosize Start Column
 
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@CoachID", LogIn.GetCoachID());
-                    cmd.ExecuteNonQuery();
-                    dt = new DataTable();
-                    da.Fill(dt);
-                    BindingSource bSource = new BindingSource();
-                    bSource.DataSource = dt;
-                    dgvAppt.DataSource = bSource;
-
-                    dgvAppt.Columns["Type"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-                    dgvAppt.Columns["Start"].DefaultCellStyle.Format = "MMMM dd, yyyy hh:mm tt"; //Format Start date
-                    dgvAppt.Columns["Start"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells; // Autosize Start Column
-
-                    dgvAppt.Columns["End"].DefaultCellStyle.Format = "MMMM dd, yyyy hh:mm tt"; //Format End date
-                    dgvAppt.Columns["End"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells; // Autosize End Column
-                    dgvAppt.Columns["Athlete"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells; // Autosize Athlete column
-                    da.Update(dt);
-
-                    string startDate = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now, TimeZoneInfo.Local).ToString("yyyy-MM-dd HH:mm");
-                    string toDate = Convert.ToDateTime(startDate).AddHours(1).ToString("yyyy-MM-dd HH:mm");
-
-                    MySqlCommand cmd2 = new MySqlCommand("sp_getApptsByDate");
-                    cmd2.CommandType = CommandType.StoredProcedure;
-                    cmd2.Connection = con;
-                    cmd2.Parameters.AddWithValue("@CoachID", LogIn.GetCoachID());
-                    cmd2.Parameters.AddWithValue("@startDate", startDate);
-                    cmd2.Parameters.AddWithValue("@endDate", toDate);
-                    MySqlDataReader dr = cmd2.ExecuteReader();
-
-                    // Show if there is an appointment within 15 minutes of current time. 
-                    if (dr.Read())
-                    {
-                        lblUpcoming.Text = $"Upcoming Appointment: {GetCorrectedDate(Convert.ToDateTime(dr["Start"])).ToString()}"; // Correct date for Appointment display
-                        lblUpcoming.BackColor = Color.SpringGreen;
-                    }
-                    else
-                    {
-                        lblUpcoming.Text = $"Upcoming Appointments: None";                      
-                    }
-                    dr.Close();
-
-                }
-                con.Close();
-                dgvAppt.ClearSelection();
-            }
+            dgvAppt.Columns["End"].DefaultCellStyle.Format = "MMMM dd, yyyy hh:mm tt"; //Format End date
+            dgvAppt.Columns["End"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells; // Autosize End Column
+            dgvAppt.Columns["Athlete"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells; // Autosize Athlete column
+                                                                                                     //da.Update(dt);
         }
 
+        private void DispayUpcomingAppointment()
+        {
+            DateTime upcoming  = new DateTime();
+
+            upcoming = AppointmentProcesser.GetUpcomingAppointment(currentCoachID);
+
+            // Show if there is an appointment within 15 minutes of current time. 
+            if (upcoming != null)
+            {
+                lblUpcoming.Text = $"Upcoming Appointment: {GetCorrectedDate(Convert.ToDateTime(upcoming))}"; // Correct date for Appointment display
+                lblUpcoming.BackColor = Color.SpringGreen;
+            }
+            else
+            {
+                lblUpcoming.Text = $"Upcoming Appointments: None";                      
+            }
+
+        }
 
         // View or Edit selected appointment
         private void btnApptView_Click(object sender, EventArgs e)
@@ -311,66 +291,47 @@ namespace CoverZeroScheduling
                     AppointmentForm viewAppointment = new AppointmentForm();
                     if (currentApptID > 0)
                     {
-                        con.Open();
+                        List<string> athleteNames = new List<string>();
+                        athleteNames = AthleteProcessor.GetAthleteNames();
 
-                        // Fill appointment athlete name combobox
-                        MySqlCommand cmd2 = new MySqlCommand("sp_athleteName");
-                        cmd2.Connection = con;
-                        dr = cmd2.ExecuteReader();
-
-                        while (dr.Read())
+                        foreach (var item in athleteNames)
                         {
-                            viewAppointment.cbCustName.Items.Add(dr["athleteName"].ToString());
+                            viewAppointment.cbCustName.Items.Add(item);
                         }
-                        dr.Close();
 
                         // Fill appointment consultant combobox
-                        MySqlCommand cmd3 = new MySqlCommand("sp_getDistinctCoach");
-                        cmd3.Connection = con;
-                        dr = cmd3.ExecuteReader();
+                        List<string> coachNames = new List<string>();
+                        coachNames = CoachProcesser.GetCoachNames();
 
-                        while (dr.Read())
+                        foreach (var item in coachNames)
                         {
-                            viewAppointment.cbUsr.Items.Add(dr["coachName"].ToString());
-                            viewAppointment.cbUsr.Text = currentCoach.ToString();
+                            viewAppointment.cbUsr.Items.Add(item);
                         }
-                        dr.Close();
 
                         //Fill appointment type combobox
-                        MySqlCommand cmd4 = new MySqlCommand("sp_allAppTypes");
-                        cmd4.Connection = con;
-                        dr = cmd4.ExecuteReader();
+                        List<string> appointmentTypes = new List<string>();
+                        appointmentTypes = AppointmentProcesser.GetAppointmentTypes();
 
-                        while (dr.Read())
+                        foreach (var item in appointmentTypes)
                         {
-                            viewAppointment.cbType.Items.Add(dr["type"].ToString());
+                            viewAppointment.cbUsr.Items.Add(item);
                         }
-                        dr.Close();
 
                         // Get appointment by appointmentID
-                        cmd.Connection = con;
-                        cmd.CommandText = "sp_viewAppts";
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.Clear();
-                        cmd.Parameters.AddWithValue("@apptID", currentApptID);
-                        dr = cmd.ExecuteReader();
+                        Appointment apt = new Appointment();
 
-                        if (dr.Read())
-                        {
-                            viewAppointment.lblApptID.Text = dr["appointmentID"].ToString();
-                            viewAppointment.cbCustName.Text = dr["athleteName"].ToString();
-                            viewAppointment.cbType.Text = dr["type"].ToString();
-                            viewAppointment.dTPStart.Text = GetCorrectedDate(Convert.ToDateTime((dr["start"]))).ToString("MMMM dd, yyyy");
-                            DateTime appStartTime = GetCorrectedDate(Convert.ToDateTime((dr["start"])));
-                            viewAppointment.dTPStartTime.Text = appStartTime.ToString(" HH:mm");
-                            viewAppointment.dtpEnd.Text = GetCorrectedDate(Convert.ToDateTime((dr["end"]))).ToString();
-                            DateTime appEndTime = GetCorrectedDate(Convert.ToDateTime(dr["end"]));
-                            viewAppointment.dTPEndTime.Text = appEndTime.ToString(" hh:mm tt");
-                            DateTime lastUpdated = Convert.ToDateTime(dr["lastUpdate"]).ToLocalTime();
-                            viewAppointment.lblUpdated.Text = lastUpdated.ToString("MMMM dd, yyyy hh:mm tt");
+                        viewAppointment.lblApptID.Text = apt.AppointmentID.ToString();
+                        viewAppointment.cbCustName.Text = apt.AthleteName.ToString();
+                        viewAppointment.cbType.Text = apt.Type.ToString();
+                        viewAppointment.dTPStart.Text = GetCorrectedDate(Convert.ToDateTime(apt.StartDate)).ToString("MMMM dd, yyyy");
+                        DateTime appStartTime = GetCorrectedDate(Convert.ToDateTime((apt.StartDate)));
+                        viewAppointment.dTPStartTime.Text = appStartTime.ToString(" HH:mm");
+                        viewAppointment.dtpEnd.Text = GetCorrectedDate(Convert.ToDateTime((apt.EndDate))).ToString();
+                        DateTime appEndTime = GetCorrectedDate(Convert.ToDateTime(apt.EndDate));
+                        viewAppointment.dTPEndTime.Text = appEndTime.ToString(" hh:mm tt");
+                        DateTime lastUpdated = Convert.ToDateTime(apt.Updated).ToLocalTime();
+                        viewAppointment.lblUpdated.Text = lastUpdated.ToString("MMMM dd, yyyy hh:mm tt");
 
-                        }
-                        con.Close();
                     }
                     viewAppointment.gbAppointment.Text = "Edit Appointment";
                     this.Hide();
@@ -385,14 +346,6 @@ namespace CoverZeroScheduling
             {
                 MessageBox.Show(ex.Message);// print error message
             }
-            finally
-            {
-                if (dr != null)
-                    dr.Close();
-                if (con.State == ConnectionState.Open)
-                    con.Close();
-            }
-
         }
 
         private void dgvAppt_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -408,61 +361,43 @@ namespace CoverZeroScheduling
 
             try
             {
-                con.Open();
-
                 // Fill appointment type combobox
-                cmd.Connection = con;
-                cmd.CommandText = "sp_allAppTypes";
-                cmd.CommandType = CommandType.StoredProcedure;
-                MySqlDataReader dr = cmd.ExecuteReader();
-                
-                while (dr.Read())
+                List<string> appointmentTypes = new List<string>();
+                appointmentTypes = AppointmentProcesser.GetAppointmentTypes();
+
+                foreach (var item in appointmentTypes)
                 {
-                    newAppointment.cbType.Items.Add(dr["type"].ToString());
+                    newAppointment.cbType.Items.Add(item);
                 }
-                dr.Close();
 
                 // Fill appointment consultant combobox
-                MySqlCommand cmd3 = new MySqlCommand("sp_getDistinctCoach");
-                cmd3.Connection = con;
-                dr = cmd3.ExecuteReader();
+                List<string> coachNames = new List<string>();
+                coachNames = CoachProcesser.GetCoachNames();
 
-                while (dr.Read())
+                foreach (var item in coachNames)
                 {
-                    newAppointment.cbUsr.Text = dr["coachName"].ToString();
-                    newAppointment.cbUsr.Items.Add(dr["coachName"].ToString());
+                    newAppointment.cbUsr.Text = item;
+                    newAppointment.cbUsr.Items.Add(item);
                 }
-                dr.Close();
 
                 // Fill appointment Athlete name combobox
-                MySqlCommand cmd2 = new MySqlCommand("sp_athleteName");
-                cmd2.Connection = con;
-                dr = cmd2.ExecuteReader();
+                List<string> athleteNames = new List<string>();
+                athleteNames = AthleteProcessor.GetAthleteNames();
 
-                while (dr.Read())
+                foreach (var item in athleteNames)
                 {
-                    newAppointment.cbCustName.Items.Add(dr["athleteName"].ToString());
+                    newAppointment.cbCustName.Items.Add(item);
                 }
                
                 newAppointment.gbAppointment.Text = "New Appointment";
                 newAppointment.lblApptID.Text = "0";
                 newAppointment.lblUpdated.Visible = false;
                 newAppointment.lblLastUpdate.Visible = false;
-                //newAppointment.dTPStartTime.Value = DateTime.Today;
-                //newAppointment.dTPEndTime.Value = DateTime.Today;
                 newAppointment.ShowDialog();
-                con.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);// print error message
-            }
-            finally
-            {
-                if (dr != null)
-                    dr.Close();
-                if (con.State == ConnectionState.Open)
-                    con.Close();
             }
         }
 
@@ -483,16 +418,8 @@ namespace CoverZeroScheduling
                     // Delete appointment. 
                     if (result == DialogResult.Yes)
                     {
-                        con.Open();
-                        cmd.Connection = con;
-                        cmd.CommandText = "sp_apptDeletebyID";
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.Clear();
-                        cmd.Parameters.AddWithValue("@apptID", currentApptID);
-                        cmd.ExecuteNonQuery();
-                        con.Close();
-                        string sp = "sp_getApptsbyCoachID";
-                        LoadAppointmentData(sp);
+                        AppointmentProcesser.DeleteAppointment(currentApptID);
+                        LoadAppointments();
                         MessageBox.Show($"Appointment ID#{currentApptID} on {currentStartDate} " +
                             $"with Athlete-{currentAthlete} has been Removed!", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
@@ -509,11 +436,6 @@ namespace CoverZeroScheduling
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);// print error message
-            }
-            finally
-            {
-                if (con.State == ConnectionState.Open)
-                    con.Close();
             }
 
         }

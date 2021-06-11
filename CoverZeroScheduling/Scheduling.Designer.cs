@@ -1,4 +1,4 @@
-﻿namespace CoverZeroScheduling
+﻿namespace DataLibrary
 {
     partial class Schedule
     {
@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Schedule));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.gbReports = new System.Windows.Forms.GroupBox();
             this.cbConsultant = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -66,6 +66,8 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.currentCoachlbl = new System.Windows.Forms.Label();
+            this.coachlbl = new System.Windows.Forms.Label();
             this.gbReports.SuspendLayout();
             this.gbAppointments.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -293,28 +295,28 @@
             this.dgvAppt.BackgroundColor = System.Drawing.Color.White;
             this.dgvAppt.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dgvAppt.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvAppt.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvAppt.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dgvAppt.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAppt.GridColor = System.Drawing.Color.LightSteelBlue;
             this.dgvAppt.Location = new System.Drawing.Point(10, 126);
             this.dgvAppt.MultiSelect = false;
             this.dgvAppt.Name = "dgvAppt";
             this.dgvAppt.ReadOnly = true;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvAppt.RowHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvAppt.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.dgvAppt.RowHeadersVisible = false;
             this.dgvAppt.Size = new System.Drawing.Size(647, 207);
             this.dgvAppt.TabIndex = 5;
@@ -461,6 +463,8 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.MediumBlue;
+            this.panel1.Controls.Add(this.coachlbl);
+            this.panel1.Controls.Add(this.currentCoachlbl);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Location = new System.Drawing.Point(6, 13);
@@ -489,6 +493,28 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
+            // 
+            // currentCoachlbl
+            // 
+            this.currentCoachlbl.AutoSize = true;
+            this.currentCoachlbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.currentCoachlbl.ForeColor = System.Drawing.Color.White;
+            this.currentCoachlbl.Location = new System.Drawing.Point(821, 93);
+            this.currentCoachlbl.Name = "currentCoachlbl";
+            this.currentCoachlbl.Size = new System.Drawing.Size(109, 16);
+            this.currentCoachlbl.TabIndex = 2;
+            this.currentCoachlbl.Text = "Current Coach:";
+            // 
+            // coachlbl
+            // 
+            this.coachlbl.AutoSize = true;
+            this.coachlbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.coachlbl.ForeColor = System.Drawing.Color.White;
+            this.coachlbl.Location = new System.Drawing.Point(929, 85);
+            this.coachlbl.Name = "coachlbl";
+            this.coachlbl.Size = new System.Drawing.Size(66, 24);
+            this.coachlbl.TabIndex = 3;
+            this.coachlbl.Text = "label5";
             // 
             // Schedule
             // 
@@ -560,5 +586,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TextBox searchBoxAppt;
         private System.Windows.Forms.TextBox searchBoxAthl;
+        private System.Windows.Forms.Label currentCoachlbl;
+        internal System.Windows.Forms.Label coachlbl;
     }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoverZeroScheduling.Models
+namespace DataLibrary.Models
 {
     public class Corner : Athlete
     {

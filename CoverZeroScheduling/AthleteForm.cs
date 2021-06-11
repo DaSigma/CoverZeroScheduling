@@ -8,11 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using CoverZeroScheduling.Models;
+using DataLibrary.Models;
 using System.Configuration;
 using System.Text.RegularExpressions;
 
-namespace CoverZeroScheduling
+namespace DataLibrary
 {
     public partial class AthleteForm : Form
     {
