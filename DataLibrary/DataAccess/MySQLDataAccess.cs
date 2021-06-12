@@ -66,6 +66,33 @@ namespace DataLibrary.DataAccess
 
         }
 
+        public static int LoadCoachIDDataByName(string coachName, string sp)
+        {
+            MySqlConnection con = new MySqlConnection(GetConnectionString());
+            MySqlCommand cmd;
+            MySqlDataReader dr;
+            int coachID;
+
+            using (con)
+            {
+                con.Open();
+
+                // Get coachID by name
+                cmd = new MySqlCommand(sp, con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Coach_name", coachName);
+                dr = cmd.ExecuteReader();
+                if (dr.Read())
+                {
+                    return coachID = Convert.ToInt32(dr["coachId"]);
+                }                
+                dr.Close();
+                return 0;
+
+            }
+            
+        }
+
         public static DataTable GetData(string sp, int coachID, string StartDate, string ToDate)
         {
             MySqlConnection con = new MySqlConnection(GetConnectionString());
@@ -111,6 +138,42 @@ namespace DataLibrary.DataAccess
                 da.Update(dt);
 
                 return dt;
+            }
+        }
+
+        public static (bool, string, string) CheckCoachAppointmentTimesData(int appointmentID, int coachID, DateTime start)
+        {
+            MySqlConnection con = new MySqlConnection(GetConnectionString());
+            MySqlCommand cmd;
+            MySqlDataAdapter da;
+
+            using (con)
+            {
+                cmd = new MySqlCommand("sp_getCoachApptTimes", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Coach_ID", coachID);
+                MySqlDataReader dr;
+                dr = cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    int AID = Convert.ToInt32(dr["AID"]);
+
+                    if ((DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(dr["Start"])) <= start)
+                    && (start <= DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(dr["End"]))))
+                    {
+                        if (AID != appointmentID)
+                        {
+                            string mtgStart = DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(dr["Start"])).ToString("hh:mm tt");
+                            string mtgEnd = DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(dr["End"])).ToString("hh:mm tt");
+                            string mtgDay = DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(dr["Start"])).ToString("MMMM dd, yyyy");
+                            return (true, mtgStart, mtgEnd);
+                        }
+                    }
+                                        
+                }
+                dr.Close();
+                return (false, "", "");
             }
         }
 
@@ -642,6 +705,30 @@ namespace DataLibrary.DataAccess
                 cmd.Parameters.AddWithValue("@addID", addressID);
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        // Update City and country Texbox based on Zip
+        public static Address LoadCityCountryData(string zip, string sp)
+        {
+            MySqlConnection con = new MySqlConnection(GetConnectionString());
+            MySqlCommand cmd;
+            Address address = new Address();
+
+            using (con)
+            {
+                con.Open();
+                cmd = new MySqlCommand(sp, con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@zip", zip);
+                MySqlDataReader dr = cmd.ExecuteReader();
+
+                if (dr.Read())
+                {
+                    address.City = (dr["City"].ToString());
+                    address.Country = (dr["Country"].ToString());
+                }
+            }
+            return address;
         }
     }
 }

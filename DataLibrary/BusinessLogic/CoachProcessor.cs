@@ -64,5 +64,13 @@ namespace DataLibrary.BusinessLogic
 
             return pg;
         }
+
+        public static int GetCoachIDByName(string coachName)
+        {
+            string sp = "sp_getCoachIDbyName";
+            int coachID;
+            coachID = MySQLDataAccess.LoadCoachIDDataByName(coachName, sp);
+            return coachID;
+        }
     }
 }

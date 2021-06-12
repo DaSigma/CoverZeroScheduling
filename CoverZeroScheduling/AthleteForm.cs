@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using MySql.Data.MySqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +16,6 @@ namespace DataLibrary
 {
     public partial class AthleteForm : Form
     {
-        MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ConnectionString);
         int athleteID;
         int addressID;
         public static int AddressID { get; set; }
@@ -77,7 +75,7 @@ namespace DataLibrary
         // Conditions to allow save button to be enabled
         private bool AllowSave()
         {
-            if (((string.IsNullOrEmpty(tbName.Text)) || (ValidatePhoneNumber(tbPhone.Text) == false) || (string.IsNullOrEmpty(tbAdd.Text)) ||
+            if (((string.IsNullOrEmpty(tbName.Text)) || (AddressProcessor.ValidatePhoneNumber(tbPhone.Text) == false) || (string.IsNullOrEmpty(tbAdd.Text)) ||
                 (string.IsNullOrEmpty(cbZip.Text))))
             {
                 return false;
@@ -92,21 +90,11 @@ namespace DataLibrary
         // Update City and country Texbox based on Zip
         private void cbCustZip_TextChanged(object sender, EventArgs e)
         {
-            using (con)
-            {
-                con.Open();
-                MySqlCommand cmd = new MySqlCommand("sp_getAddressInfo", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@zip", cbZip.Text);
-                MySqlDataReader dr = cmd.ExecuteReader();
+            Address address = new Address();
+            address = AddressProcessor.GetAddress(cbZip.Text);
+            tbCity.Text = address.City;
+            tbCountry.Text = address.Country;
 
-                if (dr.Read())
-                {
-                    tbCity.Text = (dr["City"].ToString());
-                    tbCountry.Text = (dr["Country"].ToString());
-                }
-            }
-            con.Close();
         }
 
         // Validation check for empty Athlete name textbox
@@ -125,7 +113,7 @@ namespace DataLibrary
         // Validation check for empty Athlete phone textbox
         private void tbAthletePhone_Leave(object sender, EventArgs e)
         {
-            if (ValidatePhoneNumber(tbPhone.Text))
+            if (AddressProcessor.ValidatePhoneNumber(tbPhone.Text))
             {
                 errorProvider1.SetError(tbPhone, "Please provide athlete's Phone Number.");
             }
@@ -274,22 +262,9 @@ namespace DataLibrary
             LoadcbDiscipline();
         }
 
-
-        private bool ValidatePhoneNumber(string phone)
-        {
-            var phoneNumber = phone.Trim()
-                 .Replace(" ", "")
-                 .Replace("-", "")
-                 .Replace("(", "")
-                 .Replace(")", "");
-            var test = Regex.Match(phoneNumber, @"^[01]?[- .]?(\([2-9]\d{2}\)|[2-9]\d{2})[- .]?\d{3}[- .]?\d{4}$").Success; 
-            return test;
-        }
-
         private void tbPhone_Leave(object sender, EventArgs e)
         {
-
-            if (ValidatePhoneNumber(tbPhone.Text) == false)
+            if (AddressProcessor.ValidatePhoneNumber(tbPhone.Text) == false)
             {
                 errorProvider1.SetError(tbPhone, "Please provide athlete's Phone Number.");
 
@@ -297,19 +272,9 @@ namespace DataLibrary
             else
             {
                 errorProvider1.SetError(tbPhone, null);
-                tbPhone.Text = TrimNumber(tbPhone.Text);
+                tbPhone.Text = AddressProcessor.TrimNumber(tbPhone.Text);
             }
             
-        }
-
-        private string TrimNumber(string phoneNumber)
-        {
-            string trimmed = phoneNumber.Replace(" ", "")
-                                        .Replace("-", "")
-                                        .Replace("(", "")
-                                        .Replace(")", "");
-            string test = String.Format("{0:(###) ###-####}", Convert.ToInt64(trimmed));
-            return test;
         }
     }
 }

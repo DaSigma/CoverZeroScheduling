@@ -10,13 +10,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DataLibrary.BusinessLogic;
-using MySql.Data.MySqlClient;
+using DataLibrary.DataAccess;
+//using MySql.Data.MySqlClient;
+
 
 namespace DataLibrary
 {
     public partial class AppointmentForm : Form
     {
-        MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ConnectionString);
+        //MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ConnectionString);
  
         static DateTime start;
         static DateTime end;
@@ -76,48 +78,30 @@ namespace DataLibrary
                             string apptStartTimeTemp = dTPStartTime.Value.ToString(" HH:mm");
                             string apptEndTimeTemp = dTPEndTime.Value.ToString(" HH:mm");
 
-                            con.Open();
-
                             // Get coachID by name
-                            MySqlCommand cmd4 = new MySqlCommand("sp_getCoachIDbyName", con);
-                            cmd4.CommandType = CommandType.StoredProcedure;
-                            cmd4.Parameters.AddWithValue("@Coach_name", cbUsr.Text.ToString());
-                            MySqlDataReader dr = cmd4.ExecuteReader();
-                            if (dr.Read())
-                            {
-                                coachID = Convert.ToInt32(dr["coachId"]);
-                            }
-                            dr.Close();
+                            coachID =  CoachProcessor.GetCoachIDByName(cbUsr.Text);
+
 
                             // Insert or update Appointment
                             start = Convert.ToDateTime(dTPStart.Value.ToString("yyyy-MM-dd") + dTPStartTime.Value.ToString(" HH:mm"));
                             end = Convert.ToDateTime(dTPStart.Value.ToString("yyyy-MM-dd") + dTPEndTime.Value.ToString(" HH:mm"));
-                            MySqlCommand cmd3 = new MySqlCommand("sp_getCoachApptTimes", con);
-                            cmd3.CommandType = CommandType.StoredProcedure;
-                            cmd3.Parameters.AddWithValue("@Coach_ID", coachID);
-                            dr = cmd3.ExecuteReader();
 
-                            while (dr.Read())
+                            ChangeAID();
+
+                            string mtgStart;
+                            string mtgEnd;
+                            bool CoachHasAppointment;
+                            (CoachHasAppointment, mtgStart, mtgEnd) = MySQLDataAccess.CheckCoachAppointmentTimesData(Convert.ToInt32(lblApptID.Text), coachID, start);
+
+
+                            if (CoachHasAppointment)
                             {
-                                ChangeAID();
-                                int AID = Convert.ToInt32(dr["AID"]);
-
-                                if ((DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(dr["Start"])) <= start)
-                                && (start <= DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(dr["End"]))))
-                                {
-                                    if (AID != Convert.ToInt32(lblApptID.Text))
-                                    {
-                                        string mtgStart = DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(dr["Start"])).ToString("hh:mm tt");
-                                        string mtgEnd = DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(dr["End"])).ToString("hh:mm tt");
-                                        string mtgDay = DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(dr["Start"])).ToString("MMMM dd, yyyy");
-                                        char.ToUpper(cbUsr.Text[0]);
-                                        MessageBox.Show($"Coach {cbUsr.Text} already has a meeting from {mtgStart} to {mtgEnd} on {mtgDay}!");
-                                        goto done;                                
-                                    }
-                                }
+                                char.ToUpper(cbUsr.Text[0]);
+                                MessageBox.Show($"Coach {cbUsr.Text} already has a meeting from {mtgStart} to {mtgEnd} on That Day!");
+                                goto done;
                             }
-                            
-                            dr.Close();
+
+
 
                             //Get AthleteID by name
                             MySqlCommand cmd = new MySqlCommand("sp_getAthleteIDByName", con);
