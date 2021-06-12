@@ -90,7 +90,7 @@ namespace DataLibrary.BusinessLogic
         public static void InsertUpdateCorner(int athleteID, string athleteName, string athletePostition, string AthleteDiscipline, int addressID)
         {
             string sp = "sp_addUpdateCorner";
-            MySQLDataAccess.Insert_UpdateCornerData(addressID, athleteName, athletePostition, AthleteDiscipline, athleteID, sp);
+            MySQLDataAccess.Insert_UpdateCornerData(athleteID, athleteName, athletePostition, AthleteDiscipline, addressID, sp);
         }
 
         public static void InsertUpdateSafety(int athleteID, string athleteName, string athletePostition, string AthleteDiscipline, int addressID)

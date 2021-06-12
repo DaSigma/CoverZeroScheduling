@@ -612,7 +612,7 @@ namespace DataLibrary.DataAccess
                 con.Open();
 
                 cmd = new MySqlCommand(sp, con);
-                cmd.Parameters.Clear();
+                //cmd.Parameters.Clear();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@AthlID", athleteID);
                 cmd.Parameters.AddWithValue("@AthlName", athleteName);
@@ -632,7 +632,7 @@ namespace DataLibrary.DataAccess
                 con.Open();
 
                 cmd = new MySqlCommand(sp, con);
-                cmd.Parameters.Clear();
+                //cmd.Parameters.Clear();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@AthlID", athleteID);
                 cmd.Parameters.AddWithValue("@AthlName", athleteName);

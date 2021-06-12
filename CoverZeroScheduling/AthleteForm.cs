@@ -72,12 +72,6 @@ namespace DataLibrary
             {
                 MessageBox.Show(ex.Message);// print error message
             }
-            finally
-            {
-                if (con.State == ConnectionState.Open)
-                    con.Close();
-            }
-
         }
 
         // Conditions to allow save button to be enabled
