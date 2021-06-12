@@ -11,15 +11,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DataLibrary.BusinessLogic;
 using DataLibrary.DataAccess;
-//using MySql.Data.MySqlClient;
 
 
 namespace DataLibrary
 {
     public partial class AppointmentForm : Form
     {
-        //MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ConnectionString);
- 
         static DateTime start;
         static DateTime end;
         static DateTime lowerLimit;
