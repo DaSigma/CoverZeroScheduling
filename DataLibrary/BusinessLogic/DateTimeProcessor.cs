@@ -15,6 +15,23 @@ namespace DataLibrary.BusinessLogic
             return dateTime.AddHours(currentOffset.TotalHours);
         }
 
+
+        ////ToDO:
+        //public static bool BusinessHrsValidation()
+        //{
+        //    bool test = true;
+        //    if ((((dTPStart.Value.DayOfWeek == DayOfWeek.Saturday) || (dtpEnd.Value.DayOfWeek == DayOfWeek.Saturday)) ||
+        //            ((dTPStart.Value.DayOfWeek == DayOfWeek.Sunday) || (dtpEnd.Value.DayOfWeek == DayOfWeek.Sunday))) ||
+        //            ((apptStartTime < lowerLimit) || (apptEndTime > upperLimit)))
+        //    {
+
+        //        MessageBox.Show("Out of Business Hrs, Please select a different time!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        //        test = false;
+        //    }
+        //    btnSaveApt.Enabled = AllowSave();
+        //    return test;
+        //}
+
         ////ToDo
         //public static void ConvertDatesToMonth(int currentMonth, int currentYear, int daysInMonth)
         //{

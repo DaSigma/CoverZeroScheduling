@@ -145,10 +145,10 @@ namespace DataLibrary.DataAccess
         {
             MySqlConnection con = new MySqlConnection(GetConnectionString());
             MySqlCommand cmd;
-            MySqlDataAdapter da;
 
             using (con)
             {
+                con.Open();
                 cmd = new MySqlCommand("sp_getCoachApptTimes", con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Coach_ID", coachID);
@@ -175,6 +175,60 @@ namespace DataLibrary.DataAccess
                 dr.Close();
                 return (false, "", "");
             }
+        }
+
+        public static void SaveAppointmentData(int appointmentID, int athleteID, int coachID, string type, DateTime startDate, DateTime endDate)
+        {
+            MySqlConnection con = new MySqlConnection(GetConnectionString());
+            MySqlCommand cmd;
+
+            using (con)
+            {
+                con.Open();
+                string sp = "sp_insertAppt";
+                cmd = new MySqlCommand(sp, con);
+                cmd.Connection = con;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@apptID", appointmentID);
+                cmd.Parameters.AddWithValue("@Athlete_ID", athleteID);
+                cmd.Parameters.AddWithValue("@Coach_Id", coachID);
+                cmd.Parameters.AddWithValue("@typeof", type);
+                cmd.Parameters.AddWithValue("@startDate", startDate.ToString("yyyy-MM-dd HH:mm"));//dTPStart.Value.ToString("yyyy-MM-dd"));
+                cmd.Parameters.AddWithValue("@endDate", endDate.ToString("yyyy-MM-dd HH:mm"));
+                DateTime lastUpdatedtimeUTC = DateTime.UtcNow;
+                DateTime lastUpdatedtime;
+                lastUpdatedtime = DateTime.SpecifyKind(lastUpdatedtimeUTC, DateTimeKind.Utc).ToLocalTime();
+                cmd.Parameters.AddWithValue("@lastUpdated", lastUpdatedtimeUTC.ToString("yyyy-MM-dd HH:mm"));
+                cmd.ExecuteNonQuery(); 
+            }
+        }
+
+        public static int GetAthleteIDDataByName(string athleteName)
+        {
+            MySqlConnection con = new MySqlConnection(GetConnectionString());
+            MySqlCommand cmd;
+            MySqlDataReader dr;
+            int athleteID;
+            //Get AthleteID by name
+            using (con)
+            {
+                con.Open();
+                cmd = new MySqlCommand("sp_getAthleteIDByName", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Athlete_Name", athleteName.ToString());
+                dr = cmd.ExecuteReader();
+                if (dr.Read())
+                {
+                    athleteID = Convert.ToInt32(dr["athleteId"].ToString());
+                    return athleteID;
+                    
+                }
+                dr.Close();
+                return 0;
+                 
+            }
+            
+
         }
 
         public static Appointment LoadUpcomingAppointmentData(string sp, int coachID)

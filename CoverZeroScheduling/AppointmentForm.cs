@@ -59,99 +59,61 @@ namespace DataLibrary
                 //Validate times
                 if ((BusinessHrsValidation()) && (FutureAppointmentValidation()) && (MeetingTimeValidation()))
                 {
-                    using (con)
+                    int AthleteID;
+                    CoachID = coachID;
+
+                    
+                    apptStartTime = TimeZoneInfo.ConvertTimeToUtc(dTPStartTime.Value, TimeZoneInfo.Local);
+                    apptEndTime = TimeZoneInfo.ConvertTimeToUtc(dTPEndTime.Value, TimeZoneInfo.Local);
+                    string apptStart = dTPStart.Value.ToString("yyyy-MM-dd") + apptStartTime.ToString(" HH:mm");
+                    string apptEnd = dTPStart.Value.ToString("yyyy-MM-dd") + apptEndTime.ToString(" HH:mm");
+                    DateTime t1 = Convert.ToDateTime(apptStart);
+                    DateTime t2 = Convert.ToDateTime(apptEnd);
+
+                    string apptStartTimeTemp = dTPStartTime.Value.ToString(" HH:mm");
+                    string apptEndTimeTemp = dTPEndTime.Value.ToString(" HH:mm");
+
+                    // Get coachID by name
+                    coachID =  CoachProcessor.GetCoachIDByName(cbUsr.Text);
+
+                    start = Convert.ToDateTime(dTPStart.Value.ToString("yyyy-MM-dd") + dTPStartTime.Value.ToString(" HH:mm"));
+                    end = Convert.ToDateTime(dTPStart.Value.ToString("yyyy-MM-dd") + dTPEndTime.Value.ToString(" HH:mm"));
+
+                    ChangeAID();
+
+                    //Check Coach appointmnets
+                    string mtgStart;
+                    string mtgEnd;
+                    bool CoachHasAppointment;
+                    (CoachHasAppointment, mtgStart, mtgEnd) = MySQLDataAccess.CheckCoachAppointmentTimesData(Convert.ToInt32(lblApptID.Text), coachID, start);
+                    if (CoachHasAppointment)
                     {
-                        int AthleteID;
-                        CoachID = coachID;
+                        char.ToUpper(cbUsr.Text[0]);
+                        MessageBox.Show($"Coach {cbUsr.Text} already has a meeting from {mtgStart} to {mtgEnd} on That Day!");
+                        //goto done;
+                        return;
+                    }
+                    else
+                    {
+                        //Get AthleteID by name
+                        AthleteID = MySQLDataAccess.GetAthleteIDDataByName(athleteName);
 
                         // Insert Appointment
-                        string sp = "sp_insertAppt";
-                        using (MySqlCommand cmd2 = new MySqlCommand(sp, con))
-                        {
-                            apptStartTime = TimeZoneInfo.ConvertTimeToUtc(dTPStartTime.Value, TimeZoneInfo.Local);
-                            apptEndTime = TimeZoneInfo.ConvertTimeToUtc(dTPEndTime.Value, TimeZoneInfo.Local);
-                            string apptStart = dTPStart.Value.ToString("yyyy-MM-dd") + apptStartTime.ToString(" HH:mm");
-                            string apptEnd = dTPStart.Value.ToString("yyyy-MM-dd") + apptEndTime.ToString(" HH:mm");
-                            DateTime t1 = Convert.ToDateTime(apptStart);
-                            DateTime t2 = Convert.ToDateTime(apptEnd);
+                        MySQLDataAccess.SaveAppointmentData(Convert.ToInt32(lblApptID.Text), AthleteID, coachID, cbType.Text, t1, t2);
 
-                            string apptStartTimeTemp = dTPStartTime.Value.ToString(" HH:mm");
-                            string apptEndTimeTemp = dTPEndTime.Value.ToString(" HH:mm");
-
-                            // Get coachID by name
-                            coachID =  CoachProcessor.GetCoachIDByName(cbUsr.Text);
-
-
-                            // Insert or update Appointment
-                            start = Convert.ToDateTime(dTPStart.Value.ToString("yyyy-MM-dd") + dTPStartTime.Value.ToString(" HH:mm"));
-                            end = Convert.ToDateTime(dTPStart.Value.ToString("yyyy-MM-dd") + dTPEndTime.Value.ToString(" HH:mm"));
-
-                            ChangeAID();
-
-                            string mtgStart;
-                            string mtgEnd;
-                            bool CoachHasAppointment;
-                            (CoachHasAppointment, mtgStart, mtgEnd) = MySQLDataAccess.CheckCoachAppointmentTimesData(Convert.ToInt32(lblApptID.Text), coachID, start);
-
-
-                            if (CoachHasAppointment)
-                            {
-                                char.ToUpper(cbUsr.Text[0]);
-                                MessageBox.Show($"Coach {cbUsr.Text} already has a meeting from {mtgStart} to {mtgEnd} on That Day!");
-                                goto done;
-                            }
-
-
-
-                            //Get AthleteID by name
-                            MySqlCommand cmd = new MySqlCommand("sp_getAthleteIDByName", con);
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Parameters.AddWithValue("@Athlete_Name", athleteName.ToString());
-                            dr = cmd.ExecuteReader();
-                            if (dr.Read())
-                            {
-                                {
-                                    AthleteID = Convert.ToInt32(dr["athleteId"].ToString());
-                                    cmd2.Connection = con;
-                                    cmd2.CommandType = CommandType.StoredProcedure;
-                                    cmd2.Parameters.AddWithValue("@apptID", lblApptID.Text.ToString());
-                                    cmd2.Parameters.AddWithValue("@Athlete_ID", AthleteID);
-                                    cmd2.Parameters.AddWithValue("@Coach_Id", coachID);
-                                    cmd2.Parameters.AddWithValue("@typeof", cbType.Text.ToString());
-
-                                    cmd2.Parameters.AddWithValue("@startDate", t1.ToString("yyyy-MM-dd HH:mm"));//dTPStart.Value.ToString("yyyy-MM-dd"));
-
-                                    cmd2.Parameters.AddWithValue("@endDate", t2.ToString("yyyy-MM-dd HH:mm"));
-                                    DateTime lastUpdatedtimeUTC = DateTime.UtcNow;
-                                    DateTime lastUpdatedtime;
-                                    lastUpdatedtime = DateTime.SpecifyKind(lastUpdatedtimeUTC, DateTimeKind.Utc).ToLocalTime();
-                                    cmd2.Parameters.AddWithValue("@lastUpdated", lastUpdatedtimeUTC.ToString("yyyy-MM-dd HH:mm"));
-                                    dr.Close();
-                                    cmd2.ExecuteNonQuery();
-                                    MessageBox.Show("Appointment Saved!");
-                                }
-                                Schedule schedulingScreen = new Schedule();
-                                schedulingScreen.Show();
-                                this.Hide();
-                            }
-                            done:;
-                            con.Close();
-
-                        }
-
+                        MessageBox.Show("Appointment Saved!");
+                        Schedule schedulingScreen = new Schedule();
+                        schedulingScreen.Show();
+                        this.Hide();
                     }
-                }
+                    //done:;
+                }                  
+         
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);// print error message
             }
-            finally
-            {
-                if (con.State == ConnectionState.Open)
-                    con.Close();
-            }
-
         }
 
         // Conditions for save button to be enabled
@@ -267,7 +229,6 @@ namespace DataLibrary
                 lblApptID.Text = "0";
             }
         }
-
         private void dTPStartTime_ValueChanged(object sender, EventArgs e)
         {
             dTPEndTime.Value = dTPStartTime.Value.AddHours(1);
