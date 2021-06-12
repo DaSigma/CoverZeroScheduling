@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -463,6 +464,24 @@ namespace DataLibrary
                         viewAthlete.tbCity.Text = currentAthlete.City;
                         viewAthlete.tbCountry.Text = currentAthlete.Country;
                         viewAthlete.cbZip.Text = currentAthlete.PostalCode;
+                        if (AthleteProcessor.ConvertToImage(currentAthlete.ImageURL) != null)
+                        {
+                            viewAthlete.pictureBox1.Image = AthleteProcessor.ConvertToImage(currentAthlete.ImageURL);
+                        }
+
+                        //using (var wc = new WebClient())
+                        //{
+                        //    Uri test = new Uri("https://static.clubs.nfl.com/image/private/t_thumb_squared/f_auto/saints/qgdjllpuvflnwcxexuxu.jpg");
+                        //    string mystring = @"https://static.clubs.nfl.com/image/private/t_thumb_squared/f_auto/saints/qgdjllpuvflnwcxexuxu.jpg";
+                        //    using (var imgStream = new MemoryStream(wc.DownloadData(test)))
+                        //    {
+                        //        using (var objImage = Image.FromStream(imgStream))
+                        //        {
+                        //            viewAthlete.pictureBox1.Image = objImage;
+                        //            //do stuff with the image
+                        //        }
+                        //    }
+                        //}
 
                         AthleteForm.AddressID = currentAthlete.AddressID;
 

@@ -383,7 +383,6 @@
         private System.Windows.Forms.Label lbl1;
         private System.Windows.Forms.GroupBox gbCustomerInfo;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button btnClose;
         internal System.Windows.Forms.GroupBox gbCustomer;
         internal System.Windows.Forms.TextBox tbName;
@@ -402,5 +401,6 @@
         internal System.Windows.Forms.ComboBox cbPosition;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
+        public System.Windows.Forms.PictureBox pictureBox1;
     }
 }

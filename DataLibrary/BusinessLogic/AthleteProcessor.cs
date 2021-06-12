@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using DataLibrary.DataAccess;
@@ -97,6 +99,20 @@ namespace DataLibrary.BusinessLogic
         {
             string sp = "sp_addUpdateSafety";
             MySQLDataAccess.Insert_UpdateSafetyData(athleteID, athleteName, athletePostition, AthleteDiscipline, addressID, sp);
+        }
+
+        public static System.Drawing.Image ConvertToImage(string url)
+        {
+            if (url != null && url != string.Empty)
+            {
+                WebClient wc = new WebClient();
+                byte[] bytes = wc.DownloadData(url);
+                MemoryStream ms = new MemoryStream(bytes);
+                System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
+
+                return img;
+            }
+            return null;
         }
     }
 }

@@ -319,6 +319,7 @@ namespace DataLibrary.DataAccess
                     currentAthlete.PostalCode = dr["postalCode"].ToString();
                     currentAthlete.AddressID = Convert.ToInt32(dr["addressId"]);
                     currentAthlete.Updated = Convert.ToDateTime(dr["lastUpdate"]);
+                    currentAthlete.ImageURL = dr["imgURL"].ToString();
                 }
                 con.Close();
                 return currentAthlete;
