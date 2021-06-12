@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.Models
 {
-    class Country
+    public class Corner : Athlete
     {
+        public string CornerPosition { get; set; }
+
     }
 }

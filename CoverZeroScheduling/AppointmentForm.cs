@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DataLibrary.BusinessLogic;
 using MySql.Data.MySqlClient;
 
 namespace DataLibrary
@@ -101,14 +102,14 @@ namespace DataLibrary
                                 ChangeAID();
                                 int AID = Convert.ToInt32(dr["AID"]);
 
-                                if ((Schedule.GetCorrectedDate(Convert.ToDateTime(dr["Start"])) <= start)
-                                && (start <= Schedule.GetCorrectedDate(Convert.ToDateTime(dr["End"]))))
+                                if ((DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(dr["Start"])) <= start)
+                                && (start <= DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(dr["End"]))))
                                 {
                                     if (AID != Convert.ToInt32(lblApptID.Text))
                                     {
-                                        string mtgStart = Schedule.GetCorrectedDate(Convert.ToDateTime(dr["Start"])).ToString("hh:mm tt");
-                                        string mtgEnd = Schedule.GetCorrectedDate(Convert.ToDateTime(dr["End"])).ToString("hh:mm tt");
-                                        string mtgDay = Schedule.GetCorrectedDate(Convert.ToDateTime(dr["Start"])).ToString("MMMM dd, yyyy");
+                                        string mtgStart = DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(dr["Start"])).ToString("hh:mm tt");
+                                        string mtgEnd = DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(dr["End"])).ToString("hh:mm tt");
+                                        string mtgDay = DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(dr["Start"])).ToString("MMMM dd, yyyy");
                                         char.ToUpper(cbUsr.Text[0]);
                                         MessageBox.Show($"Coach {cbUsr.Text} already has a meeting from {mtgStart} to {mtgEnd} on {mtgDay}!");
                                         goto done;                                

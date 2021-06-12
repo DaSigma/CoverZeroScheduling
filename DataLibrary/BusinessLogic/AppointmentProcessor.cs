@@ -9,7 +9,7 @@ using DataLibrary.Models;
 
 namespace DataLibrary.BusinessLogic
 {
-    public class AppointmentProcesser
+    public class AppointmentProcessor
     {
         public static DataTable GetAppointmentByCoach(int coachID)
         {
@@ -49,8 +49,18 @@ namespace DataLibrary.BusinessLogic
         public static void DeleteAppointment(int appointmentID)
         {
             string sp = "sp_apptDeletebyID";
-            MySQLDataAccess.DeleteAppointmenData(appointmentID, sp);
+            MySQLDataAccess.DeleteAppointmentData(appointmentID, sp);
         }
+
+        public static List<Appointment> GetAppointmentCount(string startDate, string endDate)
+        {
+            List<Appointment> apts = new List<Appointment>();
+            string sp = "sp_appointmentTypebyMonth";
+
+            apts = MySQLDataAccess.LoadAppointmentCountData(startDate, endDate, sp);
+            return apts;
+        }
+
             
     }
 }

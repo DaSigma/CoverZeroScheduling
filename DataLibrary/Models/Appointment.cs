@@ -14,6 +14,7 @@ namespace DataLibrary.Models
         public int CoachID { get; set; }
 
         public string Type { get; set; }
+        public int Count_Type { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime Updated { get; set; }

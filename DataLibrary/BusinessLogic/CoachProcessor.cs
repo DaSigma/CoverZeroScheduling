@@ -8,12 +8,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DataLibrary.DataAccess;
 using DataLibrary.Models;
-using DataLibrary.DataAccess;
 using MySql.Data;
 
 namespace DataLibrary.BusinessLogic
 {
-    public static class CoachProcesser
+    public static class CoachProcessor
     {
         public static void AddCoach(string userName, string password)
         {
@@ -46,6 +45,24 @@ namespace DataLibrary.BusinessLogic
             coachNames =  MySQLDataAccess.LoadCoachNamesData(sp);
             return coachNames;
 
+        }
+
+        public static StringBuilder GetCoachSchedule(string coachName)
+        {
+            var pg = new StringBuilder();
+            string sp = "sp_getCoachSchedule";
+            pg = MySQLDataAccess.LoadCoachScheduleData(coachName, sp);
+
+            return pg;
+        }
+
+        public static StringBuilder GetAllCoachesAppointments()
+        {
+            string sp = "sp_getAllAppointments";
+            var pg = new StringBuilder();
+            pg = MySQLDataAccess.LoadAllCoachesAppointmentData(sp);
+
+            return pg;
         }
     }
 }

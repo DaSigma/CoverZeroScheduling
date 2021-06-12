@@ -14,8 +14,8 @@ namespace DataLibrary
 {
     public partial class LogIn : Form
     {
-        public string CurrentCoachName { get; set; }
-        public int CurrentCoachID { get; set; }
+        public static string CurrentCoachName { get; set; }
+        public static int CurrentCoachID { get; set; }
         private static string currentCoachName;
         private static int currentCoachID;
 
@@ -56,7 +56,7 @@ namespace DataLibrary
                 // Validate 
                 if (ValidateChildren(ValidationConstraints.Enabled))
                 {
-                    Coach CurrentCoach = CoachProcesser.Login(txtUsername.Text.ToUpper(), txtPassword.Text);
+                    Coach CurrentCoach = CoachProcessor.Login(txtUsername.Text.ToUpper(), txtPassword.Text);
                     if (CurrentCoach != null)
                     {                        
                         CurrentCoachID = CurrentCoach.CoachID;
@@ -64,7 +64,8 @@ namespace DataLibrary
 
                         // Open Scheduling screen
                         Schedule scheduling = new Schedule();
-                        scheduling.coachlbl.Text = currentCoachName;
+                        scheduling.coachlbl.Text = CurrentCoachName;
+                        scheduling.currentCoachID = CurrentCoach.CoachID;
                         this.Hide();
                         scheduling.Show();
 
@@ -127,14 +128,14 @@ namespace DataLibrary
         // Set Current user ID
         internal static int GetCoachID()
         {
-            int coachID = currentCoachID;
+            int coachID = CurrentCoachID;
             return coachID;
         }
 
         // Set Current user Name
         internal static string GetCoachName()
         {
-            string userName = currentCoachName;
+            string userName = CurrentCoachName;
             return userName;
         }
 

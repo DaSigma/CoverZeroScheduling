@@ -200,9 +200,6 @@
     <Compile Include="AppointmentForm.Designer.cs">
       <DependentUpon>AppointmentForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\Address.cs" />
-    <Compile Include="Models\Athlete.cs" />
-    <Compile Include="Models\City.cs" />
     <Compile Include="LogIn.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -215,9 +212,6 @@
     <Compile Include="AthleteForm.Designer.cs">
       <DependentUpon>AthleteForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\Corner.cs" />
-    <Compile Include="Models\Country.cs" />
-    <Compile Include="Models\Safety.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scheduling.cs">

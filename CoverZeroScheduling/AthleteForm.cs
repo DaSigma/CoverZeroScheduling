@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using DataLibrary.Models;
 using System.Configuration;
 using System.Text.RegularExpressions;
+using DataLibrary.BusinessLogic;
 
 namespace DataLibrary
 {
@@ -45,20 +46,20 @@ namespace DataLibrary
 
             try
             {
-                cityID = City.GetCityID(cbZip.Text);
-                addressID = Address.GetAddressID(cityID, cbZip.Text, tbAdd.Text, tbPhone.Text);
-                Address.Insert_UpdateAddress(addressID, tbAdd.Text, cityID, cbZip.Text, tbPhone.Text);
+                cityID = AddressProcessor.GetCityID(cbZip.Text);
+                addressID = AddressProcessor.GetAddressID(cityID, cbZip.Text, tbAdd.Text, tbPhone.Text);
+                AddressProcessor.Insert_UpdateAddress(addressID, tbAdd.Text, cityID, cbZip.Text, tbPhone.Text);
 
-                addressID = Address.GetAddressID(cityID, cbZip.Text, tbAdd.Text, tbPhone.Text);
+                addressID = AddressProcessor.GetAddressID(cityID, cbZip.Text, tbAdd.Text, tbPhone.Text);
 
                 SelectDiscipline();
                 if (isCorner)
                 {
-                    Corner.Insert_UpdateCorner(athleteID, tbName.Text, cbPosition.Text, cbDiscipline.Text, addressID);
+                    AthleteProcessor.InsertUpdateCorner(athleteID, tbName.Text, cbPosition.Text, cbDiscipline.Text, addressID);
                 }
                 else
                 {
-                    Safety.Insert_UpdateSafety(athleteID, tbName.Text, cbPosition.Text, cbDiscipline.Text, addressID);
+                    AthleteProcessor.InsertUpdateSafety(athleteID, tbName.Text, cbPosition.Text, cbDiscipline.Text, addressID);
                 }
 
                 MessageBox.Show("Athlete Added/Updated");// Feedback

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DataLibrary;
+using DataLibrary.BusinessLogic;
 using Xunit;
 
 namespace CooverZeroScheduling.Tests
@@ -20,7 +20,7 @@ namespace CooverZeroScheduling.Tests
         public void SetSp_AthleteIDShouldSetSp(string expected, bool isCorner)
         {
             // Act
-            string actual = Schedule.SetSp_AthleteID(isCorner);
+            string actual = AthleteProcessor.SetSp_AthleteID(isCorner);
 
             // Asert
             Assert.Equal(expected, actual);
@@ -35,7 +35,7 @@ namespace CooverZeroScheduling.Tests
         public void SetAthleteDisciplineSouldSetDiscipline(string expected, bool isCorner)
         {
             // Act
-            string actual = Schedule.SetAthleteDiscipline(isCorner);
+            string actual = AthleteProcessor.SetAthleteDiscipline(isCorner);
 
             // Asert
             Assert.Equal(expected, actual);

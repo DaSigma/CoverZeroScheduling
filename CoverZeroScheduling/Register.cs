@@ -60,7 +60,7 @@ namespace DataLibrary
                     string coachUserName = txtUsername.Text;
                     string coachPassword = txtPassword.Text;
 
-                    CoachProcesser.AddCoach(coachUserName, coachPassword);
+                    CoachProcessor.AddCoach(coachUserName, coachPassword);
                     LogIn logIn = new LogIn();
                     MessageBox.Show($"Registrations Complete, Welcom2 to CoverZero {coachPassword}!");
                     this.Hide();

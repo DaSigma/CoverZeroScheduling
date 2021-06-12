@@ -30,17 +30,20 @@ namespace DataLibrary
         public int CurrentMonth { get; set; }
         public int CurrentYear { get; set; }
         public int DaysInMonth { get; set; }
+        
 
         int indexOfSelectedAppt = -1;
         int indexOfSelectedAthlete = -1;
-        int currentCoachID;
+        public int currentCoachID;
         string currentCoach;
 
         public Schedule()
         {
             InitializeComponent();
             FormatDataGridView(dgvAppt);
-            FormatDataGridView(dgvAthlete);  
+            FormatDataGridView(dgvAthlete);
+            currentCoachID = LogIn.GetCoachID();
+            coachlbl.Text = LogIn.GetCoachName();
         }
 
         // On scheduling form load
@@ -62,17 +65,9 @@ namespace DataLibrary
             if (e.Value is DateTime)
             {
                 DateTime value = (DateTime)e.Value; 
-                e.Value = GetCorrectedDate(value);// Correct date formats to local
+                e.Value = DateTimeProcessor.GetCorrectedDate(value);// Correct date formats to local
             }
 
-        }
-
-        // Correct DateTime to local and output datetime
-        internal static DateTime GetCorrectedDate(DateTime dateTime)
-        {
-            TimeZone curTimeZone = TimeZone.CurrentTimeZone;
-            TimeSpan currentOffset = curTimeZone.GetUtcOffset(DateTime.Now);
-            return dateTime.AddHours(currentOffset.TotalHours);
         }
 
         // Check if radio button Week is selected
@@ -120,30 +115,11 @@ namespace DataLibrary
         // Get appointment data from database with given stored parameter starting date and end date
         private void UpdateTable(string StartDate, string ToDate)
         {
-            DataTable dt =  CoachProcesser.GetCoachDataByDate(currentCoachID, StartDate, ToDate);
+            DataTable dt =  CoachProcessor.GetCoachDataByDate(currentCoachID, StartDate, ToDate);
             BindingSource bSource = new BindingSource();
             bSource.DataSource = dt;
             dgvAppt.DataSource = bSource;
 
-            //using (con)
-            //{
-            //    con.Open();
-            //    cmd = new MySqlCommand(sp, con);
-            //    da = new MySqlDataAdapter(cmd);
-            //    cmd.CommandType = CommandType.StoredProcedure;
-            //    cmd.Parameters.AddWithValue("@CoachID", LogIn.GetCoachID());
-            //    cmd.Parameters.AddWithValue("@startDate", StartDate);
-            //    cmd.Parameters.AddWithValue("@endDate", ToDate);
-            //    //da.Fill(ds);
-            //    cmd.ExecuteNonQuery();
-            //    dt = new DataTable();
-            //    da.Fill(dt);
-            //    BindingSource bSource = new BindingSource();
-            //    bSource.DataSource = dt;
-            //    dgvAppt.DataSource = bSource;
-            //    da.Update(dt);
-            //}
-            //con.Close();
         }
 
         // Get upcomeing appointments if withing 15 minutes from now
@@ -246,7 +222,7 @@ namespace DataLibrary
         private void LoadAppointments()
         {
             DataTable dt = new DataTable();
-            AppointmentProcesser.GetAppointmentByCoach(currentCoachID);
+            dt = AppointmentProcessor.GetAppointmentByCoach(currentCoachID);
             BindingSource bSource = new BindingSource();
             bSource.DataSource = dt;
             dgvAppt.DataSource = bSource;
@@ -265,12 +241,12 @@ namespace DataLibrary
         {
             DateTime upcoming  = new DateTime();
 
-            upcoming = AppointmentProcesser.GetUpcomingAppointment(currentCoachID);
+            upcoming = AppointmentProcessor.GetUpcomingAppointment(currentCoachID);
 
             // Show if there is an appointment within 15 minutes of current time. 
             if (upcoming != null)
             {
-                lblUpcoming.Text = $"Upcoming Appointment: {GetCorrectedDate(Convert.ToDateTime(upcoming))}"; // Correct date for Appointment display
+                lblUpcoming.Text = $"Upcoming Appointment: {DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(upcoming))}"; // Correct date for Appointment display
                 lblUpcoming.BackColor = Color.SpringGreen;
             }
             else
@@ -301,7 +277,7 @@ namespace DataLibrary
 
                         // Fill appointment consultant combobox
                         List<string> coachNames = new List<string>();
-                        coachNames = CoachProcesser.GetCoachNames();
+                        coachNames = CoachProcessor.GetCoachNames();
 
                         foreach (var item in coachNames)
                         {
@@ -310,7 +286,7 @@ namespace DataLibrary
 
                         //Fill appointment type combobox
                         List<string> appointmentTypes = new List<string>();
-                        appointmentTypes = AppointmentProcesser.GetAppointmentTypes();
+                        appointmentTypes = AppointmentProcessor.GetAppointmentTypes();
 
                         foreach (var item in appointmentTypes)
                         {
@@ -319,15 +295,16 @@ namespace DataLibrary
 
                         // Get appointment by appointmentID
                         Appointment apt = new Appointment();
+                        apt = AppointmentProcessor.GetAppointmentByID(currentApptID);
 
                         viewAppointment.lblApptID.Text = apt.AppointmentID.ToString();
                         viewAppointment.cbCustName.Text = apt.AthleteName.ToString();
                         viewAppointment.cbType.Text = apt.Type.ToString();
-                        viewAppointment.dTPStart.Text = GetCorrectedDate(Convert.ToDateTime(apt.StartDate)).ToString("MMMM dd, yyyy");
-                        DateTime appStartTime = GetCorrectedDate(Convert.ToDateTime((apt.StartDate)));
+                        viewAppointment.dTPStart.Text = DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(apt.StartDate)).ToString("MMMM dd, yyyy");
+                        DateTime appStartTime = DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime((apt.StartDate)));
                         viewAppointment.dTPStartTime.Text = appStartTime.ToString(" HH:mm");
-                        viewAppointment.dtpEnd.Text = GetCorrectedDate(Convert.ToDateTime((apt.EndDate))).ToString();
-                        DateTime appEndTime = GetCorrectedDate(Convert.ToDateTime(apt.EndDate));
+                        viewAppointment.dtpEnd.Text =DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime((apt.EndDate))).ToString();
+                        DateTime appEndTime = DateTimeProcessor.GetCorrectedDate(Convert.ToDateTime(apt.EndDate));
                         viewAppointment.dTPEndTime.Text = appEndTime.ToString(" hh:mm tt");
                         DateTime lastUpdated = Convert.ToDateTime(apt.Updated).ToLocalTime();
                         viewAppointment.lblUpdated.Text = lastUpdated.ToString("MMMM dd, yyyy hh:mm tt");
@@ -363,7 +340,7 @@ namespace DataLibrary
             {
                 // Fill appointment type combobox
                 List<string> appointmentTypes = new List<string>();
-                appointmentTypes = AppointmentProcesser.GetAppointmentTypes();
+                appointmentTypes = AppointmentProcessor.GetAppointmentTypes();
 
                 foreach (var item in appointmentTypes)
                 {
@@ -372,7 +349,7 @@ namespace DataLibrary
 
                 // Fill appointment consultant combobox
                 List<string> coachNames = new List<string>();
-                coachNames = CoachProcesser.GetCoachNames();
+                coachNames = CoachProcessor.GetCoachNames();
 
                 foreach (var item in coachNames)
                 {
@@ -418,7 +395,7 @@ namespace DataLibrary
                     // Delete appointment. 
                     if (result == DialogResult.Yes)
                     {
-                        AppointmentProcesser.DeleteAppointment(currentApptID);
+                        AppointmentProcessor.DeleteAppointment(currentApptID);
                         LoadAppointments();
                         MessageBox.Show($"Appointment ID#{currentApptID} on {currentStartDate} " +
                             $"with Athlete-{currentAthlete} has been Removed!", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -448,8 +425,8 @@ namespace DataLibrary
                 indexOfSelectedAthlete= e.RowIndex;
             }
             IsCorner();
-            sp_AthleteByID = SetSp_AthleteID(IsCorner());
-            athleteDiscipline = SetAthleteDiscipline(IsCorner());
+            sp_AthleteByID = AthleteProcessor.SetSp_AthleteID(IsCorner());
+            athleteDiscipline = AthleteProcessor.SetAthleteDiscipline(IsCorner());
         }
 
         // View/Edit athlete record
@@ -464,46 +441,32 @@ namespace DataLibrary
                     AthleteForm viewAthlete = new AthleteForm();
                     if (currentAthleteID > 0)
                     {
-                        con.Open();
-
-                        MySqlCommand cmd4 = new MySqlCommand("sp_distinctZip");
-                        cmd4.Connection = con;
-                        MySqlDataReader dr = cmd4.ExecuteReader();
-
-                        while (dr.Read())
+                        List<string> distinctZips = new List<string>();
+                        
+                        distinctZips =  AddressProcessor.GetDistinctZips();
+                        foreach (var item in distinctZips)
                         {
-                            viewAthlete.cbZip.Items.Add(dr["postalCode"].ToString());
-                            
+                            viewAthlete.cbZip.Items.Add(item);
                         }
-                        dr.Close();
 
-                        cmd.Connection = con;
-                        cmd.CommandText = SetSp_AthleteID(IsCorner());// sp_AthleteByID;
+                        Athlete currentAthlete = new Athlete();
 
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.Clear();
-                        cmd.Parameters.AddWithValue("@AthlID", currentAthleteID);
-                        dr = cmd.ExecuteReader();
+                        currentAthlete = AthleteProcessor.GetAthleteByID(IsCorner(), currentAthleteID);
 
-                        if (dr.Read())
-                        {
-                            viewAthlete.lblCustID.Text = dr["athleteId"].ToString();
-                            viewAthlete.tbName.Text = dr["athleteName"].ToString();
-                            
-                            //viewAthlete.cbPosition.Items.Add(dr["athletePosition"].ToString());
-                            viewAthlete.cbPosition.Text = dr["athletePosition"].ToString();
-                            //viewAthlete.cbDiscipline.Items.Add(dr["athleteDiscipline"].ToString());
-                            viewAthlete.cbDiscipline.Text = dr[athleteDiscipline].ToString();
-                            //viewAthlete.cbDiscipline.Text = dr["athleteDiscipline"].ToString();
-                            viewAthlete.tbPhone.Text = dr["phone"].ToString();
-                            viewAthlete.tbAdd.Text = dr["address"].ToString();
-                            viewAthlete.tbCity.Text = dr["city"].ToString();
-                            viewAthlete.tbCountry.Text = dr["country"].ToString();
-                            viewAthlete.cbZip.Text = dr["postalCode"].ToString();
-                            AthleteForm.AddressID = Convert.ToInt32(dr["addressId"]);
-                            viewAthlete.lblLastUpdated.Text = Schedule.GetCorrectedDate(Convert.ToDateTime(dr["lastUpdate"])).ToString();
-                        }
-                        con.Close();
+                        viewAthlete.lblCustID.Text = currentAthlete.AthleteID.ToString();
+                        viewAthlete.tbName.Text = currentAthlete.AthleteName;
+                        viewAthlete.cbPosition.Text = currentAthlete.AthletePosition;
+                        viewAthlete.cbDiscipline.Text = currentAthlete.AthleteDiscipline;
+
+                        viewAthlete.tbPhone.Text = currentAthlete.Phone;
+                        viewAthlete.tbAdd.Text = currentAthlete.StreetAddress;
+                        viewAthlete.tbCity.Text = currentAthlete.City;
+                        viewAthlete.tbCountry.Text = currentAthlete.Country;
+                        viewAthlete.cbZip.Text = currentAthlete.PostalCode;
+
+                        AthleteForm.AddressID = currentAthlete.AddressID;
+
+                        viewAthlete.lblLastUpdated.Text = DateTimeProcessor.GetCorrectedDate(currentAthlete.Updated).ToString();
                     }
                     viewAthlete.gbCustomer.Text = "Edit Athlete";
                     viewAthlete.ShowDialog();
@@ -517,13 +480,6 @@ namespace DataLibrary
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);// print error message
-            }
-            finally
-            {
-                if (dr != null)
-                    dr.Close();
-                if (con.State == ConnectionState.Open)
-                    con.Close();
             }
         }
 
@@ -542,19 +498,26 @@ namespace DataLibrary
                 this.Hide();
                 AthleteForm newAthlete = new AthleteForm();
 
-                con.Open();
-                cmd.Connection = con;
-                cmd.CommandText = "sp_distinctCitysZipCountry";
+                List<string> distinctZips = new List<string>();
 
-                cmd.CommandType = CommandType.StoredProcedure;
-                MySqlDataReader dr = cmd.ExecuteReader();
-
-                while (dr.Read())
+                distinctZips = AddressProcessor.GetDistinctZips();
+                foreach (var item in distinctZips)
                 {
-                    newAthlete.cbZip.Items.Add(dr["Zip"].ToString());
+                    newAthlete.cbZip.Items.Add(item);
                 }
+                //con.Open();
+                //cmd.Connection = con;
+                //cmd.CommandText = "sp_distinctCitysZipCountry";
 
-                con.Close();
+                //cmd.CommandType = CommandType.StoredProcedure;
+                //MySqlDataReader dr = cmd.ExecuteReader();
+
+                //while (dr.Read())
+                //{
+                //    newAthlete.cbZip.Items.Add(dr["Zip"].ToString());
+                //}
+
+                //con.Close();
 
                 //Change labels on new customer form
                 newAthlete.gbCustomer.Text = "New Athlete";
@@ -573,78 +536,43 @@ namespace DataLibrary
             {
                 MessageBox.Show(ex.Message);// print error message
             }
-            finally
-            {
-                if (dr != null)
-                    dr.Close();
-                if (con.State == ConnectionState.Open)
-                    con.Close();
-            }
-
         }
 
-        // Delete customer by customerID
+        // Delete Athlete by athleteID
         private void btnCustDelete_Click(object sender, EventArgs e)
         {
             if (indexOfSelectedAthlete >= 0)
             {
-                // Select Customer
+                // Select Athlete
                 int currentAthleteID = (int)dgvAthlete.Rows[indexOfSelectedAthlete].Cells[0].Value;
                 int address_ID = (int)dgvAthlete.Rows[indexOfSelectedAthlete].Cells["AddressID"].Value;
                 string currentAthlete = dgvAthlete.Rows[indexOfSelectedAthlete].Cells[1].Value.ToString();
 
-                    con.Open();
-                    cmd.Connection = con;
-                    cmd.CommandText = "sp_distinctApptAthleteID";
-                    MySqlDataReader dr = cmd.ExecuteReader();
-
-                    while (dr.Read())
-                    {
-
-                        if (currentAthleteID.Equals(Convert.ToInt32((dr["athleteId"]))))
-                        {
-                            MessageBox.Show($"Deletion of athlete {currentAthlete} is not allowed. {currentAthlete} is " +
-                                $"associated with Appointments!", "Not Allowed!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                            goto done;
-                        }
-
-                    }
-
-                    dr.Close();
-                DialogResult result = MessageBox.Show($"Athlete: {currentAthlete} is not associated with any appointment(s). " +
-                    $"Are you sure you want to delete Athlete ID# {currentAthleteID}: {currentAthlete}?", "Delete",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                // Delete Athlete
-                if (result == DialogResult.Yes)
+                if (AthleteProcessor.CheckAssociation(currentAthleteID))
                 {
-
-                    MySqlCommand cmd2 = new MySqlCommand("sp_AthleteDeletebyID");
-                    cmd2.Connection = con;
-                    cmd2.CommandType = CommandType.StoredProcedure;
-                    cmd2.Parameters.Clear();
-                    cmd2.Parameters.AddWithValue("@Athlete_ID", currentAthleteID);
-                    cmd2.ExecuteNonQuery();
-
-
-                    cmd2.Parameters.Clear();
-                    cmd2.CommandText = "sp_deleteAddressbyID";
-                    cmd2.CommandType = CommandType.StoredProcedure;
-                    cmd2.Parameters.AddWithValue("@Address_ID", address_ID);
-                    cmd2.ExecuteNonQuery();
-
-                    MessageBox.Show($"Athlete ID#{currentAthleteID} name {currentAthlete} " +
-                        $"has been Removed!", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }                
+                    MessageBox.Show($"Deletion of athlete {currentAthlete} is not allowed. {currentAthlete} is " +
+                                $"associated with Appointments!", "Not Allowed!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
                 else
                 {
-                
-                    MessageBox.Show("No Athletes Deleted!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                done:;
-                con.Close();
-                LoadCustomerData();
+                    DialogResult result = MessageBox.Show($"Athlete: {currentAthlete} is not associated with any appointment(s). " +
+                    $"Are you sure you want to delete Athlete ID# {currentAthleteID}: {currentAthlete}?", "Delete",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        // Delete Athlete and Address
+                        AthleteProcessor.DeleteAthleteByID(currentAthleteID);
+                        AddressProcessor.DeleteAddress(address_ID);
+                        MessageBox.Show($"Athlete ID#{currentAthleteID} name {currentAthlete} " +
+                            $"has been Removed!", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                    else
+                    {
 
+                        MessageBox.Show("No Athletes Deleted!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                LoadCustomerData();
             }
             else
             {
@@ -652,29 +580,20 @@ namespace DataLibrary
             }
         }
 
-        // Get all customer data from database
+        // Get all athletes data from database
         private void LoadCustomerData()
         {
-            using (con)
-            {
-                indexOfSelectedAthlete = -1;
-                using (MySqlCommand cmd = new MySqlCommand("sp_viewAllAthletes", con))
-                {
-                    con.Open();
-                    da = new MySqlDataAdapter(cmd);
-                    cmd.ExecuteNonQuery();
-                    dt = new DataTable();
-                    da.Fill(dt);
-                    BindingSource bSource = new BindingSource();
-                    bSource.DataSource = dt;
-                    dgvAthlete.DataSource = bSource;
-                    dgvAthlete.Columns["Name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-                    dgvAthlete.Columns["Address"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-                    dgvAthlete.Columns["AddressID"].Visible = false;
-                    da.Update(dt);
-                }
-            }
-            con.Close();
+            indexOfSelectedAthlete = -1;
+
+            DataTable dt;
+
+            dt = AthleteProcessor.GetAthletes();
+            BindingSource bSource = new BindingSource();
+            bSource.DataSource = dt;
+            dgvAthlete.DataSource = bSource;
+            dgvAthlete.Columns["Name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dgvAthlete.Columns["Address"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dgvAthlete.Columns["AddressID"].Visible = false;
             dgvAthlete.ClearSelection();
         }
 
@@ -683,8 +602,8 @@ namespace DataLibrary
         {
             indexOfSelectedAthlete = -1;
             IsCorner();
-            sp_AthleteByID = SetSp_AthleteID(IsCorner());
-            athleteDiscipline = SetAthleteDiscipline(IsCorner());
+            sp_AthleteByID = AthleteProcessor.SetSp_AthleteID(IsCorner());
+            athleteDiscipline = AthleteProcessor.SetAthleteDiscipline(IsCorner());
             string result = cbReports.Text;
             string sp;
             switch (result)
@@ -700,11 +619,11 @@ namespace DataLibrary
                     break;
                 case "Safeties":
                     sp = "sp_safeties";
-                    DBReports(sp);
+                    DBReports(sp,athleteDiscipline);
                     break;
                 case "Corners":
                     sp = "sp_corners";
-                    DBReports(sp);
+                    DBReports(sp,athleteDiscipline);
                     break;
                 default:
                     break;
@@ -723,39 +642,36 @@ namespace DataLibrary
             CurrentYear = currentYear;
             DaysInMonth = daysInMonth;
 
+            ConvertDatesToMonth(currentMonth, currentYear, daysInMonth);
             try
             {
-                con.Open();
-                ConvertDatesToMonth(currentMonth, currentYear, daysInMonth);
+                List<Appointment> appointments = new List<Appointment>();
+                appointments = AppointmentProcessor.GetAppointmentCount(StartDate, ToDate);                
 
-                MySqlCommand cmd2 = new MySqlCommand("sp_appointmentTypebyMonth", con);
-                cmd2.Connection = con;
-                cmd2.CommandType = CommandType.StoredProcedure;
-                cmd2.Parameters.AddWithValue("@startDate", StartDate);
-                cmd2.Parameters.AddWithValue("@endDate", ToDate);
-                MySqlDataReader dr = cmd2.ExecuteReader();
                 var pg = new StringBuilder();
                 pg.Append($"\t\t Appointments for the month of {dtpMonth.Text} \n\n");
                 pg.Append(String.Format("{0,-15}{1,10}\n", "Type", "Count"));
                 pg.Append($"{string.Concat(Enumerable.Repeat("*", 80))} \n");
-                while (dr.Read())
+
+                foreach (var appointment in appointments)
                 {
-                    pg.AppendFormat(String.Format("{0,-15}\t {1,-10:N0} \n", dr["type"], Convert.ToInt32(dr["Count(type)"])));
+                    pg.AppendFormat(String.Format("{0,-15}\t {1,-10:N0} \n", appointment.Type, appointment.Count_Type)); 
                 }
-                con.Close();
+
+                //var pg = new StringBuilder();
+                //pg.Append($"\t\t Appointments for the month of {dtpMonth.Text} \n\n");
+                //pg.Append(String.Format("{0,-15}{1,10}\n", "Type", "Count"));
+                //pg.Append($"{string.Concat(Enumerable.Repeat("*", 80))} \n");
+                //while (dr.Read())
+                //{
+                //    pg.AppendFormat(String.Format("{0,-15}\t {1,-10:N0} \n", dr["type"], Convert.ToInt32(dr["Count(type)"])));
+                //}
 
                 rtbReport.Text = pg.ToString();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);// print error message
-            }
-            finally
-            {
-                if (dr != null)
-                    dr.Close();
-                if (con.State == ConnectionState.Open)
-                    con.Close();
             }
 
         }
@@ -767,38 +683,15 @@ namespace DataLibrary
 
             try
             {
-                con.Open();
-
-                MySqlCommand cmd = new MySqlCommand("sp_getCoachSchedule", con);
-                cmd.Connection = con;
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@CoachName", coachName);
-
-                MySqlDataReader dr = cmd.ExecuteReader();
                 var pg = new StringBuilder();
-                pg.Append($"\t\t\t All appointments for Coach {coachName} \n\n");
-                pg.Append(String.Format("{0,-15}\t{1,-15}\t{2,-25}\t\t{3,-25}\n", "Coach", "Type", "Start", "End"));
-                pg.Append($"{string.Concat(Enumerable.Repeat("*", 100))} \n");
-                while (dr.Read())
-                {
-                    pg.AppendFormat(String.Format("{0,-15}\t{1,-15}\t{2,-25}\t{3,-25} \n", dr["coachName"], dr["type"],
-                        GetCorrectedDate(Convert.ToDateTime(dr["start"])), GetCorrectedDate(Convert.ToDateTime(dr["end"]))));
-                }
-                con.Close();
-
+                pg = CoachProcessor.GetCoachSchedule(coachName);
                 rtbReport.Text = pg.ToString();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);// print error message
             }
-            finally
-            {
-                if (dr != null)
-                    dr.Close();
-                if (con.State == ConnectionState.Open)
-                    con.Close();
-            }
+
 
         }
 
@@ -807,25 +700,9 @@ namespace DataLibrary
         {
             try
             {
-                con.Open();
-
-                MySqlCommand cmd = new MySqlCommand("sp_getAllAppointments", con);
-                cmd.Connection = con;
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                MySqlDataReader dr = cmd.ExecuteReader();
-
                 // Initilize stringbuilder
                 var pg = new StringBuilder();
-                pg.Append($"\t\t\t All appointments for all Coaches \n\n");// Report Title
-                pg.Append(String.Format("{0,-15}\t{1,-15}\t{2,-25}\t\t{3,-25}\n", "Coach", "Type", "Start", "End"));// Report Header
-                pg.Append($"{string.Concat(Enumerable.Repeat("*", 100))} \n");
-                while (dr.Read())
-                {
-                    pg.AppendFormat(String.Format("{0,-15}\t{1,-15}\t{2,-25}\t{3,-25} \n", dr["coachName"], dr["type"], 
-                        GetCorrectedDate(Convert.ToDateTime(dr["start"])), GetCorrectedDate(Convert.ToDateTime(dr["end"]))));
-                }
-                con.Close();
+                pg = CoachProcessor.GetAllCoachesAppointments();
 
                 rtbReport.Text = pg.ToString(); // Print report to Rich text box
             }
@@ -833,52 +710,22 @@ namespace DataLibrary
             {
                 MessageBox.Show(ex.Message);// print error message
             }
-            finally
-            {
-                if (dr != null)
-                    dr.Close();
-                if (con.State == ConnectionState.Open)
-                    con.Close();
-            }
         }
 
         // Print All DBs by position to a report
-        private void DBReports(string sp)
+        private void DBReports(string sp, string athleteDiscipline)
         {
             try
             {
-                con.Open();
-
-                MySqlCommand cmd = new MySqlCommand(sp, con);
-                cmd.Connection = con;
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                MySqlDataReader dr = cmd.ExecuteReader();
-
                 // Initilize stringbuilder
                 var pg = new StringBuilder();
-                pg.Append($"\t\t\t Defensive Backs by Position \n\n");// Report Title
-                pg.Append(String.Format("{0,-35}\t{1,-25}\t{2,-25}\t\n", "       DB       ", "Discipline", "Position"));// Report Header
-                pg.Append($"{string.Concat(Enumerable.Repeat("*", 100))} \n");
-                while (dr.Read())
-                {
-                    pg.AppendFormat(String.Format("{0,-30}\t{1,-25}\t{2,-25} \n", dr["athleteName"], dr[athleteDiscipline],
-                        dr["athletePosition"]));
-                }
-                con.Close();
+                pg = AthleteProcessor.GetDBReports(sp, athleteDiscipline);
 
                 rtbReport.Text = pg.ToString(); // Print report to Rich text box
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);// print error message
-            }
-            finally
-            {
-                if (dr != null)
-                    dr.Close();
-                if (con.State == ConnectionState.Open)
-                    con.Close();
             }
         }
 
@@ -914,30 +761,21 @@ namespace DataLibrary
             }
 
             IsCorner();
-            sp_AthleteByID = SetSp_AthleteID(IsCorner());
-            athleteDiscipline = SetAthleteDiscipline(IsCorner());
+            sp_AthleteByID = AthleteProcessor.SetSp_AthleteID(IsCorner());
+            athleteDiscipline = AthleteProcessor.SetAthleteDiscipline(IsCorner());
 
         }
 
         // Get Coach names from database
         private void GetCoachNames()
         {
-            using (con)
+            List<string> coachNames = new List<string>();
+            coachNames = CoachProcessor.GetCoachNames();
+            foreach (var coachName in coachNames)
             {
-                con.Open();
-
-
-                MySqlCommand cmd = new MySqlCommand("sp_getDistinctCoach");
-                cmd.Connection = con;
-                dr = cmd.ExecuteReader();
-
-                while (dr.Read())
-                {
-                    cbConsultant.Items.Add(dr["coachName"].ToString());
-                }
-
+                cbConsultant.Items.Add(coachName);
             }
-            con.Close();
+            
         }
 
         public bool IsCorner()

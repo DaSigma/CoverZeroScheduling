@@ -73,6 +73,10 @@
       <Project>{cfc31162-be3f-4559-93ce-f080aa76ca82}</Project>
       <Name>CoverZeroScheduling</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataLibrary\DataLibrary.csproj">
+      <Project>{9d452fb1-16ce-4cbd-ad9b-4ac230365b20}</Project>
+      <Name>DataLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
