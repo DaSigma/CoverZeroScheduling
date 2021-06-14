@@ -1,7 +1,6 @@
 # CoverZeroScheduling
 
-Application Instructions Document
-[GitHub](https://github.com/DaSigma/CoverZeroScheduling/blob/refactor/CoverZero%20Application%20Instructions.pdf)
+[App Instructions](https://github.com/DaSigma/CoverZeroScheduling/blob/refactor/CoverZero%20Application%20Instructions.pdf)
 
 Screenshots below.
 
