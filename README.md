@@ -1,6 +1,10 @@
 # CoverZeroScheduling
 
+Application Instructions Document
+[GitHub](https://github.com/DaSigma/CoverZeroScheduling/blob/refactor/CoverZero%20Application%20Instructions.pdf)
+
 Screenshots below.
+
 
 Project was done to complete assigmanet quickly. Code left as is for now due to time. Please feel free to contact me for a code review to see what I should have and plan to do different based on my continued learning.
 
