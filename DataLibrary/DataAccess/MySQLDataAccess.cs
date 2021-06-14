@@ -527,7 +527,7 @@ namespace DataLibrary.DataAccess
             return dt;
         }
 
-        public static List<Appointment> LoadAppointmentCountData(string startDate, string endDate, string sp)
+        public static StringBuilder LoadAppointmentCountData(string currentMonth, string startDate, string endDate, string sp)
         {
             MySqlConnection con = new MySqlConnection(GetConnectionString());
             MySqlCommand cmd;
@@ -538,23 +538,24 @@ namespace DataLibrary.DataAccess
             {
                 con.Open();
 
-                cmd = new MySqlCommand(sp, con);
+                cmd= new MySqlCommand(sp, con);
                 cmd.Connection = con;
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@startDate", startDate);
                 cmd.Parameters.AddWithValue("@endDate", endDate);
                 MySqlDataReader dr = cmd.ExecuteReader();
-
+                var pg = new StringBuilder();
+                pg.Append($"\t\t Appointments for the month of {currentMonth} \n\n");
+                pg.Append(String.Format("{0,-15}{1,10}\n", "Type", "Count"));
+                pg.Append($"{string.Concat(Enumerable.Repeat("*", 80))} \n");
                 while (dr.Read())
                 {
-                    apt.Type = dr["type"].ToString();
-                    apt.Count_Type = Convert.ToInt32(dr["Count(type)"]);
-
-                    newlist.Add(apt);
+                    pg.AppendFormat(String.Format("{0,-15}\t {1,-10:N0} \n", dr["type"], Convert.ToInt32(dr["Count(type)"])));
                 }
+                con.Close();
+
+                return pg;
             }
-            return newlist;
-           
         }
 
         public static StringBuilder LoadCoachScheduleData(string coachName, string sp)

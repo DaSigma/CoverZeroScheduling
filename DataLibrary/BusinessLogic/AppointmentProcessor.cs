@@ -52,13 +52,14 @@ namespace DataLibrary.BusinessLogic
             MySQLDataAccess.DeleteAppointmentData(appointmentID, sp);
         }
 
-        public static List<Appointment> GetAppointmentCount(string startDate, string endDate)
+        public static StringBuilder GetAppointmentCount(string currentMonth, string startDate, string endDate)
         {
+            var pg = new StringBuilder();
             List<Appointment> apts = new List<Appointment>();
             string sp = "sp_appointmentTypebyMonth";
 
-            apts = MySQLDataAccess.LoadAppointmentCountData(startDate, endDate, sp);
-            return apts;
+            pg = MySQLDataAccess.LoadAppointmentCountData(currentMonth, startDate, endDate, sp);
+            return pg;
         }
 
             

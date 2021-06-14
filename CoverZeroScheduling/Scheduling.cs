@@ -110,7 +110,8 @@ namespace DataLibrary
             view.DefaultCellStyle.SelectionBackColor = Color.SpringGreen;
             view.DefaultCellStyle.SelectionForeColor = Color.Blue;
             view.RowsDefaultCellStyle.BackColor = Color.White;
-            view.AlternatingRowsDefaultCellStyle.BackColor = Color.Silver;
+            //view.AlternatingRowsDefaultCellStyle.BackColor = Color.Silver;
+            view.CellBorderStyle = DataGridViewCellBorderStyle.SunkenHorizontal;
         }
 
         // Get appointment data from database with given stored parameter starting date and end date
@@ -664,27 +665,8 @@ namespace DataLibrary
             ConvertDatesToMonth(currentMonth, currentYear, daysInMonth);
             try
             {
-                List<Appointment> appointments = new List<Appointment>();
-                appointments = AppointmentProcessor.GetAppointmentCount(StartDate, ToDate);                
-
                 var pg = new StringBuilder();
-                pg.Append($"\t\t Appointments for the month of {dtpMonth.Text} \n\n");
-                pg.Append(String.Format("{0,-15}{1,10}\n", "Type", "Count"));
-                pg.Append($"{string.Concat(Enumerable.Repeat("*", 80))} \n");
-
-                foreach (var appointment in appointments)
-                {
-                    pg.AppendFormat(String.Format("{0,-15}\t {1,-10:N0} \n", appointment.Type, appointment.Count_Type)); 
-                }
-
-                //var pg = new StringBuilder();
-                //pg.Append($"\t\t Appointments for the month of {dtpMonth.Text} \n\n");
-                //pg.Append(String.Format("{0,-15}{1,10}\n", "Type", "Count"));
-                //pg.Append($"{string.Concat(Enumerable.Repeat("*", 80))} \n");
-                //while (dr.Read())
-                //{
-                //    pg.AppendFormat(String.Format("{0,-15}\t {1,-10:N0} \n", dr["type"], Convert.ToInt32(dr["Count(type)"])));
-                //}
+                pg = AppointmentProcessor.GetAppointmentCount(dtpMonth.Text, StartDate, ToDate);                
 
                 rtbReport.Text = pg.ToString();
             }
