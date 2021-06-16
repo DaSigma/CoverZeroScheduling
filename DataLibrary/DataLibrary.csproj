@@ -99,12 +99,17 @@
     <Compile Include="BusinessLogic\AthleteProcessor.cs" />
     <Compile Include="BusinessLogic\CoachProcessor.cs" />
     <Compile Include="BusinessLogic\DateTimeProcessor.cs" />
-    <Compile Include="DataAccess\MySQLDataAccess.cs" />
+    <Compile Include="DataAccess\GlobalConfig.cs" />
+    <Compile Include="DataAccess\IDataConnection.cs" />
+    <Compile Include="DataAccess\MySQLConnector.cs" />
+    <Compile Include="DataAccess\TestConnectorProcessor.cs" />
+    <Compile Include="DataAccess\TextConnector.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Appointment.cs" />
     <Compile Include="Models\Athlete.cs" />
     <Compile Include="Models\Coach.cs" />
     <Compile Include="Models\Corners.cs" />
+    <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\Safeties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

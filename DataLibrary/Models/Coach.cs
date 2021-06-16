@@ -8,6 +8,9 @@ namespace DataLibrary.Models
 {
     public class Coach
     {
+        /// <summary>
+        /// Represents the coach model
+        /// </summary>
         public int CoachID { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }

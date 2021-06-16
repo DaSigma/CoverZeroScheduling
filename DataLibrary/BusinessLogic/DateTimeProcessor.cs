@@ -15,8 +15,8 @@ namespace DataLibrary.BusinessLogic
             return dateTime.AddHours(currentOffset.TotalHours);
         }
 
+        //TODO: Move business hours validation to business logic
 
-        ////ToDO:
         //public static bool BusinessHrsValidation()
         //{
         //    bool test = true;
@@ -32,7 +32,8 @@ namespace DataLibrary.BusinessLogic
         //    return test;
         //}
 
-        ////ToDo
+        ////ToDo: Move convert dates to month to business logic date processor
+        ///
         //public static void ConvertDatesToMonth(int currentMonth, int currentYear, int daysInMonth)
         //{
         //    string StartDate;
@@ -46,7 +47,7 @@ namespace DataLibrary.BusinessLogic
         //    ToDate = toDate;
         //}
 
-        ////ToDo
+        ////ToDo: Move Convert dates to week to date processor
         //public static  void ConvertDatesToWeek()
         //{
         //    var dateFormat = CultureInfo.InvariantCulture.DateTimeFormat;

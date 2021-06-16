@@ -15,14 +15,14 @@ namespace DataLibrary.BusinessLogic
         {
             string sp = "sp_getApptsbyCoachID";
             DataTable dt = new DataTable();
-            return dt = MySQLDataAccess.LoadAppointmentsDatabyCoach(sp, coachID);
+            return dt = MySQLConnector.LoadAppointmentsDatabyCoach(sp, coachID);
         }
 
         public static DateTime GetUpcomingAppointment(int coachID)
         {
             string sp = "sp_getApptsbyCoachID";
             Appointment apt = new Appointment();
-            apt = MySQLDataAccess.LoadUpcomingAppointmentData(sp, coachID);
+            apt = MySQLConnector.LoadUpcomingAppointmentData(sp, coachID);
 
             return apt.StartDate;
         }
@@ -32,7 +32,7 @@ namespace DataLibrary.BusinessLogic
             string sp = "sp_allAppTypes";
             List<string> appointmentTypes = new List<string>();
 
-            appointmentTypes = MySQLDataAccess.LoadAppointmentsTypeData(sp);
+            appointmentTypes = MySQLConnector.LoadAppointmentsTypeData(sp);
             return appointmentTypes;
         }
 
@@ -41,7 +41,7 @@ namespace DataLibrary.BusinessLogic
             Appointment apt = new Appointment();
             string sp = "sp_viewAppts";
 
-            apt = MySQLDataAccess.LoadAppointmentDataByID(appointmentID, sp);
+            apt = MySQLConnector.LoadAppointmentDataByID(appointmentID, sp);
 
             return apt;
         }
@@ -49,7 +49,7 @@ namespace DataLibrary.BusinessLogic
         public static void DeleteAppointment(int appointmentID)
         {
             string sp = "sp_apptDeletebyID";
-            MySQLDataAccess.DeleteAppointmentData(appointmentID, sp);
+            MySQLConnector.DeleteAppointmentData(appointmentID, sp);
         }
 
         public static StringBuilder GetAppointmentCount(string currentMonth, string startDate, string endDate)
@@ -58,7 +58,7 @@ namespace DataLibrary.BusinessLogic
             List<Appointment> apts = new List<Appointment>();
             string sp = "sp_appointmentTypebyMonth";
 
-            pg = MySQLDataAccess.LoadAppointmentCountData(currentMonth, startDate, endDate, sp);
+            pg = MySQLConnector.LoadAppointmentCountData(currentMonth, startDate, endDate, sp);
             return pg;
         }
 

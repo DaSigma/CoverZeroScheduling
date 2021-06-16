@@ -82,7 +82,7 @@ namespace DataLibrary
                     string mtgStart;
                     string mtgEnd;
                     bool CoachHasAppointment;
-                    (CoachHasAppointment, mtgStart, mtgEnd) = MySQLDataAccess.CheckCoachAppointmentTimesData(Convert.ToInt32(lblApptID.Text), coachID, start);
+                    (CoachHasAppointment, mtgStart, mtgEnd) = MySQLConnector.CheckCoachAppointmentTimesData(Convert.ToInt32(lblApptID.Text), coachID, start);
                     if (CoachHasAppointment)
                     {
                         char.ToUpper(cbUsr.Text[0]);
@@ -93,10 +93,10 @@ namespace DataLibrary
                     else
                     {
                         //Get AthleteID by name
-                        AthleteID = MySQLDataAccess.GetAthleteIDDataByName(athleteName);
+                        AthleteID = MySQLConnector.GetAthleteIDDataByName(athleteName);
 
                         // Insert Appointment
-                        MySQLDataAccess.SaveAppointmentData(Convert.ToInt32(lblApptID.Text), AthleteID, coachID, cbType.Text, t1, t2);
+                        MySQLConnector.SaveAppointmentData(Convert.ToInt32(lblApptID.Text), AthleteID, coachID, cbType.Text, t1, t2);
 
                         MessageBox.Show("Appointment Saved!");
                         Schedule schedulingScreen = new Schedule();

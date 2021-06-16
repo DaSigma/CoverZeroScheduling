@@ -16,7 +16,7 @@ namespace DataLibrary.BusinessLogic
             List<string> distinctZips = new List<string>();
             string sp = "sp_distinctZip";
 
-            distinctZips = MySQLDataAccess.LoadDistinctAddressZipData(sp);
+            distinctZips = MySQLConnector.LoadDistinctAddressZipData(sp);
 
             return distinctZips;
         }
@@ -24,20 +24,20 @@ namespace DataLibrary.BusinessLogic
         public static void DeleteAddress(int addressID)
         {
             string sp = "sp_deleteAddressbyID";
-            MySQLDataAccess.DeleteAddressDataByID(addressID, sp);
+            MySQLConnector.DeleteAddressDataByID(addressID, sp);
         }
 
         public static void Insert_UpdateAddress(int addressID, string street, int cityID, string zip, string phoneNumber)
         {
             string sp = "sp_addUpdateAddress";
-            MySQLDataAccess.Insert_UpdateAddressData(addressID, street, cityID, zip, phoneNumber, sp);
+            MySQLConnector.Insert_UpdateAddressData(addressID, street, cityID, zip, phoneNumber, sp);
         }
 
         public static int GetAddressID(int cityID, string zip, string street, string phoneNumber)
         {
             int addressID;
             string sp = "sp_getAddressID";
-            addressID = MySQLDataAccess.GetAddressIDData(cityID, zip, street, phoneNumber, sp);
+            addressID = MySQLConnector.GetAddressIDData(cityID, zip, street, phoneNumber, sp);
             return addressID;
         }
 
@@ -45,7 +45,7 @@ namespace DataLibrary.BusinessLogic
         {
             int cityID;
             string sp = "sp_getCityID";
-            cityID = MySQLDataAccess.GetCityIDData(zip, sp);
+            cityID = MySQLConnector.GetCityIDData(zip, sp);
             return cityID;
 
         }
@@ -54,7 +54,7 @@ namespace DataLibrary.BusinessLogic
         {
             string sp = "sp_getAddressInfo";
             Address address = new Address();
-            address =  MySQLDataAccess.LoadCityCountryData(zip, sp);
+            address =  MySQLConnector.LoadCityCountryData(zip, sp);
             return address;
         }
 

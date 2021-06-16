@@ -13,7 +13,7 @@ using System.Windows.Forms;
 namespace DataLibrary.DataAccess
 {
 
-    public class MySQLDataAccess
+    public class MySQLConnector:IDataConnection
     {
         public static string GetConnectionString(string connectionName = "mycon")
         {
@@ -254,7 +254,7 @@ namespace DataLibrary.DataAccess
                 {
                     Appointment apt = new Appointment();
                     return apt;
-                    //Todo: fix
+                    //Todo: fix upcoming appointment alert
                 }
                 dr.Close();
                 return null;
@@ -784,6 +784,11 @@ namespace DataLibrary.DataAccess
                 }
             }
             return address;
+        }
+
+        public Appointment CreateAppointment(Appointment appointment)
+        {
+            return appointment;
         }
     }
 }

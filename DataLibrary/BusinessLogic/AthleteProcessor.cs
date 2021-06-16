@@ -17,7 +17,7 @@ namespace DataLibrary.BusinessLogic
         {
             string sp = "sp_athleteName";
             List<string> athleteNames = new List<string>();
-            athleteNames = MySQLDataAccess.LoadAthleteNameData(sp);
+            athleteNames = MySQLConnector.LoadAthleteNameData(sp);
             return athleteNames;
         }
 
@@ -54,7 +54,7 @@ namespace DataLibrary.BusinessLogic
             Athlete currentAthlete = new Athlete();
             string sp = SetSp_AthleteID(IsCorner);
 
-            currentAthlete = MySQLDataAccess.LoadAthleteDataByID(IsCorner, athleteID, sp);
+            currentAthlete = MySQLConnector.LoadAthleteDataByID(IsCorner, athleteID, sp);
             return currentAthlete;
 
         }
@@ -62,12 +62,12 @@ namespace DataLibrary.BusinessLogic
         public static void DeleteAthleteByID(int athleteID)
         {
             string sp = "sp_AthleteDeletebyID";
-            MySQLDataAccess.DeleteAthleteDataByID(athleteID, sp);            
+            MySQLConnector.DeleteAthleteDataByID(athleteID, sp);            
         }
 
         public static bool CheckAssociation(int athleteID)
         {
-            if (MySQLDataAccess.CheckAthleteAssociationData(athleteID))
+            if (MySQLConnector.CheckAthleteAssociationData(athleteID))
             {
                 return true;
             }
@@ -78,27 +78,27 @@ namespace DataLibrary.BusinessLogic
         {
             string sp = "sp_viewAllAthletes";
             DataTable dt = new DataTable();
-            dt = MySQLDataAccess.LoadAllAthletesData(sp);
+            dt = MySQLConnector.LoadAllAthletesData(sp);
             return dt;
         }
 
         public static StringBuilder GetDBReports(string sp, string athleteDiscipline)
         {
             var pg = new StringBuilder();
-            pg = MySQLDataAccess.LoadDBReportData(sp, athleteDiscipline);
+            pg = MySQLConnector.LoadDBReportData(sp, athleteDiscipline);
             return pg;
         }
 
         public static void InsertUpdateCorner(int athleteID, string athleteName, string athletePostition, string AthleteDiscipline, int addressID)
         {
             string sp = "sp_addUpdateCorner";
-            MySQLDataAccess.Insert_UpdateCornerData(athleteID, athleteName, athletePostition, AthleteDiscipline, addressID, sp);
+            MySQLConnector.Insert_UpdateCornerData(athleteID, athleteName, athletePostition, AthleteDiscipline, addressID, sp);
         }
 
         public static void InsertUpdateSafety(int athleteID, string athleteName, string athletePostition, string AthleteDiscipline, int addressID)
         {
             string sp = "sp_addUpdateSafety";
-            MySQLDataAccess.Insert_UpdateSafetyData(athleteID, athleteName, athletePostition, AthleteDiscipline, addressID, sp);
+            MySQLConnector.Insert_UpdateSafetyData(athleteID, athleteName, athletePostition, AthleteDiscipline, addressID, sp);
         }
 
         public static System.Drawing.Image ConvertToImage(string url)

@@ -22,19 +22,19 @@ namespace DataLibrary.BusinessLogic
                 Password = password
             };
 
-           MySQLDataAccess.SaveCoach(newCoach.UserName, newCoach.Password);
+           MySQLConnector.SaveCoach(newCoach.UserName, newCoach.Password);
         }
 
         public static Coach Login(string userName, string password)
         {
-            Coach coach = MySQLDataAccess.Login(userName, password);
+            Coach coach = MySQLConnector.Login(userName, password);
             return coach;
         }
 
         public static DataTable GetCoachDataByDate(int coachID, string StartDate, string ToDate)
         {
             string sp = "sp_getApptsByDate"; 
-            DataTable dt = MySQLDataAccess.GetData(sp, coachID, StartDate, ToDate);
+            DataTable dt = MySQLConnector.GetData(sp, coachID, StartDate, ToDate);
             return dt;
         }
 
@@ -42,7 +42,7 @@ namespace DataLibrary.BusinessLogic
         {
             string sp = "sp_getDistinctCoach";
             List<string> coachNames = new List<string>();
-            coachNames =  MySQLDataAccess.LoadCoachNamesData(sp);
+            coachNames =  MySQLConnector.LoadCoachNamesData(sp);
             return coachNames;
 
         }
@@ -51,7 +51,7 @@ namespace DataLibrary.BusinessLogic
         {
             var pg = new StringBuilder();
             string sp = "sp_getCoachSchedule";
-            pg = MySQLDataAccess.LoadCoachScheduleData(coachName, sp);
+            pg = MySQLConnector.LoadCoachScheduleData(coachName, sp);
 
             return pg;
         }
@@ -60,7 +60,7 @@ namespace DataLibrary.BusinessLogic
         {
             string sp = "sp_getAllAppointments";
             var pg = new StringBuilder();
-            pg = MySQLDataAccess.LoadAllCoachesAppointmentData(sp);
+            pg = MySQLConnector.LoadAllCoachesAppointmentData(sp);
 
             return pg;
         }
@@ -69,7 +69,7 @@ namespace DataLibrary.BusinessLogic
         {
             string sp = "sp_getCoachIDbyName";
             int coachID;
-            coachID = MySQLDataAccess.LoadCoachIDDataByName(coachName, sp);
+            coachID = MySQLConnector.LoadCoachIDDataByName(coachName, sp);
             return coachID;
         }
     }
